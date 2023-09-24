@@ -1,5 +1,5 @@
-STUID = 211220000
-STUNAME = 张三
+STUID = 998244353
+STUNAME = Jing Pu
 
 # DO NOT modify the following code!!!
 
