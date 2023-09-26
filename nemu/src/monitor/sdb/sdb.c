@@ -145,6 +145,8 @@ static int cmd_x(char *args) {
 		assert(~sscanf(args, "%d 0x%hhX", &N, &EXPR));
 	// TODO: error handler (0 and non-digit)
 	// TODO: Expression parser
+	
+	printf("!!!%d %hhX\n", N, EXPR);
 
 	for (int i = 0; i < N; i++)
 		printf("0x%hhu: 0x%u\n", EXPR + 4 * i, paddr_read(EXPR, 4));
