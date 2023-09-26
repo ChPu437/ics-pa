@@ -138,19 +138,19 @@ static int cmd_info(char *args) {
 }
 
 static int cmd_x(char *args) {
-	uint8_t EXPR;
+	paddr_t EXPR;
 	int N;
 
 	printf("!!!%s\n", args);
 	if (args != NULL) 
-		assert(~sscanf(args, "0x%hhX %d", &EXPR, &N));
+		assert(~sscanf(args, "0x%X %d", &EXPR, &N));
 	// TODO: error handler (0 and non-digit)
 	// TODO: Expression parser
 	
-	printf("!!!%d %hhX\n", N, EXPR);
+	printf("!!!%d %X\n", N, EXPR);
 
 	for (int i = 0; i < N; i++)
-		printf("0x%hhu: 0x%u\n", EXPR + 4 * i, paddr_read(EXPR, 4));
+		printf("0x%X: 0x%u\n", EXPR + 4 * i, paddr_read(EXPR, 4));
 	return 0;
 }
 
