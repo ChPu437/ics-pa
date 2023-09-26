@@ -55,6 +55,13 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+// Extended commands
+static int cmd_si(char *args);
+static int cmd_info(char *args);
+static int cmd_p(char *args);
+static int cmd_w(char *args);
+static int cmd_d(char *args);
+
 static struct {
   const char *name;
   const char *description;
@@ -63,6 +70,11 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
+  { "si", "Run N instructions and pause, N = 1 by default", cmd_si },
+  { "info", "Print the specified information of SUBCOMMAND", cmd_info },
+  { "p", "Calculate and print the value of EXPR", cmd_p },
+  {"w", "Set watchpoint on EXPR", cmd_w},
+  {"d", "Delete watchpoint with index N", cmd_d},
 
   /* TODO: Add more commands */
 
@@ -92,6 +104,42 @@ static int cmd_help(char *args) {
   }
   return 0;
 }
+
+// Extended commands
+static int cmd_si(char *args) {
+	/*
+	 * args[] parsed from str[] without the first substr(cmd)
+	 */
+	uint64_t N;
+	assert(~sscanf(args, "%lu", &N));
+	cpu_exec(N);
+	return 0;
+}
+
+static int cmd_info(char *args) {
+	switch(args[0]) {
+		case 'w':
+			// TODO: print watchpoint info
+			break;
+		case 'r':
+			isa_reg_display();
+			break;
+	}
+	return 0;
+}
+
+static int cmd_p(char *args) {
+	return 0;
+}
+
+static int cmd_w(char *args) {
+	return 0;
+}
+
+static int cmd_d(char *args) {
+	return 0;
+}
+
 
 void sdb_set_batch_mode() {
   is_batch_mode = true;
