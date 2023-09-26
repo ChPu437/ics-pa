@@ -13,11 +13,16 @@
 * See the Mulan PSL v2 for more details.
 ***************************************************************************************/
 
+#include <assert.h>
 #include <isa.h>
 #include <cpu/cpu.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <stdint.h>
+#include <stdio.h>
 #include "sdb.h"
+// Extended include
+#include <memory/paddr.h>
 
 static int is_batch_mode = false;
 
@@ -58,6 +63,7 @@ static int cmd_help(char *args);
 // Extended commands
 static int cmd_si(char *args);
 static int cmd_info(char *args);
+static int cmd_x(char *args);
 static int cmd_p(char *args);
 static int cmd_w(char *args);
 static int cmd_d(char *args);
@@ -72,9 +78,10 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
   { "si", "Run N instructions and pause, N = 1 by default", cmd_si },
   { "info", "Print the specified information of SUBCOMMAND", cmd_info },
+  { "x", "Print the memory value start from EXPR of length N", cmd_x },
   { "p", "Calculate and print the value of EXPR", cmd_p },
-  {"w", "Set watchpoint on EXPR", cmd_w},
-  {"d", "Delete watchpoint with index N", cmd_d},
+  { "w", "Set watchpoint on EXPR", cmd_w},
+  { "d", "Delete watchpoint with index N", cmd_d},
 
   /* TODO: Add more commands */
 
@@ -113,7 +120,7 @@ static int cmd_si(char *args) {
 	uint64_t N = 1;
 	if (args != NULL) 
 		assert(~sscanf(args, "%lu", &N));
-	printf("!!!%lu\n", N);
+	// TODO: error handler (0 and non-digit)
 	cpu_exec(N);
 	return 0;
 }
@@ -127,6 +134,19 @@ static int cmd_info(char *args) {
 			isa_reg_display();
 			break;
 	}
+	return 0;
+}
+
+static int cmd_x(char *args) {
+	uint8_t EXPR;
+	int N;
+
+	if (args != NULL) 
+		assert(~sscanf(args, "%d 0x%hhu", &N, &EXPR));
+	// TODO: error handler (0 and non-digit)
+	// TODO: Expression parser
+
+	paddr_read(EXPR, N);
 	return 0;
 }
 
