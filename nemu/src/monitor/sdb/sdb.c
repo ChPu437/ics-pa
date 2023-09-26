@@ -143,7 +143,7 @@ static int cmd_x(char *args) {
 
 	printf("!!!%s\n", args);
 	if (args != NULL) 
-		assert(~sscanf(args, "0x%x %d", &EXPR, &N));
+		assert(~sscanf(args, "%d 0x%x", &N, &EXPR));
 	// TODO: error handler (0 and non-digit)
 	// TODO: Expression parser
 	
