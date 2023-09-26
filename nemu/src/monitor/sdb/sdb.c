@@ -111,8 +111,7 @@ static int cmd_si(char *args) {
 	 * args[] parsed from str[] without the first substr(cmd)
 	 */
 	uint64_t N = 1;
-	printf("!!!%s\n", args);
-	if (args[0] != '\0') 
+	if (args != NULL) 
 		assert(~sscanf(args, "%lu", &N));
 	printf("!!!%lu\n", N);
 	cpu_exec(N);
