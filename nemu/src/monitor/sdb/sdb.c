@@ -146,7 +146,8 @@ static int cmd_x(char *args) {
 	// TODO: error handler (0 and non-digit)
 	// TODO: Expression parser
 
-	paddr_read(EXPR, N);
+	for (int i = 0; i < N; i++)
+		printf("0x%hhu: 0x%u\n", EXPR + 4 * i, paddr_read(EXPR, 4));
 	return 0;
 }
 
