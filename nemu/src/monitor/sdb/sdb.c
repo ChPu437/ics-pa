@@ -141,7 +141,7 @@ static int cmd_x(char *args) {
 	uint8_t EXPR;
 	int N;
 
-	if (args != NULL) 
+//	if (args != NULL) 
 		assert(~sscanf(args, "%d 0x%hhX", &N, &EXPR));
 	// TODO: error handler (0 and non-digit)
 	// TODO: Expression parser
