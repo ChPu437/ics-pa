@@ -143,14 +143,14 @@ static int cmd_x(char *args) {
 
 	printf("!!!%s\n", args);
 	if (args != NULL) 
-		assert(~sscanf(args, "0x%X %d", &EXPR, &N));
+		assert(~sscanf(args, "0x%x %d", &EXPR, &N));
 	// TODO: error handler (0 and non-digit)
 	// TODO: Expression parser
 	
-	printf("!!!%d %X\n", N, EXPR);
+	printf("!!!%d %x\n", N, EXPR);
 
 	for (int i = 0; i < N; i++)
-		printf("0x%X: 0x%u\n", EXPR + 4 * i, paddr_read(EXPR, 4));
+		printf("0x%x: 0x%u\n", EXPR + 4 * i, paddr_read(EXPR, 4));
 	return 0;
 }
 
