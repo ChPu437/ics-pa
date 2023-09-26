@@ -141,13 +141,10 @@ static int cmd_x(char *args) {
 	paddr_t EXPR;
 	int N;
 
-	printf("!!!%s\n", args);
 	if (args != NULL) 
 		assert(~sscanf(args, "%d 0x%x", &N, &EXPR));
 	// TODO: error handler (0 and non-digit)
 	// TODO: Expression parser
-	
-	printf("!!!%d %x\n", N, EXPR);
 
 	for (int i = 0; i < N; i++)
 		printf("0x%x: 0x%x\n", EXPR + 4 * i, paddr_read(EXPR + 4 * i, 4));
