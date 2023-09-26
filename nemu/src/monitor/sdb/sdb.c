@@ -150,7 +150,7 @@ static int cmd_x(char *args) {
 	printf("!!!%d %x\n", N, EXPR);
 
 	for (int i = 0; i < N; i++)
-		printf("0x%x: 0x%u\n", EXPR + 4 * i, paddr_read(EXPR, 4));
+		printf("0x%x: 0x%x\n", EXPR + 4 * i, paddr_read(EXPR, 4));
 	return 0;
 }
 
