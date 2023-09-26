@@ -112,6 +112,7 @@ static int cmd_si(char *args) {
 	 */
 	uint64_t N;
 	assert(~sscanf(args, "%lu", &N));
+	printf("!!!%lu\n", N);
 	cpu_exec(N);
 	return 0;
 }
