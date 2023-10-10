@@ -146,6 +146,7 @@ static bool make_token(char *e) {
 		  	  break;
 		  case TK_DIV:
 		  	  tokens[nr_token].type = TK_DIV;
+          	  ++nr_token;
 		  	  break;
 		  case TK_LBRAC:
         	  tokens[nr_token].type = TK_LBRAC;
