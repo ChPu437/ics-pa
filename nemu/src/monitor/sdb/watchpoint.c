@@ -48,14 +48,18 @@ void init_wp_pool() {
 int new_wp(char* EXPR) {
 	assert(free_ != NULL);
 	WP* new = free_;
+		printf("!!!!!!\n");
 	free_ = free_->next;
+		printf("!!!!!!\n");
 
 	new->next = NULL;
+		printf("!!!!!!\n");
 	if(head == NULL) {
 		head = new;
-		new->NO = 1;
-	} else {
 		printf("!!!!!!\n");
+		new->NO = 1;
+		printf("!!!!!!\n");
+	} else {
 		WP* last = head;
 		while(last->next != NULL)
 			last = last->next;
