@@ -234,8 +234,8 @@ uint32_t eval(uint8_t p, uint8_t q) {
   else {
 	uint8_t op = q; // position of the main operator
 	for (int i = p; i < q; i++) {
-		uint8_t type = tokens[i].type;
-		if (type == TK_PLUS || type == TK_MINUS || type == TK_MUL || type == TK_DIV || type == TK_EQ || type == TK_NEQ || type == TK_AND) {
+		const int* type = &tokens[i].type;
+		if ((*type) == TK_PLUS || (*type) == TK_MINUS || (*type) == TK_MUL || (*type) == TK_DIV || (*type) == TK_EQ || (*type) == TK_NEQ || (*type) == TK_AND) {
 			if (op == q)
 				op = i;
 			else {
