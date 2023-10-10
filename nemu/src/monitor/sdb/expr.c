@@ -221,6 +221,7 @@ uint32_t eval(uint8_t p, uint8_t q) {
     sscanf(tokens[p].str, "%u", &ret);
     // TODO: check negative number here;
     // or we don't do negative check, just convert regs and hexs
+    printf("!!!%u\n", ret);
     return ret;
   }
   else if (check_parentheses(p, q) == true) {
@@ -285,7 +286,7 @@ word_t expr(char *e, bool *success) {
 	  }
   }
 
-  printf("!!!%d\n", (tokens[nr_token - 1].type ==  TK_DEC));
+  // printf("!!!%d\n", (tokens[nr_token - 1].type ==  TK_DEC));
 
   if (tokens[nr_token - 1].type != TK_DEC && tokens[nr_token - 1].type != TK_RBRAC && tokens[nr_token - 1].type != TK_HEX)
   	assert(0); // illegal end
