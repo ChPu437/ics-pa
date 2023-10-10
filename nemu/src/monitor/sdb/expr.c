@@ -236,8 +236,10 @@ uint32_t eval(uint8_t p, uint8_t q) {
 	for (int i = p; i < q; i++) {
 
 		if (tokens[i].type == TK_PLUS || tokens[i].type == TK_MINUS || tokens[i].type == TK_MUL || tokens[i].type == TK_DIV || tokens[i].type == TK_EQ || tokens[i].type == TK_NEQ || tokens[i].type == TK_AND) {
-			if (op == q)
+			if (op == q) {
+				printf("!@!!!!!\n");
 				op = i;
+			}
 			else {
 				if (check_precedence(op) <= check_precedence(i))
 					op = i;
