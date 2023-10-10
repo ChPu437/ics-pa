@@ -63,9 +63,7 @@ int new_wp(char* EXPR) {
 	}
 
 
-	new->expr = malloc(strlen(EXPR));
-	
-		printf("!!!!!!\n");
+	new->expr = malloc(strlen(EXPR) * sizeof(char));
 	strcpy(new->expr, EXPR);
 	bool success = 0;
 	new->val = expr(EXPR, &success); 
