@@ -189,9 +189,12 @@ uint8_t check_precedence(uint8_t pos) {
 }
 
 uint32_t eval(uint8_t p, uint8_t q) {
-  if (p >= q) {
+  if (p > q) {
     /* Bad expression */
 	assert(0);
+  }
+  else if (p == q) { // empty token, do nothing.
+	return 0;
   }
   else if (p == q - 1) {
     /* Single token.
