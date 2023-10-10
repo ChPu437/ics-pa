@@ -231,17 +231,19 @@ uint32_t eval(uint8_t p, uint8_t q) {
     return ret;
   }
   else if (check_parentheses(p, q) == true) {
-  	printf("!!!!%d %d:\n", p, q);
     /* The expression is surrounded by a matched pair of parentheses.
      * If that is the case, just throw away the parentheses.
      */
-    return eval(p + 1, q);
+    return eval(p + 1, q - 1);
   }
   else {
 	uint8_t op = nr_token; // position of the main operator
 	for (int i = p; i < q; i++) {
 		if (tokens[i].type == TK_LBRAC) // we skip tokens in bracket
-			do i++; while (tokens[i].type != TK_RBRAC);
+			do {
+				i++;
+				printf("!!!!%d\n", tokens[i].type);
+			} while (tokens[i].type != TK_RBRAC);
 		
 		if (tokens[i].type == TK_PLUS || tokens[i].type == TK_MINUS || tokens[i].type == TK_MUL || tokens[i].type == TK_DIV || tokens[i].type == TK_EQ || tokens[i].type == TK_NEQ || tokens[i].type == TK_AND) {
 			if (op == nr_token) {
