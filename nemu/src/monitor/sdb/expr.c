@@ -285,7 +285,7 @@ word_t expr(char *e, bool *success) {
 	  }
   }
 
-  printf("!!!%d\n", (tokens[nr_token].type ==  TK_DEC));
+  printf("!!!%d\n", (tokens[nr_token - 1].type ==  TK_DEC));
 
   if (tokens[nr_token - 1].type != TK_DEC && tokens[nr_token - 1].type != TK_RBRAC && tokens[nr_token - 1].type != TK_HEX)
   	assert(0); // illegal end
