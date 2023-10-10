@@ -238,6 +238,7 @@ uint32_t eval(uint8_t p, uint8_t q) {
   }
   else {
 	uint8_t op = nr_token; // position of the main operator
+		printf("!!!!p: %d, q: %d\n", p, q);
 	for (int i = p; i < q; i++) {
 		if (tokens[i].type == TK_LBRAC) // we skip tokens in bracket
 			do {
