@@ -152,6 +152,15 @@ static int cmd_x(char *args) {
 }
 
 static int cmd_p(char *args) {
+	bool success;
+
+	int64_t result = expr(args, &success);
+
+	if (!success)
+		assert(0);
+
+	printf("%ld\n", result);
+
 	return 0;
 }
 

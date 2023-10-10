@@ -13,18 +13,23 @@
 * See the Mulan PSL v2 for more details.
 ***************************************************************************************/
 
+#include <assert.h>
 #include <isa.h>
 
 /* We use the POSIX regex functions to process regular expressions.
  * Type 'man regex' for more information about POSIX regex functions.
  */
+#include <iso646.h>
 #include <regex.h>
+#include <string.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ,
-
-  /* TODO: Add more token types */
-
+  TK_NOTYPE = 256, 
+  TK_EQ, TK_NEQ, TK_AND, // Logic
+  TK_PLUS, TK_MINUS, TK_MUL, TK_DIV, // Arith, minus can also be negative and multiply is also deref
+  TK_LBRAC, TK_RBRAC, // Bracket
+  TK_DEC, TK_HEX, // Number
+  TK_REG, // System
 };
 
 static struct rule {
@@ -37,8 +42,18 @@ static struct rule {
    */
 
   {" +", TK_NOTYPE},    // spaces
-  {"\\+", '+'},         // plus
-  {"==", TK_EQ},        // equal
+  // {"$\\\w+", TK_REG}, // TODO: register
+  // {"0x\\w+", TK_HEX}, // TODO: hexcimal number
+  {"\\d+", TK_DEC}, // decimal number
+  {"\\+", TK_PLUS}, // plus
+  {"-", TK_MINUS}, // minus ()
+  {"\\*", TK_MUL}, // multiply (TODO: OR deref)
+  {"/", TK_DIV}, // division
+  {"(", TK_LBRAC}, // left bracket
+  {")", TK_RBRAC}, // right bracket
+  // {"==", TK_EQ}, // TODO: equal
+  // {"!=", TK_NEQ}, // TODO: not equal
+  // {"&&", TK_AND}, // TODO: logical and
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -95,7 +110,33 @@ static bool make_token(char *e) {
          */
 
         switch (rules[i].token_type) {
-          default: TODO();
+          case TK_NOTYPE:
+          	  break; // we want not space recorded for optimized memory use.
+          default:
+        	  tokens[nr_token].type = rules[i].token_type;
+        	  // TODO: DONT throw "0x" of hexical here, throw at eval
+        	  // also hexical overflow check can be hard!
+		  case TK_DEC: // remember index handling and alphabic handling when handling hexical, or using sscanf 
+			  assert(strlen(rules[i].regex) <= 32); // do not handle when buffer overflow for now
+			  										// maybe ignore the overflowed upper bits
+			  strcpy(tokens[nr_token].str, rules[i].regex);		
+          	  ++nr_token;
+		  	  break;
+		  case TK_PLUS:
+          	  ++nr_token;
+		  	  break;	
+		  case TK_MINUS:
+          	  ++nr_token;
+		  	  break;
+		  case TK_MUL: // only record here, handle deref when calculating expr
+          	  ++nr_token;
+		  	  break;
+		  case TK_LBRAC:
+          	  ++nr_token;
+		  	  break;
+		  case TK_RBRAC:
+          	  ++nr_token;
+		  	  break;
         }
 
         break;
@@ -111,6 +152,95 @@ static bool make_token(char *e) {
   return true;
 }
 
+bool check_parentheses(uint8_t p, uint8_t q) {
+	if (tokens[p].type != TK_LBRAC) 
+		return 0;
+
+	for (int i = p + 1 ; i < q - 1; i++)
+		if (tokens[i].type == TK_RBRAC) // if finding right bracket ahead of end 
+				return 0;
+	
+	return tokens[q - 1].type == TK_RBRAC;
+}
+
+uint8_t check_precedence(uint8_t pos) {
+	switch(tokens[pos].type) {
+		case TK_LBRAC:
+			return 0;
+		case TK_RBRAC:
+			return 0;
+		case TK_EQ:
+			return 1;
+		case TK_NEQ:
+			return 1;
+		case TK_AND:
+			return 1;
+		case TK_MUL:
+			return 2;
+		case TK_DIV:
+			return 2;
+		case TK_PLUS:
+			return 3;
+		case TK_MINUS:
+			return 3;
+		default:
+			assert(0);
+	}
+}
+
+uint32_t eval(uint8_t p, uint8_t q) {
+  if (p >= q) {
+    /* Bad expression */
+	assert(0);
+  }
+  else if (p == q - 1) {
+    /* Single token.
+     * For now this token should be a number.
+     * Return the value of the number.
+     */
+	uint32_t ret;
+    sscanf(tokens[p].str, "%u", &ret);
+    // TODO: check negative number here;
+    // or we don't do negative check, just convert regs and hexs
+    return ret;
+  }
+  else if (check_parentheses(p, q) == true) {
+    /* The expression is surrounded by a matched pair of parentheses.
+     * If that is the case, just throw away the parentheses.
+     */
+    return eval(p + 1, q - 1);
+  }
+  else {
+	uint8_t op = q; // position of the main operator
+	for (int i = p; i < q; i++) {
+		uint8_t type = tokens[i].type;
+		if (type == TK_PLUS || type == TK_MINUS || type == TK_MUL || type == TK_DIV || type == TK_EQ || type == TK_NEQ || type == TK_AND || type == TK_LBRAC || type == TK_RBRAC) {
+			if (op == q)
+				op = i;
+			else {
+				if (check_precedence(op) <= check_precedence(i))
+					op = i;
+			}
+		}
+	}
+	assert(op != q); // we shouldn't find no main op since we got no single number here.
+	assert(tokens[op].type !=  TK_LBRAC && tokens[op].type != TK_RBRAC); // also we shouldn't select bracket since we have thrown the surrounding ones before;
+
+    uint32_t val1 = eval(p, op);
+    uint32_t val2 = eval(op + 1, q);
+
+    switch (tokens[op].type) {
+      case TK_PLUS: return val1 + val2;
+      case TK_MINUS: return val1 - val2;
+      case TK_MUL: return val1 * val2;
+      case TK_DIV: return val1 / val2;
+      case TK_EQ: return val1 == val2;
+      case TK_NEQ: return val1 != val2;
+	  case TK_AND: return val1 && val2;
+      default: assert(0);
+    }
+  }
+}
 
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
@@ -119,7 +249,27 @@ word_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  TODO();
 
-  return 0;
+  // TODO: Change assert to success = 0;
+  // do a quick scan first to check if the brackets are legal, using uint-simulated stack;
+  // 同时末位的token不可以是运算符
+
+  uint8_t cnt_bracket = 0;
+  for (int i = 0; i < nr_token; i++) {
+	  if (tokens[i].type == TK_RBRAC)
+	  	  ++cnt_bracket;
+	  if (tokens[i].type == TK_RBRAC) {
+	  	if (!cnt_bracket)
+	  		assert(0); // orphan rbrac
+	  	else
+	  		--cnt_bracket;
+	  }
+  }
+
+  if (tokens[nr_token - 1].type != TK_DEC && tokens[nr_token - 1].type != TK_RBRAC && tokens[nr_token - 1].type != TK_HEX)
+  	assert(0); // illegal end
+  if (cnt_bracket)
+  	assert(0); // open bracket
+
+  return eval(0, nr_token); // 根据我们最后++nr_token的写法，eval函数左闭右开
 }
