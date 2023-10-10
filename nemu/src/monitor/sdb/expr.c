@@ -55,7 +55,7 @@ static struct rule {
 
  // {" +", TK_NOTYPE},    // spaces
   {"\\s+", TK_NOTYPE},    // invisible characters, including \n and \t
-  {"\\$[\\$,\\w]\\w", TK_REG}, // TODO: register
+  {"\\$[\\$a-z0-9]\\w", TK_REG}, // TODO: register
   {"0x\\w+", TK_HEX}, // TODO: hexcimal number
   {"[0-9]+", TK_DEC}, // decimal number
   {"\\+", TK_PLUS}, // plus
