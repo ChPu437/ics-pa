@@ -243,7 +243,7 @@ uint32_t eval(uint8_t p, uint8_t q) {
 		if (tokens[i].type == TK_LBRAC) // we skip tokens in bracket
 			do {
 				i++;
-				printf("!!!!%d: %d\n", i, tokens[i].type);
+				// printf("!!!!%d: %d\n", i, tokens[i].type);
 			} while (tokens[i].type != TK_RBRAC);
 		
 		if (tokens[i].type == TK_PLUS || tokens[i].type == TK_MINUS || tokens[i].type == TK_MUL || tokens[i].type == TK_DIV || tokens[i].type == TK_EQ || tokens[i].type == TK_NEQ || tokens[i].type == TK_AND) {
