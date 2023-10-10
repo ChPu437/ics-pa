@@ -51,7 +51,8 @@ static struct rule {
    * Pay attention to the precedence level of different rules.
    */
 
-  {" +", TK_NOTYPE},    // spaces
+ // {" +", TK_NOTYPE},    // spaces
+  {"\\s+", TK_NOTYPE},    // invisible characters, including \n and \t
   // {"$\\\w+", TK_REG}, // TODO: register
   // {"0x\\w+", TK_HEX}, // TODO: hexcimal number
   {"[0-9]+", TK_DEC}, // decimal number
