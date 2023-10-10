@@ -44,7 +44,7 @@ static struct rule {
   {" +", TK_NOTYPE},    // spaces
   // {"$\\\w+", TK_REG}, // TODO: register
   // {"0x\\w+", TK_HEX}, // TODO: hexcimal number
-  {"\\d+", TK_DEC}, // decimal number
+  {"\\d", TK_DEC}, // decimal number
   {"\\+", TK_PLUS}, // plus
   {"-", TK_MINUS}, // minus ()
   {"\\*", TK_MUL}, // multiply (TODO: OR deref)
