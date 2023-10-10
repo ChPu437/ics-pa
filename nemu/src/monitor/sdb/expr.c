@@ -126,9 +126,10 @@ static bool make_token(char *e) {
         	  // also hexical overflow check can be hard!
 		  case TK_DEC: // remember index handling and alphabic handling when handling hexical, or using sscanf 
         	  tokens[nr_token].type = TK_DEC;
-			  assert(strlen(rules[i].regex) <= 32); // do not handle when buffer overflow for now
+			  assert(substr_len <= 32); // do not handle when buffer overflow for now
 			  										// maybe ignore the overflowed upper bits
-			  strcpy(tokens[nr_token].str, rules[i].regex);		
+          	  for (int i = 0; i < substr_len; i++)
+          	  	tokens[nr_token].str[i] = *(substr_start + i);
           	  ++nr_token;
 		  	  break;
 		  case TK_PLUS:
