@@ -234,7 +234,9 @@ uint32_t eval(uint8_t p, uint8_t q) {
   else {
 	uint8_t op = q; // position of the main operator
 	for (int i = p; i < q; i++) {
-
+		if (tokens[i].type == TK_LBRAC) // we skip tokens in bracket
+			do i++; while (tokens[i].type != TK_RBRAC);
+		
 		if (tokens[i].type == TK_PLUS || tokens[i].type == TK_MINUS || tokens[i].type == TK_MUL || tokens[i].type == TK_DIV || tokens[i].type == TK_EQ || tokens[i].type == TK_NEQ || tokens[i].type == TK_AND) {
 			if (op == q) {
 				printf("!@!!!!!\n");
