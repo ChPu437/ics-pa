@@ -180,7 +180,7 @@ bool check_parentheses(uint8_t p, uint8_t q) {
 
 	int cnt_bracket = 0;
 	for (int i = p + 1 ; i < q - 1; i++) {
-	  if (tokens[i].type == TK_RBRAC)
+	  if (tokens[i].type == TK_LBRAC)
 	  	  ++cnt_bracket;
 	  if (tokens[i].type == TK_RBRAC) {
 	  	if (!cnt_bracket)  // if finding right bracket ahead of end 
@@ -299,7 +299,7 @@ word_t expr(char *e, bool *success) {
 
   uint8_t cnt_bracket = 0;
   for (int i = 0; i < nr_token; i++) {
-	  if (tokens[i].type == TK_RBRAC)
+	  if (tokens[i].type == TK_LBRAC)
 	  	  ++cnt_bracket;
 	  if (tokens[i].type == TK_RBRAC) {
 	  	if (!cnt_bracket)
