@@ -48,17 +48,12 @@ void init_wp_pool() {
 int new_wp(char* EXPR) {
 	assert(free_ != NULL);
 	WP* new = free_;
-		printf("!!!!!!\n");
 	free_ = free_->next;
-		printf("!!!!!!\n");
 
 	new->next = NULL;
-		printf("!!!!!!\n");
 	if(head == NULL) {
 		head = new;
-		printf("!!!!!!\n");
 		new->NO = 1;
-		printf("!!!!!!\n");
 	} else {
 		WP* last = head;
 		while(last->next != NULL)
@@ -69,6 +64,8 @@ int new_wp(char* EXPR) {
 
 
 	new->expr = malloc(strlen(EXPR));
+	
+		printf("!!!!!!\n");
 	strcpy(new->expr, EXPR);
 	bool success = 0;
 	new->val = expr(EXPR, &success); 
