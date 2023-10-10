@@ -128,7 +128,9 @@ static int cmd_si(char *args) {
 static int cmd_info(char *args) {
 	switch(args[0]) {
 		case 'w':
-			// TODO: print watchpoint info
+			printf("List of watchpoints:\n");
+			printf("NO\tExpr\tVal\n");
+			dump_wp();
 			break;
 		case 'r':
 			isa_reg_display();
@@ -165,11 +167,16 @@ static int cmd_p(char *args) {
 }
 
 static int cmd_w(char *args) {
-	return 0;
+	return new_wp(args);
 }
 
 static int cmd_d(char *args) {
-	return 0;
+	int N;
+	
+	assert(args != NULL);
+	assert(~sscanf(args, "%d", &N));
+
+	return free_wp(N);
 }
 
 
