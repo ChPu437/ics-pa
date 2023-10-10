@@ -272,7 +272,7 @@ uint32_t eval(uint8_t p, uint8_t q) {
 			sscanf(tokens[p].str, "0x%x", &ret);
 			break;
 		case TK_REG:
-			bool success = 1;
+			bool success = 0;
 			ret = isa_reg_str2val(tokens[p].str + 1, &success);
 			assert(success);
 			break;
