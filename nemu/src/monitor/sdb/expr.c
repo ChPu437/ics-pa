@@ -21,8 +21,10 @@
  */
 #include <iso646.h>
 #include <regex.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
+#include <memory/paddr.h>
 
 enum {
   TK_NOTYPE = 256, 
@@ -30,7 +32,7 @@ enum {
   TK_PLUS = 4, TK_MINUS = 5, TK_MUL = 6, TK_DIV = 7, // Arith, minus can also be negative and multiply is also deref
   TK_LBRAC = 8, TK_RBRAC = 9, // Bracket
   TK_DEC = 10, TK_HEX = 11, // Number
-  TK_REG = 12, // System
+  TK_REG = 12, TK_DEREF = 13, // System
 };
 
 /* enum {
@@ -53,8 +55,8 @@ static struct rule {
 
  // {" +", TK_NOTYPE},    // spaces
   {"\\s+", TK_NOTYPE},    // invisible characters, including \n and \t
-  // {"$\\\w+", TK_REG}, // TODO: register
-  // {"0x\\w+", TK_HEX}, // TODO: hexcimal number
+  {"$\\w+", TK_REG}, // TODO: register
+  {"0x\\w+", TK_HEX}, // TODO: hexcimal number
   {"[0-9]+", TK_DEC}, // decimal number
   {"\\+", TK_PLUS}, // plus
   {"-", TK_MINUS}, // minus ()
@@ -62,9 +64,9 @@ static struct rule {
   {"/", TK_DIV}, // division
   {"\\(", TK_LBRAC}, // left bracket
   {"\\)", TK_RBRAC}, // right bracket
-  // {"==", TK_EQ}, // TODO: equal
-  // {"!=", TK_NEQ}, // TODO: not equal
-  // {"&&", TK_AND}, // TODO: logical and
+  {"==", TK_EQ}, // equal
+  {"!=", TK_NEQ}, // not equal
+  {"&&", TK_AND}, // logical and
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -125,6 +127,18 @@ static bool make_token(char *e) {
           	  break; // we want not space recorded for optimized memory use.
         	  // TODO: DONT throw "0x" of hexical here, throw at eval
         	  // also hexical overflow check can be hard!
+          case TK_HEX:
+          	  tokens[nr_token].type = TK_HEX; 
+          	  for (int i = 0; i < substr_len; i++) 
+          	  	tokens[nr_token].str[i] = *(substr_start + i);
+          	  ++nr_token;
+          	  break;
+          case TK_REG:
+          	  tokens[nr_token].type = TK_REG;
+          	  for (int i = 0; i < substr_len; i++) 
+          	  	tokens[nr_token].str[i] = *(substr_start + i);
+          	  ++nr_token;
+          	  break;
 		  case TK_DEC: // remember index handling and alphabic handling when handling hexical, or using sscanf 
         	  tokens[nr_token].type = TK_DEC;
 			  assert(substr_len <= 32); // do not handle when buffer overflow for now
@@ -141,12 +155,26 @@ static bool make_token(char *e) {
         	  tokens[nr_token].type = TK_MINUS;
           	  ++nr_token;
 		  	  break;
-		  case TK_MUL: // only record here, handle deref when calculating expr
+		  case TK_MUL: // handle ref here
+		  	  if (!nr_token || tokens[nr_token - 1].type != TK_DEC || tokens[nr_token - 1].type != TK_HEX || tokens[nr_token - 1].type != TK_REG || tokens[nr_token - 1].type != TK_RBRAC)
+		  	  	  tokens[nr_token].type = TK_REG;
         	  tokens[nr_token].type = TK_MUL;
           	  ++nr_token;
 		  	  break;
 		  case TK_DIV:
 		  	  tokens[nr_token].type = TK_DIV;
+          	  ++nr_token;
+		  	  break;
+		  case TK_EQ:
+		  	  tokens[nr_token].type = TK_EQ;
+          	  ++nr_token;
+		  	  break;
+		  case TK_NEQ:
+		  	  tokens[nr_token].type = TK_NEQ;
+          	  ++nr_token;
+		  	  break;
+		  case TK_AND:
+		  	  tokens[nr_token].type = TK_AND;
           	  ++nr_token;
 		  	  break;
 		  case TK_LBRAC:
@@ -195,24 +223,26 @@ bool check_parentheses(uint8_t p, uint8_t q) {
 
 uint8_t check_precedence(uint8_t pos) {
 	switch(tokens[pos].type) {
+		case TK_DEREF:
+			return 0;
 		case TK_LBRAC:
-			return 0;
+			return 1;
 		case TK_RBRAC:
-			return 0;
+			return 1;
 		case TK_EQ:
-			return 1;
+			return 2;
 		case TK_NEQ:
-			return 1;
+			return 2;
 		case TK_AND:
-			return 1;
+			return 2;
 		case TK_MUL:
-			return 2;
+			return 3;
 		case TK_DIV:
-			return 2;
+			return 3;
 		case TK_PLUS:
-			return 3;
+			return 4;
 		case TK_MINUS:
-			return 3;
+			return 4;
 		default:
 			assert(0);
 	}
@@ -220,7 +250,7 @@ uint8_t check_precedence(uint8_t pos) {
 
 uint32_t eval(uint8_t p, uint8_t q) {
 
-		printf("!!!!p: %d, q: %d\n", p, q);
+  // printf("!!!!p: %d, q: %d\n", p, q);
   if (p > q) {
     /* Bad expression */
 	assert(0);
@@ -234,7 +264,19 @@ uint32_t eval(uint8_t p, uint8_t q) {
      * Return the value of the number.
      */
 	uint32_t ret;
-    sscanf(tokens[p].str, "%u", &ret);
+	switch (tokens[p].type) {
+		case TK_DEC:
+			sscanf(tokens[p].str, "%u", &ret);
+			break;
+		case TK_HEX:
+			sscanf(tokens[p].str, "0x%x", &ret);
+			break;
+		case TK_REG:
+			bool success = 0;
+			ret = isa_reg_str2val(tokens[p].str + 1, &success);
+			assert(success);
+			break;
+	}
     // TODO: check negative number here;
     // or we don't do negative check, just convert regs and hexs
     // printf("!!!%s\n", tokens[p].str);
@@ -265,9 +307,14 @@ uint32_t eval(uint8_t p, uint8_t q) {
 			}
 		}
 	}
-	printf("!!!%d %d\n", op, nr_token);
+	// printf("!!!%d %d\n", op, nr_token);
 	assert(op != nr_token); // we shouldn't find no main op since we got no single number here.
 	assert(tokens[op].type !=  TK_LBRAC && tokens[op].type != TK_RBRAC); // also we shouldn't select bracket since we have thrown the surrounding ones before;
+
+	if (tokens[op].type == TK_DEREF) {
+		uint32_t val = eval(op + 1, q);
+		return paddr_read(val, 4);
+	}
 
     uint32_t val1 = eval(p, op);
     uint32_t val2 = eval(op + 1, q);
