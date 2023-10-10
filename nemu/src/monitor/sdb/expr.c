@@ -358,7 +358,7 @@ word_t expr(char *e, bool *success) {
 
   // printf("!!!%d\n", (tokens[nr_token - 1].type ==  TK_DEC));
 
-  if (tokens[nr_token - 1].type != TK_DEC && tokens[nr_token - 1].type != TK_RBRAC && tokens[nr_token - 1].type != TK_HEX)
+  if (tokens[nr_token - 1].type != TK_DEC && tokens[nr_token - 1].type != TK_RBRAC && tokens[nr_token - 1].type != TK_HEX && tokens[nr_token - 1].type != TK_REG)
   	assert(0); // illegal end
   if (cnt_bracket)
   	assert(0); // open bracket
