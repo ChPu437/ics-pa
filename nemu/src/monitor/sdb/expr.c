@@ -251,7 +251,7 @@ uint32_t eval(uint8_t p, uint8_t q) {
 			}
 		}
 	}
-	printf("!!!%d %d\n", op, q);
+	printf("!!!%d %d\n", op, nr_token);
 	assert(op != nr_token); // we shouldn't find no main op since we got no single number here.
 	assert(tokens[op].type !=  TK_LBRAC && tokens[op].type != TK_RBRAC); // also we shouldn't select bracket since we have thrown the surrounding ones before;
 
