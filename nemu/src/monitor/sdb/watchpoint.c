@@ -55,6 +55,7 @@ int new_wp(char* EXPR) {
 		head = new;
 		new->NO = 1;
 	} else {
+		printf("!!!!!!\n");
 		WP* last = head;
 		while(last->next != NULL)
 			last = last->next;
