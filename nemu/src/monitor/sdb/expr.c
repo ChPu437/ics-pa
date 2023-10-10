@@ -221,7 +221,7 @@ uint32_t eval(uint8_t p, uint8_t q) {
     sscanf(tokens[p].str, "%u", &ret);
     // TODO: check negative number here;
     // or we don't do negative check, just convert regs and hexs
-    printf("!!!%u\n", ret);
+    printf("!!!%s\n", tokens[p].str);
     return ret;
   }
   else if (check_parentheses(p, q) == true) {
