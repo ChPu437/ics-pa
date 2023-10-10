@@ -26,11 +26,11 @@
 
 enum {
   TK_NOTYPE = 256, 
-  TK_EQ, TK_NEQ, TK_AND, // Logic
-  TK_PLUS, TK_MINUS, TK_MUL, TK_DIV, // Arith, minus can also be negative and multiply is also deref
-  TK_LBRAC, TK_RBRAC, // Bracket
-  TK_DEC, TK_HEX, // Number
-  TK_REG, // System
+  TK_EQ = 1, TK_NEQ = 2, TK_AND = 3, // Logic
+  TK_PLUS = 4, TK_MINUS = 5, TK_MUL = 6, TK_DIV = 7, // Arith, minus can also be negative and multiply is also deref
+  TK_LBRAC = 8, TK_RBRAC = 9, // Bracket
+  TK_DEC = 10, TK_HEX = 11, // Number
+  TK_REG = 12, // System
 };
 
 static struct rule {
@@ -270,7 +270,7 @@ word_t expr(char *e, bool *success) {
 	  }
   }
 
-  printf("!!!%d\n", tokens[nr_token - 1].type);
+  printf("!!!%d\n", tokens[nr_token].type);
 
   if (tokens[nr_token - 1].type != TK_DEC && tokens[nr_token - 1].type != TK_RBRAC && tokens[nr_token - 1].type != TK_HEX)
   	assert(0); // illegal end
