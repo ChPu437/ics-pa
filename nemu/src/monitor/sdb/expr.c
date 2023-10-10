@@ -231,6 +231,7 @@ uint32_t eval(uint8_t p, uint8_t q) {
     return ret;
   }
   else if (check_parentheses(p, q) == true) {
+  	printf("!!!!%d %d:\n", p, q);
     /* The expression is surrounded by a matched pair of parentheses.
      * If that is the case, just throw away the parentheses.
      */
@@ -251,7 +252,6 @@ uint32_t eval(uint8_t p, uint8_t q) {
 					op = i;
 			}
 		}
-		assert(tokens[i].type != TK_MINUS);
 	}
 	printf("!!!%d %d\n", op, nr_token);
 	assert(op != nr_token); // we shouldn't find no main op since we got no single number here.
