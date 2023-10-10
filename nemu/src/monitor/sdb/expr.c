@@ -363,5 +363,7 @@ word_t expr(char *e, bool *success) {
   if (cnt_bracket)
   	assert(0); // open bracket
 
-  return eval(0, nr_token); // 根据我们最后++nr_token的写法，eval函数左闭右开
+  uint32_t ret = eval(0, nr_token); // 根据我们最后++nr_token的写法，eval函数左闭右开
+  *success = 1;
+  return ret;
 }
