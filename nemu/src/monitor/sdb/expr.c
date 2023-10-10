@@ -33,6 +33,15 @@ enum {
   TK_REG = 12, // System
 };
 
+/* enum {
+  TK_NOTYPE = 256, 
+  TK_EQ, TK_NEQ, TK_AND, // Logic
+  TK_PLUS, TK_MINUS, TK_MUL, TK_DIV, // Arith, minus can also be negative and multiply is also deref
+  TK_LBRAC, TK_RBRAC, // Bracket
+  TK_DEC, TK_HEX, // Number
+  TK_REG, // System
+}; */
+
 static struct rule {
   const char *regex;
   int token_type;
@@ -113,31 +122,37 @@ static bool make_token(char *e) {
         switch (rules[i].token_type) {
           case TK_NOTYPE:
           	  break; // we want not space recorded for optimized memory use.
-          default:
-        	  tokens[nr_token].type = rules[i].token_type;
         	  // TODO: DONT throw "0x" of hexical here, throw at eval
         	  // also hexical overflow check can be hard!
 		  case TK_DEC: // remember index handling and alphabic handling when handling hexical, or using sscanf 
+        	  tokens[nr_token].type = TK_DEC;
 			  assert(strlen(rules[i].regex) <= 32); // do not handle when buffer overflow for now
 			  										// maybe ignore the overflowed upper bits
 			  strcpy(tokens[nr_token].str, rules[i].regex);		
           	  ++nr_token;
 		  	  break;
 		  case TK_PLUS:
+        	  tokens[nr_token].type = TK_PLUS;
           	  ++nr_token;
 		  	  break;	
 		  case TK_MINUS:
+        	  tokens[nr_token].type = TK_MINUS;
           	  ++nr_token;
 		  	  break;
 		  case TK_MUL: // only record here, handle deref when calculating expr
+        	  tokens[nr_token].type = TK_MUL;
           	  ++nr_token;
 		  	  break;
 		  case TK_LBRAC:
+        	  tokens[nr_token].type = TK_LBRAC;
           	  ++nr_token;
 		  	  break;
 		  case TK_RBRAC:
+        	  tokens[nr_token].type = TK_RBRAC;
           	  ++nr_token;
 		  	  break;
+		  default:
+			  assert(0);
         }
 
         break;
@@ -270,7 +285,7 @@ word_t expr(char *e, bool *success) {
 	  }
   }
 
-  printf("!!!%d\n", tokens[nr_token].type);
+  printf("!!!%d\n", (tokens[nr_token].type ==  TK_DEC));
 
   if (tokens[nr_token - 1].type != TK_DEC && tokens[nr_token - 1].type != TK_RBRAC && tokens[nr_token - 1].type != TK_HEX)
   	assert(0); // illegal end
