@@ -49,8 +49,8 @@ static struct rule {
   {"-", TK_MINUS}, // minus ()
   {"\\*", TK_MUL}, // multiply (TODO: OR deref)
   {"/", TK_DIV}, // division
-  {"(", TK_LBRAC}, // left bracket
-  {")", TK_RBRAC}, // right bracket
+  {"\\(", TK_LBRAC}, // left bracket
+  {"\\)", TK_RBRAC}, // right bracket
   // {"==", TK_EQ}, // TODO: equal
   // {"!=", TK_NEQ}, // TODO: not equal
   // {"&&", TK_AND}, // TODO: logical and
