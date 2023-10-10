@@ -222,7 +222,7 @@ uint32_t eval(uint8_t p, uint8_t q) {
     sscanf(tokens[p].str, "%u", &ret);
     // TODO: check negative number here;
     // or we don't do negative check, just convert regs and hexs
-    printf("!!!%s\n", tokens[p].str);
+    // printf("!!!%s\n", tokens[p].str);
     return ret;
   }
   else if (check_parentheses(p, q) == true) {
@@ -235,7 +235,7 @@ uint32_t eval(uint8_t p, uint8_t q) {
 	uint8_t op = q; // position of the main operator
 	for (int i = p; i < q; i++) {
 		uint8_t type = tokens[i].type;
-		if (type == TK_PLUS || type == TK_MINUS || type == TK_MUL || type == TK_DIV || type == TK_EQ || type == TK_NEQ || type == TK_AND || type == TK_LBRAC || type == TK_RBRAC) {
+		if (type == TK_PLUS || type == TK_MINUS || type == TK_MUL || type == TK_DIV || type == TK_EQ || type == TK_NEQ || type == TK_AND) {
 			if (op == q)
 				op = i;
 			else {
