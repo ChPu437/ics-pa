@@ -21,6 +21,7 @@
  */
 #include <iso646.h>
 #include <regex.h>
+#include <stdio.h>
 #include <string.h>
 
 enum {
@@ -268,6 +269,8 @@ word_t expr(char *e, bool *success) {
 	  		--cnt_bracket;
 	  }
   }
+
+  printf("!!!%d\n", nr_token);
 
   if (tokens[nr_token - 1].type != TK_DEC && tokens[nr_token - 1].type != TK_RBRAC && tokens[nr_token - 1].type != TK_HEX)
   	assert(0); // illegal end
