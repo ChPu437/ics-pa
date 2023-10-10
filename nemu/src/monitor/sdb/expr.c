@@ -178,10 +178,18 @@ bool check_parentheses(uint8_t p, uint8_t q) {
 	if (tokens[p].type != TK_LBRAC) 
 		return 0;
 
-	for (int i = p + 1 ; i < q - 1; i++)
-		if (tokens[i].type == TK_RBRAC) // if finding right bracket ahead of end 
-				return 0;
-	
+	int cnt_bracket = 0;
+	for (int i = p + 1 ; i < q - 1; i++) {
+	  if (tokens[i].type == TK_RBRAC)
+	  	  ++cnt_bracket;
+	  if (tokens[i].type == TK_RBRAC) {
+	  	if (!cnt_bracket)  // if finding right bracket ahead of end 
+	  	  return 0;
+	  	else
+	  	  --cnt_bracket;
+	  }
+	}
+
 	return tokens[q - 1].type == TK_RBRAC;
 }
 
