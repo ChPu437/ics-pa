@@ -68,7 +68,6 @@ int new_wp(char* EXPR) {
 	bool success = 0;
 	new->val = expr(EXPR, &success); 
 	assert(success);
-	head = new;
 
 	return 0;
 }
