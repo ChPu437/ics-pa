@@ -214,6 +214,6 @@ config RT_CHECK
 
 endmenu
 
-config CONFIG_WATCHPOINT
+config WATCHPOINT
   bool "Enable watchpoint feature"
   default y
