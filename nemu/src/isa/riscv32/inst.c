@@ -30,6 +30,7 @@ enum {
   TYPE_J,
   TYPE_R,
   TYPE_B,
+  TYPE_Iz,
 };
 
 #define src1R() do { *src1 = R(rs1); } while (0)
@@ -40,6 +41,7 @@ enum {
 // Extended immediate type
 #define immJ() do { *imm = ((SEXT(BITS(i, 31, 31), 1) << 19) | (BITS(i, 19, 12) << 11) | (BITS(i, 20, 20) << 10) | BITS(i, 30, 21)) << 1;} while(0)
 #define immB() do { *imm = ((SEXT(BITS(i, 31, 31), 1) << 11) | (BITS(i, 7, 7) << 10) | (BITS(i, 30, 25) << 4) | BITS(i, 11, 8)) << 1;} while(0)
+#define immIz() do { *imm = BITS(i, 31, 20); } while(0)
 // // 左移给后续字节留下空间
 // // SEXT代表符号扩展
 
@@ -56,6 +58,7 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
 	case TYPE_J:                   immJ(); break; 
 	case TYPE_R: src1R(); src2R();         break;
 	case TYPE_B: src1R(); src2R(); immB(); break;
+	case TYPE_Iz:src1R();          immIz();break;
   }
 }
 
@@ -89,7 +92,7 @@ static int decode_exec(Decode *s) {
   // INSTPAT("??????? ????? ????? 111 ????? 00100 11", andi   , I, R(rd) = src1 & imm);
   INSTPAT("0000000 ????? ????? 000 ????? 01100 11", add    , R, R(rd) = src1 + src2);
   INSTPAT("0100000 ????? ????? 000 ????? 01100 11", sub    , R, R(rd) = src1 + src2);
-  INSTPAT("??????? ????? ????? 011 ????? 00100 11", sltiu  , I, R(rd) = src1 < ((uint32_t)(imm << 20) >> 20)); // notice imm of this should be zero-extended
+  INSTPAT("??????? ????? ????? 011 ????? 00100 11", sltiu  , Iz, R(rd) = src1 < ((uint32_t)(imm << 20) >> 20)); // notice imm of this should be zero-extended
   INSTPAT("??????? ????? ????? 000 ????? 11000 11", beq    , B, s->dnpc = (src1 == src2 ? s->pc + imm : s->dnpc));
   INSTPAT("??????? ????? ????? 001 ????? 11000 11", bne    , B, s->dnpc = (src1 != src2 ? s->pc + imm : s->dnpc));
   // Testing extended instruction end
