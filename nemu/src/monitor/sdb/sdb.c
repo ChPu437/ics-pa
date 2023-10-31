@@ -150,6 +150,7 @@ static int cmd_x(char *args) {
 
 	for (int i = 0; i < N; i++)
 		printf("0x%x: 0x%x\n", EXPR + 4 * i, paddr_read(EXPR + 4 * i, 4));
+	TODO();
 	return 0;
 }
 
