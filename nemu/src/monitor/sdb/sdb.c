@@ -141,7 +141,7 @@ static int cmd_info(char *args) {
 
 static int cmd_x(char *args) {
 	paddr_t EXPR;
-	int N = 1;
+	int N;
 
 	if (args != NULL) 
 		assert(~sscanf(args, "%d 0x%x", &N, &EXPR));
