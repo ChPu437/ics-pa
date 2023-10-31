@@ -18,7 +18,7 @@
 #include <cpu/difftest.h>
 #include <locale.h>
 #ifdef CONFIG_WATCHPOINT
-#include "../monitor/sdb/watchpoint.c"
+#include "../monitor/sdb/sdb.h"
 #endif
 
 /* The assembly code of instructions executed is only output to the screen
