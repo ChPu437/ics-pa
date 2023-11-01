@@ -128,6 +128,9 @@ static int decode_exec(Decode *s) {
   INSTPAT("0000000 ????? ????? 101 ????? 00100 11", srli   , I, R(rd) = ((word_t)src1) >> (imm & 31)); // only use imm[0:4]
   INSTPAT("0100000 ????? ????? 101 ????? 01100 11", sra    , R, R(rd) = src1 >> src2);
 
+  // // switch
+  INSTPAT("??????? ????? ????? 110 ????? 11000 11", bltu   , B, s->dnpc = ((word_t)src1 < (word_t)src2 ? s->pc + imm : s->dnpc));
+
   // Testing extended instruction end
 
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
