@@ -143,6 +143,10 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 001 ????? 00000 11", lh     , I, R(rd) = Mr(src1 + imm, 2));
 
   // // quick-sort: SIGSEGV -> out of bound
+  // // // about jmp or branch
+
+  // // crc32
+  INSTPAT("??????? ????? ????? 111 ????? 11000 11", bgeu   , B, s->dnpc = ((word_t)src1 >= (word_t)src2 ? s->pc + imm : s->dnpc));
 
   // Testing extended instruction end
 
@@ -152,8 +156,8 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
   
   // Extended pseudo-instructions
-  // We don't need this since pseudo-instructions are translated into "real" instructions
-  // this should have been done by compiler.
+  // // We don't need this since pseudo-instructions are translated into "real" instructions
+  // // this should have been done by compiler.
   INSTPAT_END();
 
   R(0) = 0; // reset $zero to 0
