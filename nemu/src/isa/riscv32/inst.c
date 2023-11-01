@@ -39,6 +39,7 @@ enum {
 #define immS() do { *imm = (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); } while(0)
 // Extended immediate type
 // // 注意到immJ和immB应当最后(即左移前)做符号扩展，因为最高位不一定一定是符号位，即可能出现实际位数小于最大位数情况
+// // 回去查一查B_imm是不是读错了，ISA说和S_type区别只是移位，查查S_type准确定义
 // #define immJ() do { *imm = ((SEXT(BITS(i, 31, 31), 1) << 19) | (BITS(i, 19, 12) << 11) | (BITS(i, 20, 20) << 10) | BITS(i, 30, 21)) << 1;} while(0)
 // #define immB() do { *imm = ((SEXT(BITS(i, 31, 31), 1) << 11) | (BITS(i, 7, 7) << 10) | (BITS(i, 30, 25) << 4) | BITS(i, 11, 8)) << 1;} while(0)
 #define immJ() do { *imm = SEXT((BITS(i, 31, 31) << 19) | (BITS(i, 19, 12) << 11) | (BITS(i, 20, 20) << 10) | BITS(i, 30, 21), 20) << 1;} while(0)
