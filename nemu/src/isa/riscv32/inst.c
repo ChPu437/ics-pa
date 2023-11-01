@@ -145,7 +145,8 @@ static int decode_exec(Decode *s) {
   // // quick-sort: SIGSEGV -> out of bound
   // // // about jmp or branch
 
-  // // crc32
+  // // crc32 --this also passed?
+  // // // maybe B[U] is wrongly processed but get 'right' result
   INSTPAT("??????? ????? ????? 111 ????? 11000 11", bgeu   , B, s->dnpc = ((word_t)src1 >= (word_t)src2 ? s->pc + imm : s->dnpc));
 
   // Testing extended instruction end
