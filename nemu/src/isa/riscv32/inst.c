@@ -149,6 +149,8 @@ static int decode_exec(Decode *s) {
   // // // maybe B[U] is wrongly processed but get 'right' result
   INSTPAT("??????? ????? ????? 111 ????? 11000 11", bgeu   , B, s->dnpc = ((word_t)src1 >= (word_t)src2 ? s->pc + imm : s->dnpc));
 
+  // // movsx --fail
+
   // Testing extended instruction end
 
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
