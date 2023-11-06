@@ -46,7 +46,8 @@ enum {
 // #define immJ() do { *imm = SEXT((BITS(i, 31, 31) << 19) | (BITS(i, 19, 12) << 11) | (BITS(i, 20, 20) << 10) | BITS(i, 30, 21), 20) << 1;} while(0)
 // #define immB() do { *imm = SEXT((BITS(i, 31, 31) << 11) | (BITS(i, 7, 7) << 10) | (BITS(i, 30, 25) << 4) | BITS(i, 11, 8), 12) << 1;} while(0)
 #define immJ() do { *imm = ((SEXT(BITS(i, 31, 31), 1) << 20) | (BITS(i, 19, 12) << 12) | (BITS(i, 20, 20) << 11) | (BITS(i, 30, 21) << 1) | 0);} while(0)
-#define immB() do { *imm = ((SEXT(BITS(i, 31, 31), 1) << 12) | (BITS(i, 7, 7) << 11) | (BITS(i, 30, 25) << 5) | (BITS(i, 11, 8) << 1) | 0);} while(0)
+// #define immB() do { *imm = ((SEXT(BITS(i, 31, 31), 1) << 12) | (BITS(i, 7, 7) << 11) | (BITS(i, 30, 25) << 5) | (BITS(i, 11, 8) << 1) | 0);} while(0)
+#define immB() do { *imm = SEXT(BITS(i, 31, 31), 1);} while(0)
 // #define immIz() do { *imm = BITS(i, 31, 20); } while(0)
 // // 左移给后续字节留下空间
 // // SEXT代表符号扩展
