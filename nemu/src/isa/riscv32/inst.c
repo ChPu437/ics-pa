@@ -124,6 +124,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("0000000 ????? ????? 011 ????? 01100 11", sltu   , R, R(rd) = ((word_t)src1 < (word_t)src2 ? 1 : 0));
 
   // // hello-str -> TODO implemention of string 
+  // // string    -> TODO inplemention of string
 
   // // if-else
   // // max
