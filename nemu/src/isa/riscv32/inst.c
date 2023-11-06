@@ -156,11 +156,11 @@ static int decode_exec(Decode *s) {
   // // load-store -- fail
   INSTPAT("??????? ????? ????? 001 ????? 00000 11", lh     , I, R(rd) = Mr(src1 + imm, 2));
 
-  // // quick-sort: SIGSEGV -> out of bound
-  // // // about jmp or branch
+  // // quick-sort
 
-  // // crc32 --this also passed?
+  // // crc32 
   // // // maybe B[U] is wrongly processed but get 'right' result
+  // // // FACT: ONLY B[U] was processed right XD
   INSTPAT("??????? ????? ????? 111 ????? 11000 11", bgeu   , B, s->dnpc = ((word_t)src1 >= (word_t)src2 ? s->pc + imm : s->dnpc));
 
   // // movsx --fail
