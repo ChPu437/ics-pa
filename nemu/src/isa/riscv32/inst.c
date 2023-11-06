@@ -38,12 +38,15 @@ enum {
 #define immU() do { *imm = SEXT(BITS(i, 31, 12), 20) << 12; } while(0)
 #define immS() do { *imm = (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); } while(0)
 // Extended immediate type
-// // 注意到immJ和immB应当最后(即左移前)做符号扩展，因为最高位不一定一定是符号位，即可能出现实际位数小于最大位数情况
+// // ~~注意到immJ和immB应当最后(即左移前)做符号扩展，因为最高位不一定一定是符号位，即可能出现实际位数小于最大位数情况~~
+// // 指令集支出符号位一定都在31位->方便硬件实现
 // // 回去查一查B_imm是不是读错了，ISA说和S_type区别只是移位，查查S_type准确定义
 // #define immJ() do { *imm = ((SEXT(BITS(i, 31, 31), 1) << 19) | (BITS(i, 19, 12) << 11) | (BITS(i, 20, 20) << 10) | BITS(i, 30, 21)) << 1;} while(0)
 // #define immB() do { *imm = ((SEXT(BITS(i, 31, 31), 1) << 11) | (BITS(i, 7, 7) << 10) | (BITS(i, 30, 25) << 4) | BITS(i, 11, 8)) << 1;} while(0)
-#define immJ() do { *imm = SEXT((BITS(i, 31, 31) << 19) | (BITS(i, 19, 12) << 11) | (BITS(i, 20, 20) << 10) | BITS(i, 30, 21), 20) << 1;} while(0)
-#define immB() do { *imm = SEXT((BITS(i, 31, 31) << 11) | (BITS(i, 7, 7) << 10) | (BITS(i, 30, 25) << 4) | BITS(i, 11, 8), 12) << 1;} while(0)
+// #define immJ() do { *imm = SEXT((BITS(i, 31, 31) << 19) | (BITS(i, 19, 12) << 11) | (BITS(i, 20, 20) << 10) | BITS(i, 30, 21), 20) << 1;} while(0)
+// #define immB() do { *imm = SEXT((BITS(i, 31, 31) << 11) | (BITS(i, 7, 7) << 10) | (BITS(i, 30, 25) << 4) | BITS(i, 11, 8), 12) << 1;} while(0)
+#define immJ() do { *imm = ((SEXT(BITS(i, 31, 31), 33) << 20) | (BITS(i, 19, 12) << 12) | (BITS(i, 20, 20) << 11) | (BITS(i, 30, 21) << 1) | 0);} while(0)
+#define immB() do { *imm = ((SEXT(BITS(i, 31, 31), 33) << 12) | (BITS(i, 7, 7) << 11) | (BITS(i, 30, 25) << 5) | (BITS(i, 11, 8) << 1) | 0);} while(0)
 // #define immIz() do { *imm = BITS(i, 31, 20); } while(0)
 // // 左移给后续字节留下空间
 // // SEXT代表符号扩展
