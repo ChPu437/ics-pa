@@ -127,7 +127,7 @@ void init_monitor(int argc, char *argv[]) {
   init_difftest(diff_so_file, img_size, difftest_port);
 
   /* Initialize the simple debugger. */
-#ifndef CONFIG_NEMU_SKIP_SDB
+#ifndef CONFIG_SKIP_SDB
   init_sdb();
 #else
   cpu_exec(-1);

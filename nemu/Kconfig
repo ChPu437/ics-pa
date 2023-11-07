@@ -217,3 +217,7 @@ endmenu
 config WATCHPOINT
   bool "Enable watchpoint feature"
   default y
+
+config SKIP_SDB
+  bool "Skip sdb and run program immediately after nemu starts"
+  default n
