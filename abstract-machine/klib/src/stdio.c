@@ -156,8 +156,6 @@ int printf(const char *fmt, ...) {
 				++_i;
 			}
 
-			// TODO: output with width and flag
-
 			switch(*(fmt +_i)) { // match specifier
 				case 'd':
 					io_format.spec = SPEC_INT;
