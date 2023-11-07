@@ -15,9 +15,6 @@
 
 #include <isa.h>
 #include <memory/paddr.h>
-#ifdef CONFIG_SDB_NO_INTERACT
-#include <cpu/cpu.h>
-#endif
 
 void init_rand();
 void init_log(const char *log_file);
@@ -27,6 +24,7 @@ void init_device();
 void init_sdb();
 void init_disasm(const char *triple);
 
+#ifndef CONFIG_SDB_NO_INTERACT
 static void welcome() {
   Log("Trace: %s", MUXDEF(CONFIG_TRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
   IFDEF(CONFIG_TRACE, Log("If trace is enabled, a log file will be generated "
@@ -38,6 +36,9 @@ static void welcome() {
   // Log("Exercise: Please remove me in the source code and compile NEMU again.");
   // assert(0);
 }
+#else
+#include <cpu/cpu.h>
+#endif
 
 #ifndef CONFIG_TARGET_AM
 #include <getopt.h>
@@ -140,12 +141,12 @@ void init_monitor(int argc, char *argv[]) {
   ));
 #endif
 
-#ifdef CONFIG_SDB_NO_INTERACT
-  cpu_exec(-1);
-#endif
-
+#ifndef CONFIG_SDB_NO_INTERACT
   /* Display welcome message. */
   welcome();
+#else
+  cpu_exec(-1);
+#endif
 }
 #else // CONFIG_TARGET_AM
 static long load_img() {
