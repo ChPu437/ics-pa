@@ -151,6 +151,7 @@ int printf(const char *fmt, ...) {
 
 			io_format.width = 0; // 0 is refered as default
 			while(ISDIGIT(*(fmt + _i))) {
+				putch('!');
 				io_format.width = io_format.width * 10 + (*(fmt + _i) - 1);
 				++_i;
 			}
