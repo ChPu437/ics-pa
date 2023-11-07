@@ -8,6 +8,25 @@
 int printf(const char *fmt, ...) {
 	va_list ap;
 	va_start(ap, fmt);
+
+	for (int _i = 0; *(fmt + _i) != '\0'; _i++) {
+		if(*(fmt + _i) != '%') {
+				putch(*(fmt + _i));
+		} else {
+			switch(*(fmt + _i + 1)) {
+				case '%':
+					putch('%');
+					break;
+				default:
+					panic("Not implemented");
+					break;
+			}
+			_i++;
+		}
+	}
+
+	va_end(ap);
+
 	return 0;
 }
 
