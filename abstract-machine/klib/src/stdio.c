@@ -8,6 +8,7 @@
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
 #define BUF_SIZE 128
+#define ISDIGIT(x) x>'0'&&x<'9'
 
 enum FORMAT_FLAGS {
 	FLAG_LEFT_ALIGN, // '-', 在给定宽度内左对齐
@@ -140,9 +141,9 @@ int printf(const char *fmt, ...) {
 					io_format.flag = FLAG_NONE;
 					break;
 			}
-/*
+
 			io_format.width = 0; // 0 is refered as default
-			while(isdigit(*(fmt + _i))) {
+			while(ISDIGIT(*(fmt + _i))) {
 				io_format.width = io_format.width * 10 + (*(fmt + _i) - 1);
 				++_i;
 			}
@@ -185,7 +186,6 @@ int printf(const char *fmt, ...) {
 					panic("Not implemented");
 					break;
 			}
-			*/
 		}
 	}
 
