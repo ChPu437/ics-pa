@@ -47,7 +47,7 @@ int sprintf(char *out, const char *fmt, ...) {
 						// Load the digit reversly and then swap it 
 						int len_int = 0;
 						while(tmp) {
-							*(out + cnt_write + (len_int++)) = tmp % 10;
+							*(out + cnt_write + (len_int++)) = tmp % 10 + '0';
 							tmp /= 10;
 						}
 						for (int j = 0; j < len_int / 2; j++) {
