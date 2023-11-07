@@ -141,6 +141,7 @@ void init_monitor(int argc, char *argv[]) {
   welcome();
 
 #ifdef SDB_NO_INTERACT
+  pritf("adasdasdsasd\n");
   cmd_c();
 #endif
 }
