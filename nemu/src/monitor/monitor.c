@@ -15,7 +15,6 @@
 
 #include <isa.h>
 #include <memory/paddr.h>
-#include <cpu/cpu.h>
 
 void init_rand();
 void init_log(const char *log_file);
@@ -127,10 +126,9 @@ void init_monitor(int argc, char *argv[]) {
   init_difftest(diff_so_file, img_size, difftest_port);
 
   /* Initialize the simple debugger. */
-#ifndef CONFIG_SKIP_SDB
   init_sdb();
-#else
-  cpu_exec(-1);
+#ifdef SDB_NO_INTERACT
+  cmd_c();
 #endif
 
 #ifndef CONFIG_ISA_loongarch32r
