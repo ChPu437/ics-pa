@@ -34,6 +34,10 @@ static void welcome() {
   printf("For help, type \"help\"\n");
   // Log("Exercise: Please remove me in the source code and compile NEMU again.");
   // assert(0);
+#ifdef SDB_NO_INTERACT
+  pritf("adasdasdsasd\n");
+  cmd_c();
+#endif
 }
 
 #ifndef CONFIG_TARGET_AM
@@ -139,11 +143,6 @@ void init_monitor(int argc, char *argv[]) {
 
   /* Display welcome message. */
   welcome();
-
-#ifdef SDB_NO_INTERACT
-  pritf("adasdasdsasd\n");
-  cmd_c();
-#endif
 }
 #else // CONFIG_TARGET_AM
 static long load_img() {
@@ -161,7 +160,5 @@ void am_init_monitor() {
   load_img();
   IFDEF(CONFIG_DEVICE, init_device());
   welcome();
-
-  cpu_exec(-1); // we don't want to access interactive interface here, just run the program
 }
 #endif
