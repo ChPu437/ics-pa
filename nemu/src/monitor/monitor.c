@@ -15,6 +15,7 @@
 
 #include <isa.h>
 #include <memory/paddr.h>
+#include <cpu/cpu.h>
 
 void init_rand();
 void init_log(const char *log_file);
@@ -126,7 +127,11 @@ void init_monitor(int argc, char *argv[]) {
   init_difftest(diff_so_file, img_size, difftest_port);
 
   /* Initialize the simple debugger. */
+#ifndef CONFIG_NEMU_SKIP_SDB
   init_sdb();
+#else
+  cpu_exec(-1);
+#endif
 
 #ifndef CONFIG_ISA_loongarch32r
   IFDEF(CONFIG_ITRACE, init_disasm(
@@ -141,7 +146,6 @@ void init_monitor(int argc, char *argv[]) {
   welcome();
 }
 #else // CONFIG_TARGET_AM
-#include <cpu/cpu.h>
 static long load_img() {
   extern char bin_start, bin_end;
   size_t size = &bin_end - &bin_start;
