@@ -57,7 +57,19 @@ void *memset(void *s, int c, size_t n) {
 }
 
 void *memmove(void *dst, const void *src, size_t n) {
-  panic("Not implemented");
+  // dst <- src, 但是保证重叠块能够正常复制
+	if (dst < src) { // 如有重叠发生在src前端
+		// 此时从前往后复制
+		for (int i = 0; i < n; i++) {
+			*((char*)dst + i) = *((char*)src + i);
+		}
+	} else { // 如有重叠发生在src后端
+	  // 此时从后往前复制
+		for (int i = n - 1; i >= 0; i--) {
+			*((char*)dst + i) = *((char*)src + i);
+		}
+	}
+	return dst;
 }
 
 void *memcpy(void *out, const void *in, size_t n) {
