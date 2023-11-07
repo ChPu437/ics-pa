@@ -50,7 +50,7 @@ int sprintf(char *out, const char *fmt, ...) {
 							*(out + cnt_write + (len_int++)) = tmp % 10;
 							tmp /= 10;
 						}
-						for (int j = 0; i < len_int / 2; j++) {
+						for (int j = 0; j < len_int / 2; j++) {
 							char *x = out + cnt_write + j;
 							char *y = out + cnt_write + len_int - j - 1;
 							char z;
