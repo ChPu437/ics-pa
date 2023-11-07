@@ -141,6 +141,7 @@ void init_monitor(int argc, char *argv[]) {
   welcome();
 }
 #else // CONFIG_TARGET_AM
+#include <cpu/cpu.h>
 static long load_img() {
   extern char bin_start, bin_end;
   size_t size = &bin_end - &bin_start;
