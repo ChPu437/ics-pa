@@ -155,7 +155,7 @@ int printf(const char *fmt, ...) {
 				io_format.width = io_format.width * 10 + (*(fmt + _i) - 1);
 				++_i;
 			}
-			assert(io_format.width == 5);
+			assert(io_format.width == 0 || io_format.width == 5);
 
 			// TODO: output with width and flag
 
