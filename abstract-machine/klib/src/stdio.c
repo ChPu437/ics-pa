@@ -20,6 +20,7 @@ enum FORMAT_FLAGS {
 enum FORMAT_SPECIFIER {
 	SPEC_INT, // d
 	SPEC_STR, // s
+	SPEC_CHAR, // c
 	// SPEC_FLOAT, // f // No need to implement float
 };
 
@@ -169,6 +170,10 @@ int printf(const char *fmt, ...) {
 					for (int i = 0; *(tmp_s + i) != '\0'; i++) {
 						buf[cnt_buf++] = *(tmp_s + i);
 					}
+					break;
+				case 'c':
+					io_format.spec = SPEC_CHAR;
+					buf[cnt_buf++] = (char)va_arg(ap, int);
 					break;
 				/*case 'f': // No need to implement float
 					io_format.spec = SPEC_FLOAT;
