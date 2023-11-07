@@ -5,6 +5,7 @@
 #include <math.h>
 #include <stdarg.h>
 #include <stdlib.h>
+#include <threads.h>
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
@@ -151,10 +152,10 @@ int printf(const char *fmt, ...) {
 
 			io_format.width = 0; // 0 is refered as default
 			while(ISDIGIT(*(fmt + _i))) {
-				putch('!');
 				io_format.width = io_format.width * 10 + (*(fmt + _i) - 1);
 				++_i;
 			}
+			assert(io_format.width == 5);
 
 			// TODO: output with width and flag
 
