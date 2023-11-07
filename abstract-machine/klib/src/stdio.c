@@ -167,7 +167,7 @@ int printf(const char *fmt, ...) {
 						putch(*(tmp_s + i));
 					}
 					break;
-				/*case 'f':
+				/*case 'f': // No need to implement float
 					io_format.spec = SPEC_FLOAT;
 					float tmp_f = (float)va_arg(ap, double); // va_arg cannot use short or float as type
 																									 
