@@ -113,6 +113,7 @@ inline void buf_flush() {
 	for (int i = 0; i < cnt_buf; i++) {
 		putch(*(buf + i));
 	}
+	cnt_buf = 0;
 }
 
 int printf(const char *fmt, ...) {
@@ -193,6 +194,7 @@ int printf(const char *fmt, ...) {
 			}
 
 			// flush buffer and output to stdout
+			cnt_write += cnt_buf;
 			if (io_format.flag != FLAG_LEFT_ALIGN) {
 				if(cnt_buf < io_format.width) {
 					for (int i = io_format.width - cnt_buf; i > 0; i--) {
@@ -208,7 +210,6 @@ int printf(const char *fmt, ...) {
 					}
 				}
 			}
-			cnt_write += cnt_buf;
 		}
 	}
 
