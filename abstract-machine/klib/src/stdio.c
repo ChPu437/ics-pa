@@ -17,7 +17,7 @@ enum FORMAT_FLAGS {
 enum FORMAT_SPECIFIER {
 	SPEC_INT, // d
 	SPEC_STR, // s
-	SPEC_FLOAT, // f
+	// SPEC_FLOAT, // f // No need to implement float
 };
 
 struct {
@@ -167,7 +167,7 @@ int printf(const char *fmt, ...) {
 						putch(*(tmp_s + i));
 					}
 					break;
-				case 'f':
+				/*case 'f':
 					io_format.spec = SPEC_FLOAT;
 					float tmp_f = (float)va_arg(ap, double); // va_arg cannot use short or float as type
 																									 
@@ -183,7 +183,7 @@ int printf(const char *fmt, ...) {
 					}
 					buf_flush();
 					cnt_write += cnt_buf;
-					break;
+					break;*/
 				default:
 					panic("Not implemented");
 					break;
