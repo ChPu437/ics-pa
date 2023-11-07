@@ -35,7 +35,7 @@ static void welcome() {
   // Log("Exercise: Please remove me in the source code and compile NEMU again.");
   // assert(0);
 #ifdef SDB_NO_INTERACT
-  pritf("adasdasdsasd\n");
+  assert(0);
   cmd_c();
 #endif
 }
