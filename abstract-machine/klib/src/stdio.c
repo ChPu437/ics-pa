@@ -69,6 +69,7 @@ int sprintf(char *out, const char *fmt, ...) {
 	va_end(ap);
 	*(out + cnt_write) = '\0';
 
+	// TODO: trim blank at back of `cnt_write`
 	return cnt_write;
 }
 
