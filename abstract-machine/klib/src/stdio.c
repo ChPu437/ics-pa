@@ -1,34 +1,30 @@
 #include <am.h>
+#include <ctype.h>
 #include <klib.h>
 #include <klib-macros.h>
 #include <stdarg.h>
+#include <stdlib.h>
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
-int printf(const char *fmt, ...) {
-	va_list ap;
-	va_start(ap, fmt);
+#define BUF_SIZE 128
 
-	for (int _i = 0; *(fmt + _i) != '\0'; _i++) {
-		if(*(fmt + _i) != '%') {
-				putch(*(fmt + _i));
-		} else {
-			switch(*(fmt + _i + 1)) {
-				case '%':
-					putch('%');
-					break;
-				default:
-					panic("Not implemented");
-					break;
-			}
-			_i++;
-		}
-	}
+enum FORMAT_FLAGS {
+	FLAG_LEFT_ALIGN, // '-', 在给定宽度内左对齐
+	FLAG_NONE, // 没有提供 flag
+};
+enum FORMAT_SPECIFIER {
+	SPEC_INT, // d
+	SPEC_STR, // s
+	SPEC_FLOAT, // f
+};
 
-	va_end(ap);
+struct {
+	enum FORMAT_FLAGS flag;
+	int width;
+	enum FORMAT_SPECIFIER spec;
+} io_format;
 
-	return 0;
-}
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
 	int cnt_write = 0;
@@ -60,6 +56,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 							tmp = -tmp;
 						}
 						// Load the digit reversly and then swap it 
+						// TODO: rewrite this with atoi()
 						int len_int = 0;
 						while(tmp) {
 							*(out + cnt_write + (len_int++)) = tmp % 10 + '0';
@@ -75,6 +72,9 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 						}
 						cnt_write += len_int; // Update cnt_write
 					}
+					break;
+				default:
+					panic("Not implemented");
 					break;
 			}
 			i++; // jump over the format specifier, need to be expand to a certain value when the length of specifier gt 1
@@ -101,5 +101,98 @@ int snprintf(char *out, size_t n, const char *fmt, ...) {
 int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
   panic("Not implemented");
 }
+
+int cnt_buf = 0;
+char buf[BUF_SIZE];
+
+
+inline void buf_flush() {
+	for (int i = 0; i < cnt_buf; i++) {
+		putch(*(buf + i));
+	}
+}
+
+int printf(const char *fmt, ...) {
+	int cnt_write = 0;
+	va_list ap;
+	va_start(ap, fmt);
+
+	for (int _i = 0; *(fmt + _i) != '\0'; _i++) {
+		if(*(fmt + _i) != '%') {
+				++cnt_write;
+				putch(*(fmt + _i));
+		} else {
+			++_i; // jump over the starting '%'
+			// %[flags][width][.precision][length]specifier
+			// need to implement first: '-' and [width]
+			if (*(fmt + _i) == '%') { // "%%"
+				++cnt_write;
+				putch('%');
+				continue;
+			}	
+
+			switch(*(fmt + _i)) { // match flag
+				case '-':
+					++_i;
+					io_format.flag = FLAG_LEFT_ALIGN;
+					break;
+				default:
+					io_format.flag = FLAG_NONE;
+					break;
+			}
+/*
+			io_format.width = 0; // 0 is refered as default
+			while(isdigit(*(fmt + _i))) {
+				io_format.width = io_format.width * 10 + (*(fmt + _i) - 1);
+				++_i;
+			}
+
+			switch(*(fmt +_i)) { // match specifier
+				case 'd':
+					io_format.spec = SPEC_INT;
+					int tmp_d = va_arg(ap, int);
+
+					cnt_buf = sprintf(buf, "%d", tmp_d);
+					buf_flush();
+					cnt_write += cnt_buf;
+					break;
+				case 's':
+					io_format.spec = SPEC_STR;
+					char* tmp_s = va_arg(ap, char*);
+					for (int i = 0; *(tmp_s + i) != '\0'; i++) {
+						++cnt_write;
+						putch(*(tmp_s + i));
+					}
+					break;
+				case 'f':
+					io_format.spec = SPEC_FLOAT;
+					float tmp_f = (float)va_arg(ap, double); // va_arg cannot use short or float as type
+																									 
+					int tmp_f_i = (int)tmp_f; // 整数部分
+					cnt_buf = sprintf(buf, "%d", tmp_f_i);
+					buf[cnt_buf++] = '.';	
+					tmp_f = tmp_f - tmp_f_i; // 小数部分
+					if(tmp_f < 0) tmp_f = -tmp_f; // 输出小数不关心符号
+					tmp_f_i = tmp_f * 10;
+					while(cnt_buf < BUF_SIZE && tmp_f_i) {
+						buf[++cnt_buf] = tmp_f_i;
+						tmp_f = tmp_f * 10 - tmp_f_i;
+					}
+					buf_flush();
+					cnt_write += cnt_buf;
+					break;
+				default:
+					panic("Not implemented");
+					break;
+			}
+			*/
+		}
+	}
+
+	va_end(ap);
+
+	return cnt_write;
+}
+
 
 #endif
