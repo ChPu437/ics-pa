@@ -155,7 +155,6 @@ int printf(const char *fmt, ...) {
 				io_format.width = io_format.width * 10 + (*(fmt + _i) - '0');
 				++_i;
 			}
-			assert(io_format.width == 0 || io_format.width == 5);
 
 			// TODO: output with width and flag
 
@@ -205,9 +204,10 @@ int printf(const char *fmt, ...) {
 				}
 				buf_flush();
 			} else {
-				buf_flush();
 				if(cnt_buf < io_format.width) {
-					for (int i = io_format.width - cnt_buf; i > 0; i--) {
+					int i = io_format.width - cnt_buf;
+					buf_flush();
+					for ( ; i > 0; i--) {
 						putch(' ');
 					}
 				}
