@@ -127,9 +127,6 @@ void init_monitor(int argc, char *argv[]) {
 
   /* Initialize the simple debugger. */
   init_sdb();
-#ifdef SDB_NO_INTERACT
-  cmd_c();
-#endif
 
 #ifndef CONFIG_ISA_loongarch32r
   IFDEF(CONFIG_ITRACE, init_disasm(
@@ -142,6 +139,10 @@ void init_monitor(int argc, char *argv[]) {
 
   /* Display welcome message. */
   welcome();
+
+#ifdef SDB_NO_INTERACT
+  cmd_c();
+#endif
 }
 #else // CONFIG_TARGET_AM
 static long load_img() {
