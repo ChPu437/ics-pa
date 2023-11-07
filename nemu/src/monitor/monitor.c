@@ -156,5 +156,7 @@ void am_init_monitor() {
   load_img();
   IFDEF(CONFIG_DEVICE, init_device());
   welcome();
+
+  cpu_exec(-1); // we don't want to access interactive interface here, just run the program
 }
 #endif
