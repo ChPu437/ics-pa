@@ -15,6 +15,9 @@
 
 #include <isa.h>
 #include <memory/paddr.h>
+#ifdef CONFIG_SDB_NO_INTERACT
+#include <cpu/cpu.h>
+#endif
 
 void init_rand();
 void init_log(const char *log_file);
@@ -34,10 +37,6 @@ static void welcome() {
   printf("For help, type \"help\"\n");
   // Log("Exercise: Please remove me in the source code and compile NEMU again.");
   // assert(0);
-#ifdef SDB_NO_INTERACT
-  assert(0);
-  cmd_c();
-#endif
 }
 
 #ifndef CONFIG_TARGET_AM
@@ -139,6 +138,10 @@ void init_monitor(int argc, char *argv[]) {
     MUXDEF(CONFIG_ISA_riscv32, "riscv32",
     MUXDEF(CONFIG_ISA_riscv64, "riscv64", "bad")))) "-pc-linux-gnu"
   ));
+#endif
+
+#ifdef CONFIG_SDB_NO_INTERACT
+  cpu_exec(-1);
 #endif
 
   /* Display welcome message. */
