@@ -2,6 +2,7 @@
 #include <ctype.h>
 #include <klib.h>
 #include <klib-macros.h>
+#include <math.h>
 #include <stdarg.h>
 #include <stdlib.h>
 
@@ -12,6 +13,7 @@
 
 enum FORMAT_FLAGS {
 	FLAG_LEFT_ALIGN, // '-', 在给定宽度内左对齐
+	FLAG_ZERO_PADDING, // '0', 用0填充右对齐时左侧的空位
 	FLAG_NONE, // 没有提供 flag
 };
 enum FORMAT_SPECIFIER {
@@ -137,6 +139,10 @@ int printf(const char *fmt, ...) {
 					++_i;
 					io_format.flag = FLAG_LEFT_ALIGN;
 					break;
+				case '0':
+					++_i;
+					io_format.flag = FLAG_ZERO_PADDING;
+					break;
 				default:
 					io_format.flag = FLAG_NONE;
 					break;
@@ -156,15 +162,12 @@ int printf(const char *fmt, ...) {
 					int tmp_d = va_arg(ap, int);
 
 					cnt_buf = sprintf(buf, "%d", tmp_d);
-					buf_flush();
-					cnt_write += cnt_buf;
 					break;
 				case 's':
 					io_format.spec = SPEC_STR;
 					char* tmp_s = va_arg(ap, char*);
 					for (int i = 0; *(tmp_s + i) != '\0'; i++) {
-						++cnt_write;
-						putch(*(tmp_s + i));
+						buf[cnt_buf++] = *(tmp_s + i);
 					}
 					break;
 				/*case 'f': // No need to implement float
@@ -188,6 +191,24 @@ int printf(const char *fmt, ...) {
 					panic("Not implemented");
 					break;
 			}
+
+			// flush buffer and output to stdout
+			if (io_format.flag != FLAG_LEFT_ALIGN) {
+				if(cnt_buf < io_format.width) {
+					for (int i = io_format.width - cnt_buf; i > 0; i--) {
+						putch(io_format.flag==FLAG_ZERO_PADDING ? '0' : ' ');
+					}
+				}
+				buf_flush();
+			} else {
+				buf_flush();
+				if(cnt_buf < io_format.width) {
+					for (int i = io_format.width - cnt_buf; i > 0; i--) {
+						putch(' ');
+					}
+				}
+			}
+			cnt_write += cnt_buf;
 		}
 	}
 
