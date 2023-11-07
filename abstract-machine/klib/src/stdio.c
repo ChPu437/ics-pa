@@ -152,7 +152,7 @@ int printf(const char *fmt, ...) {
 
 			io_format.width = 0; // 0 is refered as default
 			while(ISDIGIT(*(fmt + _i))) {
-				io_format.width = io_format.width * 10 + (*(fmt + _i) - 1);
+				io_format.width = io_format.width * 10 + (*(fmt + _i) - '0');
 				++_i;
 			}
 			assert(io_format.width == 0 || io_format.width == 5);
