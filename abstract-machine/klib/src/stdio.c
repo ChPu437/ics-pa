@@ -157,7 +157,7 @@ int printf(const char *fmt, ...) {
 				++_i;
 			}
 
-			switch(*(fmt +_i)) { // match specifier
+			switch(*(fmt + _i)) { // match specifier
 				case 'd':
 					io_format.spec = SPEC_INT;
 					int tmp_d = va_arg(ap, int);
@@ -193,7 +193,8 @@ int printf(const char *fmt, ...) {
 					cnt_write += cnt_buf;
 					break;*/
 				default:
-					panic("Not implemented");
+					putch('\n'); putch('!'); putch(*(fmt + _i));
+					panic("\nNot implemented\n");
 					break;
 			}
 
