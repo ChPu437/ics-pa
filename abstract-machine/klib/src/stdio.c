@@ -4,6 +4,7 @@
 #include <klib-macros.h>
 #include <math.h>
 #include <stdarg.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <threads.h>
 
@@ -11,6 +12,10 @@
 
 #define BUF_SIZE 128
 #define ISDIGIT(x) x>'0'&&x<'9'
+
+#define BITMASK(bits) ((1ull << (bits)) - 1)
+#define BITS(x, hi, lo) (((x) >> (lo)) & BITMASK((hi) - (lo) + 1)) // similar to x[hi:lo] in verilog
+
 
 enum FORMAT_FLAGS {
 	FLAG_LEFT_ALIGN, // '-', 在给定宽度内左对齐
@@ -21,6 +26,7 @@ enum FORMAT_SPECIFIER {
 	SPEC_INT, // d
 	SPEC_STR, // s
 	SPEC_CHAR, // c
+	SPEC_HEX, // x or X, unsigned hex
 	// SPEC_FLOAT, // f // No need to implement float
 };
 
@@ -174,6 +180,20 @@ int printf(const char *fmt, ...) {
 				case 'c':
 					io_format.spec = SPEC_CHAR;
 					buf[cnt_buf++] = (char)va_arg(ap, int);
+					break;
+				case 'x':
+				case 'X':
+					io_format.spec = SPEC_HEX;
+					uint32_t tmp_x = va_arg(ap, unsigned int);
+					for (int i = 8; i > 0; i--) {
+						uint32_t tmp_buf = BITS(tmp_x, 4 * i - 1, 4 * (i - 1));
+						if(!tmp_buf) continue;
+						if(tmp_buf <= 9) {
+							buf[cnt_buf++] = tmp_buf + '0';
+						} else {
+							buf[cnt_buf++] = tmp_buf - 9 + 'A' - 1;
+						}
+					}
 					break;
 				/*case 'f': // No need to implement float
 					io_format.spec = SPEC_FLOAT;
