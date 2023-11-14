@@ -219,5 +219,5 @@ config WATCHPOINT
   default y
 
 config SDB_NO_INTERACT
-  bool "Run program immediately after nemu starts"
+  bool "Enable batch mode"
   default n
