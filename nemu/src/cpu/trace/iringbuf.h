@@ -23,11 +23,16 @@ void iringbuf_update(char* log) {
 }
 
 void iringbuf_dump() {
-	for (int i = 0; i < RINGBUF_SIZE; i++) {
-		if (i == iringbuf.cnt) {
-			printf("----> %s\n", iringbuf.inst_buf[i]);
-		} else {
-			printf("      %s\n", iringbuf.inst_buf[i]);
+	printf("Trace of instrucion context(iringbuf):\n");
+	if (iringbuf.cnt == -1) {
+		printf("[Empty]\n");
+	} else {
+		for (int i = 0; i < RINGBUF_SIZE; i++) {
+			if (i == iringbuf.cnt) {
+				printf("----> %s\n", iringbuf.inst_buf[i]);
+			} else {
+				printf("      %s\n", iringbuf.inst_buf[i]);
+			}
 		}
 	}
 }
