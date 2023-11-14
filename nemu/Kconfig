@@ -151,7 +151,7 @@ config IRINGBUF
 
 config MTRACE
   depends on TRACE && TARGET_NATIVE_ELF && ENGINE_INTERPRETER
-  bool "Enable memory tracer (this will generate huge output)"
+  bool "Enable memory tracer (this may generate huge output)"
   default n
 
 config FTRACE
