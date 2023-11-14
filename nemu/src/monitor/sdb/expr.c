@@ -55,8 +55,8 @@ static struct rule {
 
  // {" +", TK_NOTYPE},    // spaces
   {"\\s+", TK_NOTYPE},    // invisible characters, including \n and \t
-  {"\\$[\\$a-z0-9]\\w", TK_REG}, // TODO: register
-  {"0x\\w+", TK_HEX}, // TODO: hexcimal number
+  {"\\$[\\$a-z0-9]\\w", TK_REG}, // register
+  {"0x\\w+", TK_HEX}, // hexcimal number
   {"[0-9]+", TK_DEC}, // decimal number
   {"\\+", TK_PLUS}, // plus
   {"-", TK_MINUS}, // minus ()
@@ -124,7 +124,7 @@ static bool make_token(char *e) {
 
         switch (rules[i].token_type) {
           case TK_NOTYPE:
-          	  break; // we want not space recorded for optimized memory use.
+          	  break; // we want no space recorded for optimized memory use.
         	  // TODO: DONT throw "0x" of hexical here, throw at eval
         	  // also hexical overflow check can be hard!
           case TK_HEX:
@@ -159,9 +159,10 @@ static bool make_token(char *e) {
           	  ++nr_token;
 		  	  break;
 		  case TK_MUL: // handle ref here
-		  	  if (!nr_token || tokens[nr_token - 1].type != TK_DEC || tokens[nr_token - 1].type != TK_HEX || tokens[nr_token - 1].type != TK_REG || tokens[nr_token - 1].type != TK_RBRAC)
-		  	  	  tokens[nr_token].type = TK_REG;
-        	  tokens[nr_token].type = TK_MUL;
+					if (!nr_token || tokens[nr_token - 1].type != TK_DEC || tokens[nr_token - 1].type != TK_HEX || tokens[nr_token - 1].type != TK_REG || tokens[nr_token - 1].type != TK_RBRAC)
+		  	  	tokens[nr_token].type = TK_DEREF;
+					else
+						tokens[nr_token].type = TK_MUL;
           	  ++nr_token;
 		  	  break;
 		  case TK_DIV:
