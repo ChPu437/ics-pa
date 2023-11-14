@@ -119,6 +119,7 @@ static int cmd_si(char *args) {
 	 * args[] parsed from str[] without the first substr(cmd)
 	 */
 	uint64_t N = 1;
+
 	if (args == NULL) {
 		printf("This command requires 1 argument! Usage: si [step]\n");
 		return 1;
@@ -126,7 +127,8 @@ static int cmd_si(char *args) {
 	if (!~sscanf(args, "%lu", &N)) {
 		printf("Invalid argument: %s\n", args);
 		return 1;
-	} else if (N == 0) {
+	}
+	if (N == 0) {
 		return 0; // Do nothing when we run 0 instructions
 	}
 	
