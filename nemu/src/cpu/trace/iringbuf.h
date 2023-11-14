@@ -29,9 +29,9 @@ void iringbuf_dump() {
 	} else {
 		for (int i = 0; i < RINGBUF_SIZE; i++) {
 			if (i == iringbuf.cnt) {
-				printf("----> %s\n", iringbuf.inst_buf[i]);
+				printf("last---> %s\n", iringbuf.inst_buf[i]);
 			} else {
-				printf("      %s\n", iringbuf.inst_buf[i]);
+				printf("         %s\n", iringbuf.inst_buf[i]);
 			}
 		}
 	}
