@@ -77,7 +77,7 @@ int free_wp(int index) {
 	// assert(index <= head->NO); // if exceeded max index
 	// // This may be problematic since the index can? get out of order
 
-	WP *last = NULL, *curr = head, *nnext = NULL;
+	WP *last = NULL, *curr = head, *nnext = head->next;
 	while (curr->NO != index) {
 		last = curr;
 		curr = curr -> next;
