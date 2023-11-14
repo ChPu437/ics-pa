@@ -24,17 +24,15 @@
 #include "sdb.h"
 // Extended include
 #include <memory/paddr.h>
-#ifdef CONFIG_IRINGBUF
-#include "../../cpu/trace/iringbuf.h"
-void iringbuf_init();
-#endif
-
 #define MAX_EXPR_LENGTH 256
 
 static int is_batch_mode = false;
 
 void init_regex();
 void init_wp_pool();
+#ifdef CONFIG_IRINGBUF
+void iringbuf_init();
+#endif
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
