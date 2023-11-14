@@ -145,7 +145,7 @@ void init_monitor(int argc, char *argv[]) {
   /* Display welcome message. */
   welcome();
 #else
-  cpu_exec(-1);
+  sdb_set_batch_mode();
 #endif
 }
 #else // CONFIG_TARGET_AM

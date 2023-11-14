@@ -117,8 +117,8 @@ bool update_wp() {
 		if (curr->val != new_val) {
 			printf("Watchpoint %d triggered! %s: %u -> %u\n", curr->NO, curr->expr, curr->val, new_val);
 			curr->val = new_val;
+			ret = 1;
 		}
-		ret = 1;
 		curr = curr->next;
 	} 
 	return ret;
