@@ -108,9 +108,9 @@ void dump_wp() {
 }
 
 bool update_wp() {
-//	WP* curr = head;
+	WP* curr = head;
 	bool ret = 0;
-/*	while(curr != NULL) {
+	while(curr != NULL) {
 		bool success = 0;
 		uint32_t new_val = expr(curr->expr, &success);
 		assert(success);
@@ -119,6 +119,7 @@ bool update_wp() {
 			curr->val = new_val;
 		}
 		ret = 1;
-	} */
+		curr = curr->next;
+	} 
 	return ret;
 }
