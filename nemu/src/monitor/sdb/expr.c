@@ -60,7 +60,7 @@ static struct rule {
   {"[0-9]+", TK_DEC}, // decimal number
   {"\\+", TK_PLUS}, // plus
   {"-", TK_MINUS}, // minus ()
-  {"\\*", TK_MUL}, // multiply (TODO: OR deref)
+  {"\\*", TK_MUL}, // multiply (OR deref)
   {"/", TK_DIV}, // division
   {"\\(", TK_LBRAC}, // left bracket
   {"\\)", TK_RBRAC}, // right bracket
