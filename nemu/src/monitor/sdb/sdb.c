@@ -202,6 +202,9 @@ static int cmd_p(char *args) {
 }
 
 static int cmd_w(char *args) {
+	bool success = 0;
+	expr(args, &success);
+	if (!success) return 1;
 	return new_wp(args);
 }
 
