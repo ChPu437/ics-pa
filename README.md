@@ -1,3 +1,8 @@
+# TO-DOs
+* klib implemention
+* infrastructure(2)
+* device: VGA, sound
+
 # ICS2022 Programming Assignment
 
 This project is the programming assignment of the class ICS(Introduction to Computer System)

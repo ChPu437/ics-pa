@@ -20,9 +20,14 @@
 #include <readline/history.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <macro.h>
 #include "sdb.h"
 // Extended include
 #include <memory/paddr.h>
+#ifdef CONFIG_IRINGBUF
+#include "../../cpu/trace/iringbuf.h"
+void iringbuf_init();
+#endif
 
 #define MAX_EXPR_LENGTH 256
 
@@ -276,4 +281,7 @@ void init_sdb() {
 
   /* Initialize the watchpoint pool. */
   init_wp_pool();
+
+  // Initialize ring buffer for instruction tracing
+  IFDEF(CONFIG_IRINGBUF, iringbuf_init());
 }
