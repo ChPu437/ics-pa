@@ -154,7 +154,7 @@ static int cmd_x(char *args) {
 	int n;
 
 	if (args != NULL) {
-		if (~sscanf(args, "%d %s", &n, expr_s)) {
+		if (!~sscanf(args, "%d %s", &n, expr_s)) {
 			printf("Unable to parse arguments: %s\n", args);
 			return 1;
 		} else {
@@ -207,7 +207,7 @@ static int cmd_d(char *args) {
 		printf("This command requires 1 argument! Usage: d [watchpoint_id]\n");
 		return 1;
 	}
-	if (~sscanf(args, "%d", &N)) {
+	if (!~sscanf(args, "%d", &N)) {
 		printf("Unable to parse argument: %s\n", args);
 		return 1;
 	}
