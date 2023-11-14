@@ -194,8 +194,12 @@ static int cmd_x(char *args) {
 }
 
 static int cmd_p(char *args) {
-	bool success;
+	if (args == NULL) {
+		printf("This command requires 1 argument! Usage: p [expr]\n");
+		return 1;
+	}
 
+	bool success;
 	int64_t result = expr(args, &success);
 
 	if (!success) {

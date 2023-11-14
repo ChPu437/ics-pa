@@ -30,7 +30,7 @@ void iringbuf_dump() {
 		for (int i = 0; i < RINGBUF_SIZE; i++) {
 			if (i == iringbuf.cnt) {
 				printf("last---> %s\n", iringbuf.inst_buf[i]);
-				printf("-----------------------------------------------------------\n");
+				printf("        ---------------------------------------------------\n");
 			} else {
 				printf("         %s\n", iringbuf.inst_buf[i]);
 			}
