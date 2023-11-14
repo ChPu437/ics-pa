@@ -74,19 +74,28 @@ int new_wp(char* EXPR) {
 
 int free_wp(int index) {
 	assert(head != NULL);
-	assert(index <= head->NO); // if exceeded max index
+	// assert(index <= head->NO); // if exceeded max index
+	// // This may be problematic since the index can? get out of order
 
 	WP *last = NULL, *curr = head, *nnext = NULL;
 	while (curr->NO != index) {
 		last = curr;
 		curr = curr -> next;
-		nnext = curr -> next;
+		if (curr == NULL) {
+			printf("Find no watchpoint with index %d!\n", index);
+			return 1;
+		}
+		nnext = curr -> next; // nnext is the next of new curr
 	}
+
 	if(last) last->next = nnext;
+	else head = nnext; // last == NULL indicates that we are on head;
+
 	while (nnext != NULL) {
 		(nnext->NO)--;
 		nnext = nnext->next;
 	}
+
 	curr->val = 0;
 	free(curr->expr);
 	curr->expr = NULL;
