@@ -137,6 +137,10 @@ static int cmd_si(char *args) {
 }
 
 static int cmd_info(char *args) {
+	if (args == NULL) {
+		printf("This command needs 1 argument! Usage: info [w/r]\n");
+		return 1;
+	}
 	switch(args[0]) {
 		case 'w':
 			printf("List of watchpoints:\n");
