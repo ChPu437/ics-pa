@@ -74,7 +74,7 @@ int new_wp(char* EXPR) {
 
 int free_wp(int index) {
 	assert(head != NULL);
-	assert(index > head->NO); // if exceeded max index
+	assert(index <= head->NO); // if exceeded max index
 
 	WP *last = NULL, *curr = head, *nnext = NULL;
 	while (curr->NO != index) {
