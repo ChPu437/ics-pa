@@ -189,7 +189,7 @@ static bool make_token(char *e) {
           	  ++nr_token;
 		  	  break;
 		  default:
-			  assert(0);
+			  assert(0); // this should not be called since we should have covered all cases defined
         }
 
         break;
@@ -247,7 +247,7 @@ uint8_t check_precedence(uint8_t pos) {
 		case TK_MINUS:
 			return 4;
 		default:
-			assert(0);
+			assert(0); // this should not be called since we should have covered all cases defined
 	}
 }
 
@@ -277,10 +277,13 @@ uint32_t eval(uint8_t p, uint8_t q) {
 		case TK_REG:
 			bool success = 0;
 			ret = isa_reg_str2val(tokens[p].str + 1, &success);
-			assert(success);
+			if (!success) {
+				printf("Unable to read register: %s. Is this a legal register name?\n", tokens[p].str);
+				return -1;
+			}
 			break;
 	}
-    // TODO: check negative number here;
+    // check negative number here;
     // or we don't do negative check, just convert regs and hexs
     // printf("!!!%s\n", tokens[p].str);
     return ret;
@@ -329,7 +332,7 @@ uint32_t eval(uint8_t p, uint8_t q) {
       case TK_DIV: return val1 / val2;
       case TK_EQ: return val1 == val2;
       case TK_NEQ: return val1 != val2;
-	  case TK_AND: return val1 && val2;
+		  case TK_AND: return val1 && val2;
       default: assert(0);
     }
   }
@@ -349,22 +352,30 @@ word_t expr(char *e, bool *success) {
 
   uint8_t cnt_bracket = 0;
   for (int i = 0; i < nr_token; i++) {
-	  if (tokens[i].type == TK_LBRAC)
+	  if (tokens[i].type == TK_LBRAC) {
 	  	  ++cnt_bracket;
+		}
 	  if (tokens[i].type == TK_RBRAC) {
-	  	if (!cnt_bracket)
-	  		assert(0); // orphan rbrac
-	  	else
+	  	if (!cnt_bracket) {
+	  		*success = 0; // orphan rbrac
+	  		return -1;
+			}
+	  	else {
 	  		--cnt_bracket;
-	  }
-  }
+	  	}
+  	}
+	}
 
   // printf("!!!%d\n", (tokens[nr_token - 1].type ==  TK_DEC));
 
-  if (tokens[nr_token - 1].type != TK_DEC && tokens[nr_token - 1].type != TK_RBRAC && tokens[nr_token - 1].type != TK_HEX && tokens[nr_token - 1].type != TK_REG)
-  	assert(0); // illegal end
-  if (cnt_bracket)
-  	assert(0); // open bracket
+	if (tokens[nr_token - 1].type != TK_DEC && tokens[nr_token - 1].type != TK_RBRAC && tokens[nr_token - 1].type != TK_HEX && tokens[nr_token - 1].type != TK_REG) {
+  	*success = 0; // illegal end
+  	return -1;
+	}
+  if (cnt_bracket) {
+  	*success = 0; // open bracket
+  	return -1;
+  }
 
   uint32_t ret = eval(0, nr_token); // 根据我们最后++nr_token的写法，eval函数左闭右开
   *success = 1;

@@ -24,6 +24,8 @@
 // Extended include
 #include <memory/paddr.h>
 
+#define MAX_EXPR_LENGTH 256
+
 static int is_batch_mode = false;
 
 void init_regex();
@@ -117,9 +119,14 @@ static int cmd_si(char *args) {
 	 * args[] parsed from str[] without the first substr(cmd)
 	 */
 	uint64_t N = 1;
-	if (args != NULL) 
-		assert(~sscanf(args, "%lu", &N));
-	// TODO: error handler (0 and non-digit)
+	if (args != NULL) {
+		if (!~sscanf(args, "%lu", &N)) {
+			printf("Invalid argument: %s\n", args);
+			return 1;
+		} else if (N == 0) {
+			return 0; // Do nothing when we run 0 instructions
+		}
+	}
 	cpu_exec(N);
 	return 0;
 }
@@ -134,22 +141,43 @@ static int cmd_info(char *args) {
 		case 'r':
 			isa_reg_display();
 			break;
+		default:
+			printf("Unknown argument: %c\n", args[0]);
+			return 1;
 	}
 	return 0;
 }
 
+
 static int cmd_x(char *args) {
-	paddr_t EXPR;
-	int N;
+	char expr_s[MAX_EXPR_LENGTH] = {'\0'};
+	int n;
 
-	if (args != NULL) 
-		assert(~sscanf(args, "%d 0x%x", &N, &EXPR));
+	if (args != NULL) {
+		if (~sscanf(args, "%d %s", &n, expr_s)) {
+			printf("Unable to parse arguments: %s\n", args);
+			return 1;
+		} else {
+			if (n == 0) return 0;
+			if (expr_s[0] == '\0') {
+				printf("This command requires two args! Usage: x [step] [address]\n");
+				return 1;
+			}
+		}
+	} else {
+		printf("This command requires two args! Usage: x [step] [address]\n");
+		return 1;
+	}
 	// TODO: error handler (0 and non-digit)
-	// TODO: Expression parser
+	bool success = false;
+	paddr_t expr_i = expr(expr_s, &success);
+	if (!success) {
+		printf("Unable to parse expression: %s\n", expr_s);
+		return 1;
+	}
 
-	for (int i = 0; i < N; i++)
-		printf("0x%x: 0x%x\n", EXPR + 4 * i, paddr_read(EXPR + 4 * i, 4));
-	// TODO();
+	for (int i = 0; i < n; i++)
+		printf("0x%x: 0x%x\n", expr_i + 4 * i, paddr_read(expr_i + 4 * i, 4));
 	return 0;
 }
 
@@ -158,8 +186,10 @@ static int cmd_p(char *args) {
 
 	int64_t result = expr(args, &success);
 
-	if (!success)
-		assert(0);
+	if (!success) {
+		printf("Unable to parse expression: %s\n", args);
+		return 1;
+	}
 
 	printf("%ld\n", result);
 
@@ -173,8 +203,14 @@ static int cmd_w(char *args) {
 static int cmd_d(char *args) {
 	int N;
 	
-	assert(args != NULL);
-	assert(~sscanf(args, "%d", &N));
+	if (args == NULL) {
+		printf("This command requires 1 argument! Usage: d [watchpoint_id]\n");
+		return 1;
+	}
+	if (~sscanf(args, "%d", &N)) {
+		printf("Unable to parse argument: %s\n", args);
+		return 1;
+	}
 
 	return free_wp(N);
 }
