@@ -23,7 +23,7 @@ void iringbuf_update(char* log) {
 }
 
 void iringbuf_dump() {
-	printf("Trace of instrucion context(iringbuf):\n");
+	printf("\nTrace of instrucion context(iringbuf):\n");
 	if (iringbuf.cnt == -1) {
 		printf("[Empty]\n");
 	} else {
