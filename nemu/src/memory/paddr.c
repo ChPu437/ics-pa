@@ -20,7 +20,6 @@
 #include <stdio.h>
 #ifdef CONFIG_MTRACE
 #include "../cpu/trace/mtrace.h"
-void mtrace_log(paddr_t addr, int len, word_t value, bool is_write);
 #endif
 
 #if   defined(CONFIG_PMEM_MALLOC)
