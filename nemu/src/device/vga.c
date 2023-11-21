@@ -64,14 +64,14 @@ static inline void update_screen() {
 #else
 static void init_screen() {}
 
-static inline void update_screen() {
+static inline void update_s creen() {
   io_write(AM_GPU_FBDRAW, 0, 0, vmem, screen_width(), screen_height(), true);
 }
 #endif
 #endif
 
 #define SYNC_MASK = 
-void vga_update_screen() {
+void vga_update_screen() { 
   // TODO: call `update_screen()` when the sync register is non-zero,
   // then zero out the sync register
   if (mmio_read(CONFIG_VGA_CTL_MMIO + 4, 1)) { // am/ioe/gpu.c: SYNC_ADDR = (VGACTL_ADDR + 4)

@@ -28,10 +28,17 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
 }
 
 void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
-  if (ctl->sync) {
+  // Finishing its function to draw the pixels
+  // x, y, pixels, w, h, sync
+  uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
+	for (int i = ctl->y; i < ctl->h; i++) {
+		for (int j = ctl->x; j < ctl->w; j++) {
+				fb[i * io_read(AM_GPU_CONFIG).width + j] = ((uint32_t*)(ctl->pixels))[i * ctl->w + j];
+		}
+	}
+	if (ctl->sync) {
     outl(SYNC_ADDR, 1);
   }
-  // 软件(AM)已实现，而硬件(vga)未实现
 }
 
 void __am_gpu_status(AM_GPU_STATUS_T *status) {
