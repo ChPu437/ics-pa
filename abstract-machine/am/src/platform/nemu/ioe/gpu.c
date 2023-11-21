@@ -22,6 +22,7 @@ void __am_gpu_init() {
 void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
   *cfg = (AM_GPU_CONFIG_T) {
     .present = true, .has_accel = false,
+  // view_width = screen_w * sizeof(u32i) = 4 * screen_w
     .width = 400, // MUXDEF(CONFIG_VGA_SIZE_400x300, 400, 800),
     .height = 300, // MUXDEF(CONFIG_VGA_SIZE_400x300, 300, 600),
     // 硬件(vga)已实现，而软件(AM)未实现
@@ -33,14 +34,9 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   // Finishing its function to draw the pixels
   // x, y, pixels, w, h, sync
   uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
-	/* for (int i = ctl->y; i < ctl->h; i++) {
-		for (int j = ctl->x; j < ctl->w; j++) {
-				fb[i * io_read(AM_GPU_CONFIG).width + j] = ((uint32_t*)(ctl->pixels))[i * ctl->w + j];
-		}
-	} */
 	for (int i = ctl->y; i < ctl->h; i++) {
 		for (int j = ctl->x; j < ctl->w; j++) {
-				fb[i * io_read(AM_GPU_CONFIG).width + j] = ((uint32_t*)(ctl->pixels))[i * ctl->w + j];
+				fb[i * io_read(AM_GPU_CONFIG).width * 4 + j] = ((uint32_t*)(ctl->pixels))[i * ctl->w + j];
 		}
 	}
 	if (ctl->sync) {
