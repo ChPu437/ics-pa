@@ -16,7 +16,7 @@ void __am_gpu_init() {
   // 800 * 600 会爆栈
   uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
   // for (i = 0; i < w * 40; i ++) fb[i] = i / w * 20;
-	for (int i = 0; i < 100; i++) {
+	for (int i = 0; i < 400; i++) {
 		for (int j = 0; j < w; j++) {
 			fb[i * w + j] = i * 2;
 		}
