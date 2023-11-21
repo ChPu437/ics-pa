@@ -10,8 +10,9 @@
 
 void __am_gpu_init() {
   int i;
-  int w = io_read(AM_GPU_CONFIG).width / 32;  // TODO: get the correct width
-  int h = io_read(AM_GPU_CONFIG).height / 32;  // TODO: get the correct height
+  int w = io_read(AM_GPU_CONFIG).width;  // TODO: get the correct width
+  int h = io_read(AM_GPU_CONFIG).height;  // TODO: get the correct height
+  // 800 * 600 会爆栈
   uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
   for (i = 0; i < w * h; i ++) fb[i] = i;
   outl(SYNC_ADDR, 1);
@@ -20,7 +21,7 @@ void __am_gpu_init() {
 void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
   *cfg = (AM_GPU_CONFIG_T) {
     .present = true, .has_accel = false,
-    .width = 800, .height = 400, // TODO: get correct width & height here
+    .width = 400, .height = 300, // TODO: get correct width & height here
     // 硬件(vga)已实现，而软件(AM)未实现
     .vmemsz = 0
   };
