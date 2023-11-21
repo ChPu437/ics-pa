@@ -44,7 +44,7 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
 	for (int i = 0; i < ctl->h; i++) {
 		for (int j = 0; j < ctl->w; j++) {
 			// printf ("j: %d\n", j);
-				fb[(i + ctl->h) * w + (j + ctl->y)] = ((uint32_t*)(ctl->pixels))[i * ctl->w + j];
+				fb[(i + ctl->x) * w + (j + ctl->y)] = ((uint32_t*)(ctl->pixels))[i * ctl->w + j];
 		}
 	}
 	if (ctl->sync) {
