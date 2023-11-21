@@ -41,8 +41,8 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   int w = io_read(AM_GPU_CONFIG).width;
   // int h = io_read(AM_GPU_CONFIG).height;
   uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
-	for (int i = ctl->y; i < ctl->y + ctl->h; i++) {
-		for (int j = ctl->x; j < ctl->x + ctl->w; j++) {
+	for (int i = ctl->y; i < ctl->h; i++) {
+		for (int j = ctl->x; j < ctl->w; j++) {
 				fb[i * w + j] = ((uint32_t*)(ctl->pixels))[i * ctl->w + j];
 		}
 	}
