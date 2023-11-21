@@ -41,10 +41,10 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   int w = io_read(AM_GPU_CONFIG).width;
   // int h = io_read(AM_GPU_CONFIG).height;
   uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
-	for (int i = ctl->y; i < ctl->h; i++) {
-		for (int j = ctl->x; j < ctl->w; j++) {
+	for (int i = 0; i < ctl->h; i++) {
+		for (int j = 0; j < ctl->w; j++) {
 			// printf ("j: %d\n", j);
-				fb[i * w + j] = ((uint32_t*)(ctl->pixels))[i * ctl->w + (j - ctl->x)];
+				fb[(i + ctl->h) * w + (j + ctl->y)] = ((uint32_t*)(ctl->pixels))[i * ctl->w + j];
 		}
 	}
 	if (ctl->sync) {
