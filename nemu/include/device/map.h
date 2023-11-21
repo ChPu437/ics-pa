@@ -53,4 +53,8 @@ void add_mmio_map(const char *name, paddr_t addr,
 word_t map_read(paddr_t addr, int len, IOMap *map);
 void map_write(paddr_t addr, int len, word_t data, IOMap *map);
 
+/* Custom def from device/io/mmio.c  to support mmio_read directly in vga.c */
+word_t mmio_read(paddr_t addr, int len);
+void mmio_write(paddr_t addr, int len, word_t data);
+
 #endif
