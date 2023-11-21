@@ -106,5 +106,8 @@
 #define io_write(reg, ...) \
   ({ reg##_T __io_param = (reg##_T) { __VA_ARGS__ }; \
     ioe_write(reg, &__io_param); })
-
+/*
+ * ioe_read(reg, &ret), ret
+ * ioe_write(reg, &(reg_T){va_args})
+ */
 #endif

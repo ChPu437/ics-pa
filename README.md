@@ -1,7 +1,7 @@
 # TO-DOs
 * klib implemention
-* infrastructure(2)
-* device: VGA, sound
+* infrastructure(2) -> ftrace
+* device: VGA, sound + dtrace
 
 # ICS2022 Programming Assignment
 
