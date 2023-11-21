@@ -38,10 +38,12 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
 void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   // Finishing its function to draw the pixels
   // x, y, pixels, w, h, sync
+  int w = io_read(AM_GPU_CONFIG).width; // / 32 // TODO: get the correct width
+  // int h = io_read(AM_GPU_CONFIG).height; // / 32 // TODO: get the correct height
   uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
 	for (int i = ctl->y; i < ctl->h; i++) {
 		for (int j = ctl->x; j < ctl->w; j++) {
-				fb[i * io_read(AM_GPU_CONFIG).width + j] = ((uint32_t*)(ctl->pixels))[i * ctl->w + j];
+				fb[i * w] = ((uint32_t*)(ctl->pixels))[i * ctl->w + j];
 		}
 	}
 	if (ctl->sync) {
