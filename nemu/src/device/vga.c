@@ -76,7 +76,7 @@ void vga_update_screen() {
   // then zero out the sync register
   if (mmio_read(CONFIG_VGA_CTL_MMIO + 4, 1)) { // am/ioe/gpu.c: SYNC_ADDR = (VGACTL_ADDR + 4)
 
-		printf("!vga sync\n");
+//		printf("!vga sync\n");
 	  update_screen();
 	  mmio_write(CONFIG_VGA_CTL_MMIO + 4, 1, 0);
   }
