@@ -5,13 +5,11 @@
 
 #include <am.h>
 #include <nemu.h>
-#include <stdio.h>
 
 #define SYNC_ADDR (VGACTL_ADDR + 4)
 
 void __am_gpu_init() {
   int i;
-  printf("w: %d, h: %d\n", io_read(AM_GPU_CONFIG).width, io_read(AM_GPU_CONFIG).height);
   int w = io_read(AM_GPU_CONFIG).width;  // TODO: get the correct width
   int h = io_read(AM_GPU_CONFIG).height;  // TODO: get the correct height
   uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
