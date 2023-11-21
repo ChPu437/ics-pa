@@ -18,7 +18,7 @@ void __am_gpu_init() {
   // for (i = 0; i < w * 40; i ++) fb[i] = i / w * 20;
 	for (int i = 0; i < 100; i++) {
 		for (int j = 0; j < w; j++) {
-			fb[i * w + j] = i * 7;
+			fb[i * w + j] = i * 2;
 		}
 	}
   outl(SYNC_ADDR, 1); 
