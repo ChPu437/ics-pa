@@ -22,7 +22,8 @@ void __am_gpu_init() {
 void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
   *cfg = (AM_GPU_CONFIG_T) {
     .present = true, .has_accel = false,
-    .width = 400, .height = 300,
+    .width = 400, // MUXDEF(CONFIG_VGA_SIZE_400x300, 400, 800),
+    .height = 300, // MUXDEF(CONFIG_VGA_SIZE_400x300, 300, 600),
     // 硬件(vga)已实现，而软件(AM)未实现
     .vmemsz = 0
   };
