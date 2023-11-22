@@ -46,7 +46,7 @@ static void buf_flush() {
 	}
 	cnt_buf = 0;
 }
-// static void buf_flush_str() {
+// static void buf_flush_str(char *out) { // out应指向输出字符串的'\0'或开头
 
 // }
 
@@ -234,10 +234,10 @@ int printf(const char *fmt, ...) {
 
 			// flush buffer and output to stdout
 			cnt_write += cnt_buf;
-			if (io_format.flag != FLAG_LEFT_ALIGN) {
+			if (!(io_format.flag & FLAG_LEFT_ALIGN)) {
 				if(cnt_buf < io_format.width) {
 					for (int i = io_format.width - cnt_buf; i > 0; i--) {
-						putch(io_format.flag==FLAG_ZERO_PADDING ? '0' : ' ');
+						putch(io_format.flag & FLAG_ZERO_PADDING ? '0' : ' ');
 					}
 				}
 				buf_flush();
