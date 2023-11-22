@@ -16,6 +16,10 @@
 #define BITMASK(bits) ((1ull << (bits)) - 1)
 #define BITS(x, hi, lo) (((x) >> (lo)) & BITMASK((hi) - (lo) + 1)) // similar to x[hi:lo] in verilog
 
+static void TODO(){
+	panic("Not implemented.\n");
+}
+
 
 enum FORMAT_FLAGS {
 	FLAG_LEFT_ALIGN, // '-', 在给定宽度内左对齐
@@ -184,6 +188,9 @@ int printf(const char *fmt, ...) {
 
 					cnt_buf = sprintf(buf, "%d", tmp_d);
 					break;
+				case 'u':
+					TODO();
+					break;
 				case 's':
 					io_format.spec = SPEC_STR;
 					char* tmp_s = va_arg(ap, char*);
@@ -194,6 +201,9 @@ int printf(const char *fmt, ...) {
 				case 'c':
 					io_format.spec = SPEC_CHAR;
 					buf[cnt_buf++] = (char)va_arg(ap, int);
+					break;
+				case 'o':
+					TODO();
 					break;
 				case 'x':
 				case 'X':
@@ -209,23 +219,10 @@ int printf(const char *fmt, ...) {
 						}
 					}
 					break;
-				/*case 'f': // No need to implement float
-					io_format.spec = SPEC_FLOAT;
-					float tmp_f = (float)va_arg(ap, double); // va_arg cannot use short or float as type
-																									 
-					int tmp_f_i = (int)tmp_f; // 整数部分
-					cnt_buf = sprintf(buf, "%d", tmp_f_i);
-					buf[cnt_buf++] = '.';	
-					tmp_f = tmp_f - tmp_f_i; // 小数部分
-					if(tmp_f < 0) tmp_f = -tmp_f; // 输出小数不关心符号
-					tmp_f_i = tmp_f * 10;
-					while(cnt_buf < BUF_SIZE && tmp_f_i) {
-						buf[++cnt_buf] = tmp_f_i;
-						tmp_f = tmp_f * 10 - tmp_f_i;
-					}
-					buf_flush();
-					cnt_write += cnt_buf;
-					break;*/
+				case 'p':
+					TODO();
+					break;
+				/* case 'f': // No need to implement float */
 				default:
 					putch('\n'); putch('!'); putch(*(fmt + _i));
 					panic("\nNot implemented\n");
