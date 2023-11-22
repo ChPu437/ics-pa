@@ -16,10 +16,6 @@
 #define BITMASK(bits) ((1ull << (bits)) - 1)
 #define BITS(x, hi, lo) (((x) >> (lo)) & BITMASK((hi) - (lo) + 1)) // similar to x[hi:lo] in verilog
 
-static void TODO(){
-	panic("Not implemented.\n");
-}
-
 
 enum FORMAT_FLAGS {
 	FLAG_LEFT_ALIGN, // '-', 在给定宽度内左对齐
@@ -50,7 +46,7 @@ static void buf_flush() {
 	}
 	cnt_buf = 0;
 }
-/* static void buf_flush_str(char *out) { // out 应该是输出位置, 也即输出前的'\0'位置
+/* static void buf_flush_str(char *out) { // out 应该是输出位置, 也即输出前的'\0'
 
 } */
 
@@ -149,31 +145,31 @@ int printf(const char *fmt, ...) {
 				continue;
 			}	
 
-			//bool flag_s = 1;
-			//while (flag_s) {
+			bool flag_s = 1;
+			while (flag_s) {
 				switch(*(fmt + (_i++))) { // match flag
 					case '-':
-						io_format.flag = FLAG_LEFT_ALIGN;
+						io_format.flag |= FLAG_LEFT_ALIGN;
 						break;
 					case '+':
-						io_format.flag = FLAG_FORCE_SIGN;
+						io_format.flag |= FLAG_FORCE_SIGN;
 						break;
 					case ' ':
-						io_format.flag = FLAG_MARGIN_SIGN;
+						io_format.flag |= FLAG_MARGIN_SIGN;
 						break;
 					case '#':
-						io_format.flag = FLAG_FORCE_DECO;
+						io_format.flag |= FLAG_FORCE_DECO;
 						break;
 					case '0':
-						io_format.flag = FLAG_ZERO_PADDING;
+						io_format.flag |= FLAG_ZERO_PADDING;
 						break;
 					default:
 						--_i; // return to last position
 						io_format.flag = FLAG_NONE;
-			//			flag_s = 0;
+						flag_s = 0;
 						break;
 				}
-			//}
+			}
 
 			io_format.width = 0; // 0 is refered as default
 			while(ISDIGIT(*(fmt + _i))) {
@@ -188,9 +184,6 @@ int printf(const char *fmt, ...) {
 
 					cnt_buf = sprintf(buf, "%d", tmp_d);
 					break;
-				case 'u':
-					TODO();
-					break;
 				case 's':
 					io_format.spec = SPEC_STR;
 					char* tmp_s = va_arg(ap, char*);
@@ -201,9 +194,6 @@ int printf(const char *fmt, ...) {
 				case 'c':
 					io_format.spec = SPEC_CHAR;
 					buf[cnt_buf++] = (char)va_arg(ap, int);
-					break;
-				case 'o':
-					TODO();
 					break;
 				case 'x':
 				case 'X':
@@ -219,10 +209,23 @@ int printf(const char *fmt, ...) {
 						}
 					}
 					break;
-				case 'p':
-					TODO();
-					break;
-				/* case 'f': // No need to implement float */
+				/*case 'f': // No need to implement float
+					io_format.spec = SPEC_FLOAT;
+					float tmp_f = (float)va_arg(ap, double); // va_arg cannot use short or float as type
+																									 
+					int tmp_f_i = (int)tmp_f; // 整数部分
+					cnt_buf = sprintf(buf, "%d", tmp_f_i);
+					buf[cnt_buf++] = '.';	
+					tmp_f = tmp_f - tmp_f_i; // 小数部分
+					if(tmp_f < 0) tmp_f = -tmp_f; // 输出小数不关心符号
+					tmp_f_i = tmp_f * 10;
+					while(cnt_buf < BUF_SIZE && tmp_f_i) {
+						buf[++cnt_buf] = tmp_f_i;
+						tmp_f = tmp_f * 10 - tmp_f_i;
+					}
+					buf_flush();
+					cnt_write += cnt_buf;
+					break;*/
 				default:
 					putch('\n'); putch('!'); putch(*(fmt + _i));
 					panic("\nNot implemented\n");
@@ -231,10 +234,10 @@ int printf(const char *fmt, ...) {
 
 			// flush buffer and output to stdout
 			cnt_write += cnt_buf;
-			if (io_format.flag == FLAG_LEFT_ALIGN) {
+			if (io_format.flag & FLAG_LEFT_ALIGN) {
 				if(cnt_buf < io_format.width) {
 					for (int i = io_format.width - cnt_buf; i > 0; i--) {
-						putch(io_format.flag == FLAG_ZERO_PADDING ? '0' : ' ');
+						putch(io_format.flag & FLAG_ZERO_PADDING ? '0' : ' ');
 					}
 				}
 				buf_flush();
