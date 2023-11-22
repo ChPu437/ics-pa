@@ -143,18 +143,27 @@ int printf(const char *fmt, ...) {
 				continue;
 			}	
 
-			switch(*(fmt + _i)) { // match flag
-				case '-':
-					++_i;
-					io_format.flag = FLAG_LEFT_ALIGN;
-					break;
-				case '0':
-					++_i;
-					io_format.flag = FLAG_ZERO_PADDING;
-					break;
-				default:
-					io_format.flag = FLAG_NONE;
-					break;
+			bool flag_s = 1;
+			while (flag_s) {
+				switch(*(fmt + (_i++))) { // match flag
+					case '-':
+						io_format.flag |= FLAG_LEFT_ALIGN;
+						break;
+					case '+':
+						break;
+					case ' ':
+						break;
+					case '#':
+						break;
+					case '0':
+						io_format.flag |= FLAG_ZERO_PADDING;
+						break;
+					default:
+						--_i; // return to last position
+						io_format.flag = FLAG_NONE;
+						flag_s = 0;
+						break;
+				}
 			}
 
 			io_format.width = 0; // 0 is refered as default
