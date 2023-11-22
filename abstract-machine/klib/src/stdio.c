@@ -231,10 +231,10 @@ int printf(const char *fmt, ...) {
 
 			// flush buffer and output to stdout
 			cnt_write += cnt_buf;
-			if (io_format.flag & FLAG_LEFT_ALIGN) {
+			if (io_format.flag == FLAG_LEFT_ALIGN) {
 				if(cnt_buf < io_format.width) {
 					for (int i = io_format.width - cnt_buf; i > 0; i--) {
-						putch(io_format.flag & FLAG_ZERO_PADDING ? '0' : ' ');
+						putch(io_format.flag == FLAG_ZERO_PADDING ? '0' : ' ');
 					}
 				}
 				buf_flush();
