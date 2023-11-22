@@ -33,12 +33,22 @@ enum FORMAT_SPECIFIER {
 	// SPEC_FLOAT, // f // No need to implement float
 };
 
-struct {
+static struct {
 	enum FORMAT_FLAGS flag;
 	int width;
 	enum FORMAT_SPECIFIER spec;
 } io_format;
+static int cnt_buf = 0;
+static char buf[BUF_SIZE];
+static void buf_flush() {
+	for (int i = 0; i < cnt_buf; i++) {
+		putch(*(buf + i));
+	}
+	cnt_buf = 0;
+}
+/* static void buf_flush_str(char *out) { // out 应该是输出位置, 也即输出前的'\0'位置
 
+} */
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
 	int cnt_write = 0;
@@ -116,17 +126,6 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
   panic("Not implemented");
 }
 
-int cnt_buf = 0;
-char buf[BUF_SIZE];
-
-
-static void buf_flush() {
-	for (int i = 0; i < cnt_buf; i++) {
-		putch(*(buf + i));
-	}
-	cnt_buf = 0;
-}
-
 int printf(const char *fmt, ...) {
 	int cnt_write = 0;
 	va_list ap;
@@ -153,10 +152,13 @@ int printf(const char *fmt, ...) {
 						io_format.flag |= FLAG_LEFT_ALIGN;
 						break;
 					case '+':
+						io_format.flag |= FLAG_FORCE_SIGN;
 						break;
 					case ' ':
+						io_format.flag |= FLAG_MARGIN_SIGN;
 						break;
 					case '#':
+						io_format.flag |= FLAG_FORCE_DECO;
 						break;
 					case '0':
 						io_format.flag |= FLAG_ZERO_PADDING;
@@ -232,10 +234,10 @@ int printf(const char *fmt, ...) {
 
 			// flush buffer and output to stdout
 			cnt_write += cnt_buf;
-			if (io_format.flag != FLAG_LEFT_ALIGN) {
+			if (io_format.flag & FLAG_LEFT_ALIGN) {
 				if(cnt_buf < io_format.width) {
 					for (int i = io_format.width - cnt_buf; i > 0; i--) {
-						putch(io_format.flag==FLAG_ZERO_PADDING ? '0' : ' ');
+						putch(io_format.flag & FLAG_ZERO_PADDING ? '0' : ' ');
 					}
 				}
 				buf_flush();
