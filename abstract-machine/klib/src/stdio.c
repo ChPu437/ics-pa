@@ -16,6 +16,9 @@
 #define BITMASK(bits) ((1ull << (bits)) - 1)
 #define BITS(x, hi, lo) (((x) >> (lo)) & BITMASK((hi) - (lo) + 1)) // similar to x[hi:lo] in verilog
 
+static inline void TODO() {
+	panic("Not implemented.\n");
+} 
 
 enum FORMAT_FLAGS {
 	FLAG_LEFT_ALIGN = 1, // '-', 在给定宽度内左对齐
@@ -23,12 +26,12 @@ enum FORMAT_FLAGS {
 	FLAG_MARGIN_SIGN = 1 << 2, // ' ', 无符号时空出符号位置
 	FLAG_FORCE_DECO = 1 << 3, // 强制输出十六进制数的0x/0X或浮点数的小数点(不用实现浮点数)
 	FLAG_ZERO_PADDING = 1 << 4, // '0', 用0填充右对齐时左侧的空位
-	FLAG_NONE = 1 << 5, // 没有提供 flag
+	FLAG_NONE = 0, // 没有提供 flag
 };
 enum FORMAT_SPECIFIER {
-	SPEC_INT, // d
-	SPEC_STR, // s
-	SPEC_CHAR, // c
+	SPEC_INT, // d, 32位有符号整型
+	SPEC_STR, // s, 字符串(char数组)
+	SPEC_CHAR, // c, 单个字符
 	SPEC_HEX, // x or X, unsigned hex
 	// SPEC_FLOAT, // f // No need to implement float
 };
@@ -40,7 +43,7 @@ static struct {
 } io_format;
 static int cnt_buf = 0;
 static char buf[BUF_SIZE];
-static void buf_flush() {
+static inline void buf_flush() {
 	for (int i = 0; i < cnt_buf; i++) {
 		putch(*(buf + i));
 	}
@@ -177,12 +180,22 @@ int printf(const char *fmt, ...) {
 				++_i;
 			}
 
+			/* switch(*(fmt + _i)) { // match length modifier
+			// l/ll/h/hh/j/z/t
+			} */
+
 			switch(*(fmt + _i)) { // match specifier
 				case 'd':
-					io_format.spec = SPEC_INT;
+					io_format.spec = SPEC_INT; // 这里不需要取或，因为不同输出类型互斥
 					int tmp_d = va_arg(ap, int);
-
 					cnt_buf = sprintf(buf, "%d", tmp_d);
+					break;
+				case 'u':
+					TODO();
+					break;
+				case 'c':
+					io_format.spec = SPEC_CHAR;
+					buf[cnt_buf++] = (char)va_arg(ap, int);
 					break;
 				case 's':
 					io_format.spec = SPEC_STR;
@@ -191,9 +204,11 @@ int printf(const char *fmt, ...) {
 						buf[cnt_buf++] = *(tmp_s + i);
 					}
 					break;
-				case 'c':
-					io_format.spec = SPEC_CHAR;
-					buf[cnt_buf++] = (char)va_arg(ap, int);
+				case 'p':
+					TODO();
+					break;
+				case 'o':
+					TODO();
 					break;
 				case 'x':
 				case 'X':
@@ -209,23 +224,7 @@ int printf(const char *fmt, ...) {
 						}
 					}
 					break;
-				/*case 'f': // No need to implement float
-					io_format.spec = SPEC_FLOAT;
-					float tmp_f = (float)va_arg(ap, double); // va_arg cannot use short or float as type
-																									 
-					int tmp_f_i = (int)tmp_f; // 整数部分
-					cnt_buf = sprintf(buf, "%d", tmp_f_i);
-					buf[cnt_buf++] = '.';	
-					tmp_f = tmp_f - tmp_f_i; // 小数部分
-					if(tmp_f < 0) tmp_f = -tmp_f; // 输出小数不关心符号
-					tmp_f_i = tmp_f * 10;
-					while(cnt_buf < BUF_SIZE && tmp_f_i) {
-						buf[++cnt_buf] = tmp_f_i;
-						tmp_f = tmp_f * 10 - tmp_f_i;
-					}
-					buf_flush();
-					cnt_write += cnt_buf;
-					break;*/
+				/* case 'f': // No need to implement float */
 				default:
 					putch('\n'); putch('!'); putch(*(fmt + _i));
 					panic("\nNot implemented\n");
