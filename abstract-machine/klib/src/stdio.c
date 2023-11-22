@@ -149,8 +149,8 @@ int printf(const char *fmt, ...) {
 				continue;
 			}	
 
-			bool flag_s = 1;
-			while (flag_s) {
+			//bool flag_s = 1;
+			//while (flag_s) {
 				switch(*(fmt + (_i++))) { // match flag
 					case '-':
 						io_format.flag |= FLAG_LEFT_ALIGN;
@@ -170,10 +170,10 @@ int printf(const char *fmt, ...) {
 					default:
 						--_i; // return to last position
 						io_format.flag = FLAG_NONE;
-						flag_s = 0;
+			//			flag_s = 0;
 						break;
 				}
-			}
+			//}
 
 			io_format.width = 0; // 0 is refered as default
 			while(ISDIGIT(*(fmt + _i))) {
