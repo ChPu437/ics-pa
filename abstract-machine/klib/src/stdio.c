@@ -19,6 +19,9 @@
 
 enum FORMAT_FLAGS {
 	FLAG_LEFT_ALIGN, // '-', 在给定宽度内左对齐
+	FLAG_FORCE_SIGN, // '+', 强制显示正负号
+	FLAG_MARGIN_SIGN, // ' ', 无符号时空出符号位置
+	FLAG_FORCE_DECO, // 强制输出十六进制数的0x/0X或浮点数的小数点(不用实现浮点数)
 	FLAG_ZERO_PADDING, // '0', 用0填充右对齐时左侧的空位
 	FLAG_NONE, // 没有提供 flag
 };
@@ -117,7 +120,7 @@ int cnt_buf = 0;
 char buf[BUF_SIZE];
 
 
-inline void buf_flush() {
+static void buf_flush() {
 	for (int i = 0; i < cnt_buf; i++) {
 		putch(*(buf + i));
 	}
