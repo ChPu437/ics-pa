@@ -153,19 +153,19 @@ int printf(const char *fmt, ...) {
 			//while (flag_s) {
 				switch(*(fmt + (_i++))) { // match flag
 					case '-':
-						io_format.flag |= FLAG_LEFT_ALIGN;
+						io_format.flag = FLAG_LEFT_ALIGN;
 						break;
 					case '+':
-						io_format.flag |= FLAG_FORCE_SIGN;
+						io_format.flag = FLAG_FORCE_SIGN;
 						break;
 					case ' ':
-						io_format.flag |= FLAG_MARGIN_SIGN;
+						io_format.flag = FLAG_MARGIN_SIGN;
 						break;
 					case '#':
-						io_format.flag |= FLAG_FORCE_DECO;
+						io_format.flag = FLAG_FORCE_DECO;
 						break;
 					case '0':
-						io_format.flag |= FLAG_ZERO_PADDING;
+						io_format.flag = FLAG_ZERO_PADDING;
 						break;
 					default:
 						--_i; // return to last position
