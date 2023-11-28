@@ -155,8 +155,8 @@ config MTRACE
   default n
 
 config FTRACE
-  depends on TRACE && TARGET_NATIVE_ELF && ENGINE_INTERPRETER
-  bool "Enable function tracer"
+  depends on TRACE && TARGET_NATIVE_ELF && ENGINE_INTERPRETER && ITRACE
+  bool "Enable function tracer (must use with itrace right now)"
   default n
 
 config ITRACE_COND
