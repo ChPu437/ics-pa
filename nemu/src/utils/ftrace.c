@@ -10,7 +10,7 @@
 
 #define FTRACE_MAX_SH_SIZE 500
 #define FTRACE_STRTAB_SIZE 200
-#define FTRACE_MAX_STR_LENG 300
+#define FTRACE_MAX_STR_LENG 200
 
 bool g_f_init = 0;
 static Elf32_Ehdr g_elf_header;
