@@ -36,14 +36,14 @@ void init_ftrace(const char *elf_file) {
 	} while (g_section_header->sh_type != SHT_STRTAB);
 	// TODO: parse string tab
 
-	fseek(fp, g_elf_header->e_shoff, SEEK_SET);
+	/* fseek(fp, g_elf_header->e_shoff, SEEK_SET);
 	do { // located to symtab entry
 		success = fread(g_section_header, sizeof(Elf32_Shdr), 1, fp);
 		assert(success);
 	} while (g_section_header->sh_type != SHT_SYMTAB);
 	// TODO: parse symbol tab
 	// // map name from strtab
-	// // load address(Value) into uint32_t
+	// // load address(Value) into uint32_t */
 
 	g_f_init = 1;
 }
