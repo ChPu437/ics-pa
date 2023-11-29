@@ -31,24 +31,25 @@
  * TODO: 输出格式(地址、缩进、注释)
  */
 
-extern void* symtab;
-extern bool _f_init;
-
-/* static struct g_elf_symtab{
-	char* name;
-	uint32_t address;
-}; */
+extern FILE *g_f_file;
+extern bool g_f_init;
+// g_f_symbol;
 
 // TODO: now trace log from buf_log, this depends on ITRACE
 // while ftrace dose not need to depends on ITRACE
 void ftrace_update(char* log) {
-	
+	if (!g_f_init) return;
+	// TODO: check if current instruction into a new function / return to upper
+	// 还要记录上一条指令位置(caller_address: N*\t [callee@callee_address])
 }
 
 void ftrace_dump() {
-	printf("\n!!!!ftrace: %d\n\n", _f_init);
+	if (!g_f_init) return;
+	// TODO: output
+	fclose(g_f_file);
 }
 
 // 想法：读入log用sscanf暴力读出指令地址，匹配指令地址是否为函数入口
-// 如果是入口，缩进计数器（栈大小计数器）++，将当前函数压栈，直到运行到当前函数出口点（指令地址回到上一级函数内）弹栈
+// 如果是入口，缩进计数器（栈大小计数器）++，将当前函数压栈，直到运行到当前函数出口点
+// （指令地址回到上一级函数内 -> 回到返回位置 -> 即上一级函数的下一条语句）弹栈
 // 在整个程序运行结束后打印ftrace
