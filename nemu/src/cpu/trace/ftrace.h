@@ -57,6 +57,21 @@ static struct { // 输出用buf，中间处理过程还是得留个stack
 
 // TODO: now trace log from buf_log, this depends on ITRACE
 // while ftrace dose not need to depends on ITRACE
+static bool isReturn(uint32_t addr) {
+	if (!ftrace_stack.top) return 0;
+	int last_index = 0;
+	int top = ftrace_stack.top;
+	for (int i = 0; i < g_cnt_symtab; i++) {
+		if (ftrace_stack.last_addr[top - 1] == g_f_symtab[i].st_value) {
+			last_index = i;
+		}
+	}
+	if (ftrace_stack.last_addr[top - 1] <= addr && addr <= ftrace_stack.last_addr[top - 1] + g_f_symtab[last_index].st_size) {
+		return 1;
+	}
+	return 0;
+}
+
 void ftrace_update(char* log) {
 	if (!g_f_init) return;
 	// TODO: check if current instruction into a new function / return to upper
@@ -65,7 +80,7 @@ void ftrace_update(char* log) {
 	sscanf(log, "%X:", &current_addr);
 
 	// 处理返回的情况
-	if (current_addr == ftrace_stack.last_addr[ftrace_stack.top - 1] + 4) {
+	if (isReturn(current_addr)) {
 		--ftrace_stack.top;
 		ftrace_buf.last_addr[ftrace_buf.cnt] = last_addr;
 		ftrace_buf.indent[ftrace_buf.cnt] = ftrace_stack.top;
