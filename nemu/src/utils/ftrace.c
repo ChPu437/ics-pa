@@ -18,8 +18,8 @@ static Elf32_Ehdr elf_header;
 static Elf32_Shdr section_header[FTRACE_MAX_SH_SIZE];
 static char strtab_str[FTRACE_STRTAB_SIZE * FTRACE_MAX_STR_LENG];
 char g_f_strtab[FTRACE_STRTAB_SIZE][FTRACE_MAX_STR_LENG];
-// static Elf32_Sym symtab_full[FTRACE_MAX_SYM_SIZE];
-// Elf32_Sym g_f_symtab[FTRACE_MAX_SYM_SIZE];
+static Elf32_Sym symtab_full[FTRACE_MAX_SYM_SIZE];
+Elf32_Sym g_f_symtab[FTRACE_MAX_SYM_SIZE];
 int g_cnt_symtab = 0;
 bool g_f_init = 0;
 
@@ -60,16 +60,16 @@ void init_ftrace(const char *elf_file) {
 	int index_symtab = 0;
 	while(section_header[index_symtab].sh_type != SHT_SYMTAB)
 		index_symtab++;
-	//int size_symtab = section_header[index_symtab].sh_size;
-	//int cnt_symtab_full = size_symtab / section_header[index_symtab].sh_entsize;
+	int size_symtab = section_header[index_symtab].sh_size;
+	int cnt_symtab_full = size_symtab / section_header[index_symtab].sh_entsize;
 	fseek(fp, section_header[index_symtab].sh_offset, SEEK_SET); // *fp to symtab start
-/*	success = fread(symtab_full, section_header[index_symtab].sh_entsize, cnt_symtab_full, fp);
+	success = fread(symtab_full, section_header[index_symtab].sh_entsize, cnt_symtab_full, fp);
 	assert(success);
 	for (int i = 0; i < cnt_symtab_full; i++) {
 		if (symtab_full[i].st_info == STT_FUNC) {
 			g_f_symtab[g_cnt_symtab++] = symtab_full[i];
 		}
-	} */
+	}
 
 	g_f_init = 1;
 	fclose(fp); // we don't want this interfere load_img()
