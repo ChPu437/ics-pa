@@ -16,7 +16,7 @@
 
 static Elf32_Ehdr elf_header;
 static Elf32_Shdr section_header[FTRACE_MAX_SH_SIZE];
-static char strtab_str[FTRACE_STRTAB_SIZE * FTRACE_MAX_STR_LENG];
+char strtab_str[FTRACE_STRTAB_SIZE * FTRACE_MAX_STR_LENG];
 char g_f_strtab[FTRACE_STRTAB_SIZE][FTRACE_MAX_STR_LENG];
 static Elf32_Sym symtab_full[FTRACE_MAX_SYM_SIZE];
 Elf32_Sym g_f_symtab[FTRACE_MAX_SYM_SIZE];
