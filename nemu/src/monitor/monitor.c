@@ -52,7 +52,7 @@ static char *img_file = NULL;
 static int difftest_port = 1234;
 
 #ifdef CONFIG_FTRACE
-static int ftrace_enabled = 0;
+static int ftrace_enabled = 1; // we now enable this by default
 #endif
 
 static long load_img() {
