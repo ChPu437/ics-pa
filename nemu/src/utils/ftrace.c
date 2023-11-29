@@ -22,7 +22,7 @@ void init_ftrace(const char *elf_file) {
 	FILE *fp = fopen(elf_file, "r");
 	assert(fp); // Check if file can be opened
 
-	bool success = 0;
+	bool success;
 
 	fseek(fp, 0, SEEK_SET); // *fp to file start
 	success = fread(&g_elf_header, sizeof(Elf32_Ehdr), 1, fp); // read header to g_f_header
