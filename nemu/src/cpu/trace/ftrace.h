@@ -61,14 +61,18 @@ static bool isReturn(uint32_t addr) {
 	if (ftrace_stack.top <= 2) return 0;
 	int last_index = 0;
 	int top = ftrace_stack.top;
-	for (int i = 0; i < g_cnt_symtab; i++) {
-		if (ftrace_stack.inst[top - 2] == g_f_symtab[i].st_value) {
-			last_index = i;
-			// printf("\n!!!ftrace-last-index: %s\n", g_strtab_str + g_f_symtab[i].st_name);
+	if (ftrace_stack.inst[top - 1] == ftrace_stack.inst[top - 2]) {
+		return addr == ftrace_stack.last_addr[top - 1] + 4;
+	} else {
+		for (int i = 0; i < g_cnt_symtab; i++) {
+			if (ftrace_stack.inst[top - 2] == g_f_symtab[i].st_value) {
+				last_index = i;
+				// printf("\n!!!ftrace-last-index: %s\n", g_strtab_str + g_f_symtab[i].st_name);
+			}
 		}
-	}
-	if (ftrace_stack.inst[top - 2] <= addr && addr <= ftrace_stack.inst[top - 2] + g_f_symtab[last_index].st_size) {
-		return 1;
+		if (ftrace_stack.inst[top - 2] <= addr && addr <= ftrace_stack.inst[top - 2] + g_f_symtab[last_index].st_size) {
+			return 1;
+		}
 	}
 	return 0;
 }
