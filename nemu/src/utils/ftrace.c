@@ -8,13 +8,13 @@
 #include <elf.h>
 #include <stdio.h>
 
-#define FTRACE_MAX_SH_SIZE 10000000
+#define FTRACE_MAX_SH_SIZE 1000000
 #define FTRACE_STRTAB_SIZE 200
 #define FTRACE_MAX_STR_LENG 200
 
 bool g_f_init = 0;
 Elf32_Ehdr g_elf_header;
-static Elf32_Shdr g_section_header[FTRACE_MAX_SH_SIZE];
+// static Elf32_Shdr g_section_header[FTRACE_MAX_SH_SIZE];
 // static char g_f_strtab[FTRACE_STRTAB_SIZE][FTRACE_MAX_STR_LENG];
 
 void init_ftrace(const char *elf_file) {
@@ -29,9 +29,9 @@ void init_ftrace(const char *elf_file) {
 	assert(success);
 
 	// TODO: this didn't work (deadloop)
-	fseek(fp, g_elf_header.e_shoff, SEEK_SET);
-	success = fread(g_section_header, sizeof(Elf32_Shdr), g_elf_header.e_shnum, fp);
-	assert(success);
+	// fseek(fp, g_elf_header.e_shoff, SEEK_SET);
+	// success = fread(g_section_header, sizeof(Elf32_Shdr), g_elf_header.e_shnum, fp);
+	// assert(success);
 	// TODO: parse string tab 
 
 	// TODO: parse symbol tab
