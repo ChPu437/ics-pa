@@ -41,7 +41,10 @@ void init_ftrace(const char *elf_file) {
 	while(g_section_header[index_strtab].sh_type != SHT_STRTAB)
 		index_strtab++;
 	size_strtab = g_section_header[index_strtab].sh_size;
+
 	fseek(fp, g_section_header[index_strtab].sh_offset, SEEK_SET); // *fp to strtab start
+	success = fread(g_strtab_str, size_strtab, 1, fp);
+	assert(success);
 	while (offset_strtab <= size_strtab) { // read all strings
 		sscanf(g_strtab_str + offset_strtab, "%s", g_f_strtab[cnt_strtab]);
 		offset_strtab += strlen(g_f_strtab[cnt_strtab]) + 1;
