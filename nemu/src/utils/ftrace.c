@@ -31,7 +31,7 @@ void init_ftrace(const char *elf_file) {
 	// TODO: this didn't work (deadloop)
 	fseek(fp, g_elf_header.e_shoff, SEEK_SET);
 	success = fread(g_section_header, sizeof(Elf32_Shdr), g_elf_header.e_shnum, fp);
-	assert(success);
+	// assert(success);
 	// TODO: parse string tab 
 
 	// TODO: parse symbol tab
