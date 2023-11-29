@@ -42,6 +42,12 @@ extern Elf32_Sym g_f_symtab[100000];
 extern int g_cnt_symtab;
 extern char g_strtab_str[200 * 200];
 
+static struct {
+	uint32_t inst[FSTACK_SIZE];
+	uint32_t last_addr[FSTACK_SIZE];
+	int32_t top;
+} ftrace_stack;
+
 static struct { // 输出用buf，中间处理过程还是得留个stack
 	char inst_buf[FBUF_SIZE][200];
 	int32_t last_addr[FBUF_SIZE];
@@ -57,12 +63,33 @@ void ftrace_update(char* log) {
 	static uint32_t last_addr = 0;
 	static uint32_t current_addr = 0;
 	sscanf(log, "%X:", &current_addr);
-	for (int i = 0; i < g_cnt_symtab; i++) {
-		if (g_f_symtab[i].st_value == current_addr) {
-			ftrace_buf.last_addr[ftrace_buf.cnt] = last_addr;
-			sprintf(ftrace_buf.inst_buf[ftrace_buf.cnt++],"call [%s@%X]\n", g_strtab_str + g_f_symtab[i].st_name, current_addr);
+
+	// 处理返回的情况
+	if (current_addr == ftrace_stack.last_addr[ftrace_stack.top - 1] + 4) {
+		--ftrace_stack.top;
+		ftrace_buf.last_addr[ftrace_buf.cnt] = last_addr;
+		ftrace_buf.indent[ftrace_buf.cnt] = ftrace_stack.top;
+		for (int i = 0; i < g_cnt_symtab; i++) {
+			if (g_f_symtab[i].st_value == ftrace_stack.inst[ftrace_stack.top]) {
+				sprintf(ftrace_buf.inst_buf[ftrace_buf.cnt], "ret [%s]\n", g_strtab_str + g_f_symtab[i].st_name);
+			}
+		}
+		++ftrace_buf.cnt;
+	} else { // 新位置，如果能够查询到则压栈记录
+		for (int i = 0; i < g_cnt_symtab; i++) {
+			if (g_f_symtab[i].st_value == current_addr) {
+				ftrace_buf.last_addr[ftrace_buf.cnt] = last_addr;
+				ftrace_buf.indent[ftrace_buf.cnt] = ftrace_stack.top;
+				sprintf(ftrace_buf.inst_buf[ftrace_buf.cnt],"call [%s@%X]\n", g_strtab_str + g_f_symtab[i].st_name, current_addr);
+				++ftrace_buf.cnt;
+
+				ftrace_stack.inst[ftrace_stack.top] = current_addr;
+				ftrace_stack.last_addr[ftrace_stack.top] = last_addr;
+				++ftrace_stack.top;
+			}
 		}
 	}
+
 	// 还要记录上一条指令位置(caller_address: N*\t [callee@callee_address])
 	last_addr = current_addr;
 }
