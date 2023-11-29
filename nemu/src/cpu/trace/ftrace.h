@@ -36,10 +36,10 @@
 // extern Elf32_Shdr g_section_header[100000];
 
 extern bool g_f_init;
-extern char g_f_strtab[200][200];
+// extern char g_f_strtab[200][200];
 extern Elf32_Sym g_f_symtab[100000];
 extern int g_cnt_symtab;
-extern char strtab_str[200 * 200];
+extern char g_strtab_str[200 * 200];
 
 static struct { // 输出用buf，中间处理过程还是得留个stack
 	char inst_buf[FBUF_SIZE][200];
@@ -57,7 +57,7 @@ void ftrace_update(char* log) {
 	sscanf(log, "%X:", &current_addr);
 	for (int i = 0; i < g_cnt_symtab; i++) {
 		if (g_f_symtab[i].st_value == current_addr) {
-			sprintf(ftrace_buf.inst_buf[ftrace_buf.cnt++],"%X: call [%s@%X]\n", last_addr, g_f_strtab[g_f_symtab[i].st_name], current_addr);
+			sprintf(ftrace_buf.inst_buf[ftrace_buf.cnt++],"%X: call [%s@%X]\n", last_addr, g_strtab_str + g_f_symtab[i].st_name, current_addr);
 		}
 	}
 	// 还要记录上一条指令位置(caller_address: N*\t [callee@callee_address])
@@ -66,18 +66,18 @@ void ftrace_update(char* log) {
 
 void ftrace_dump() {
 	if (!g_f_init) return;
-	for (int i = 0; i < 20; i++) {
+	/* for (int i = 0; i < 20; i++) {
 		printf("!!!ftrace: %s\n", g_f_strtab[i]);
-	}
+	} */
 	for (int i = 0; i < g_cnt_symtab; i++) {
-		printf("!!!ftrace-symtab-value: %X %u %s\n", g_f_symtab[i].st_value, g_f_symtab[i].st_name, strtab_str + g_f_symtab[i].st_name);
+		printf("!!!ftrace-symtab-value: %X %u %s\n", g_f_symtab[i].st_value, g_f_symtab[i].st_name, g_strtab_str + g_f_symtab[i].st_name);
 	}
-/*	printf("\nFunction call trace:\n");
+	printf("\nFunction call trace:\n");
 	for (int i = 0; i < ftrace_buf.cnt; i++) {
 		for (int j = 0; j < ftrace_buf.indent[i]; j++)
 			putchar(' '), putchar(' ');
-		printf("%s\n", ftrace_buf.inst_buf[i]);
-	} */
+		printf("%s", ftrace_buf.inst_buf[i]);
+	}
 	// TODO: output
 }
 
