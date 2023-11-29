@@ -28,7 +28,7 @@ void init_ftrace(const char *elf_file) {
 	success = fread(&g_elf_header, sizeof(Elf32_Ehdr), 1, fp); // read header to g_f_header
 	assert(success);
 
-	fseek(fp, g_elf_header.e_shoff, SEEK_SET);
+	fseek(fp, g_elf_header.e_shoff, SEEK_SET); // *fp to section header start
 //	success = fread(g_section_header, sizeof(Elf32_Shdr), 1, fp);
 	success = fread(g_section_header, sizeof(Elf32_Shdr), g_elf_header.e_shnum, fp);
 	assert(success);
