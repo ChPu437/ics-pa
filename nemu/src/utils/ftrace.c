@@ -8,12 +8,13 @@
 #include <elf.h>
 #include <stdio.h>
 
-#define FTRACE_STRTAB_SIZE 128
-#define FTRACE_MAX_STR_LENG 256
+#define FTRACE_MAX_SH_SIZE 1000
+#define FTRACE_STRTAB_SIZE 200
+#define FTRACE_MAX_STR_LENG 300
 
 bool g_f_init = 0;
-Elf32_Ehdr g_elf_header;
-static Elf32_Shdr g_section_header;
+static Elf32_Ehdr g_elf_header;
+static Elf32_Shdr g_section_header[FTRACE_MAX_SH_SIZE];
 // static char g_f_strtab[FTRACE_STRTAB_SIZE][FTRACE_MAX_STR_LENG];
 
 void init_ftrace(const char *elf_file) {
@@ -31,17 +32,12 @@ void init_ftrace(const char *elf_file) {
 	// // Check if we got the right header, seems
 	// // that the fread failed right into the loop
 	// do { // located to strtab entry
-		fseek(fp, g_elf_header.e_shoff, SEEK_SET);
-		success = fread(&g_section_header, sizeof(Elf32_Shdr), 1, fp);
-		assert(success);
+	fseek(fp, g_elf_header.e_shoff, SEEK_SET);
+	success = fread(g_section_header, sizeof(Elf32_Shdr), g_elf_header.e_shnum, fp);
+	assert(success);
 	// } while (g_section_header.sh_type != SHT_STRTAB);
 	// TODO: parse string tab 
 
-	fseek(fp, g_elf_header.e_shoff, SEEK_SET);
-	do { // located to symtab entry
-		success = fread(&g_section_header, sizeof(Elf32_Shdr), 1, fp);
-		assert(success);
-	} while (g_section_header.sh_type != SHT_SYMTAB);
 	// TODO: parse symbol tab
 	// // map name from strtab
 	// // load address(Value) into uint32_t */
