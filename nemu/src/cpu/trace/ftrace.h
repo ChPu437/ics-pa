@@ -39,6 +39,7 @@ extern bool g_f_init;
 extern char g_f_strtab[200][200];
 extern Elf32_Sym g_f_symtab[100000];
 extern int g_cnt_symtab;
+extern char strtab_str[200 * 200];
 
 static struct { // 输出用buf，中间处理过程还是得留个stack
 	char inst_buf[FBUF_SIZE][200];
@@ -69,7 +70,7 @@ void ftrace_dump() {
 		printf("!!!ftrace: %s\n", g_f_strtab[i]);
 	}
 	for (int i = 0; i < g_cnt_symtab; i++) {
-		printf("!!!ftrace-symtab-value: %X %u\n", g_f_symtab[i].st_value, g_f_symtab[i].st_name);
+		printf("!!!ftrace-symtab-value: %X %u %s\n", g_f_symtab[i].st_value, g_f_symtab[i].st_name, strtab_str + g_f_symtab[i].st_name);
 	}
 /*	printf("\nFunction call trace:\n");
 	for (int i = 0; i < ftrace_buf.cnt; i++) {
