@@ -32,8 +32,9 @@
  */
 
 extern bool g_f_init;
+
 extern Elf32_Ehdr g_elf_header;
-// g_f_symbol;
+extern Elf32_Shdr* g_section_header;
 
 // TODO: now trace log from buf_log, this depends on ITRACE
 // while ftrace dose not need to depends on ITRACE
@@ -45,7 +46,8 @@ void ftrace_update(char* log) {
 
 void ftrace_dump() {
 	if (!g_f_init) return;
-	printf("\n!!!ftrace: %u\n\n", g_elf_header.e_shnum);
+	printf("\n!!!ftrace: %u\n", g_elf_header.e_shnum);
+	printf("!!!ftrace: %u\n\n", g_section_header[0].sh_addr);
 	// TODO: output
 }
 

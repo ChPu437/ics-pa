@@ -14,8 +14,8 @@
 
 bool g_f_init = 0;
 Elf32_Ehdr g_elf_header;
-static Elf32_Shdr g_section_header[FTRACE_MAX_SH_SIZE];
-// static char g_f_strtab[FTRACE_STRTAB_SIZE][FTRACE_MAX_STR_LENG];
+Elf32_Shdr g_section_header[FTRACE_MAX_SH_SIZE];
+// char g_f_strtab[FTRACE_STRTAB_SIZE][FTRACE_MAX_STR_LENG];
 
 void init_ftrace(const char *elf_file) {
 	if (!elf_file) assert(0);
@@ -29,8 +29,8 @@ void init_ftrace(const char *elf_file) {
 	assert(success);
 
 	fseek(fp, g_elf_header.e_shoff, SEEK_SET); // *fp to section header start
-	success = fread(g_section_header, g_elf_header.e_shentsize, 1, fp);
-	// success = fread(g_section_header, g_elf_header.e_shentsize, g_elf_header.e_shnum, fp);
+	// success = fread(g_section_header, g_elf_header.e_shentsize, 1, fp);
+	success = fread(g_section_header, g_elf_header.e_shentsize, g_elf_header.e_shnum, fp);
 	assert(success);
 	// TODO: parse string tab 
 
