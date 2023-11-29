@@ -8,7 +8,7 @@
 #include <elf.h>
 #include <stdio.h>
 
-#define FTRACE_MAX_SH_SIZE 1000000
+#define FTRACE_MAX_SH_SIZE 10000000
 #define FTRACE_STRTAB_SIZE 200
 #define FTRACE_MAX_STR_LENG 200
 
