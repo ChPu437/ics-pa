@@ -132,6 +132,7 @@ void init_monitor(int argc, char *argv[]) {
   // Init ftrace
   // // Since we open the img_file first and then close, we don't want this
   // // interfere with load_img() so put here.
+  assert(ftrace_file != NULL);
   IFDEF(CONFIG_FTRACE, init_ftrace(ftrace_file));
 
   /* Load the image to memory. This will overwrite the built-in image. */
