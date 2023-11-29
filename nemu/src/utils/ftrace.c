@@ -14,7 +14,7 @@
 FILE *g_f_file; // this is only used as a handler to fclose() in ftrace_dump()
 bool g_f_init = 0;
 static Elf32_Ehdr *g_elf_header;
-static Elf32_Shdr *g_section_header;
+// static Elf32_Shdr *g_section_header;
 // static char g_f_strtab[FTRACE_STRTAB_SIZE][FTRACE_MAX_STR_LENG];
 
 void init_ftrace(const char *elf_file) {
@@ -29,12 +29,12 @@ void init_ftrace(const char *elf_file) {
 	success = fread(g_elf_header, sizeof(Elf32_Ehdr), 1, fp); // read header to g_f_header
 	assert(success);
 
-	fseek(fp, g_elf_header->e_shoff, SEEK_SET);
+	/* fseek(fp, g_elf_header->e_shoff, SEEK_SET);
 	do { // located to strtab entry
 		success = fread(g_section_header, sizeof(Elf32_Shdr), 1, fp);
 		assert(success);
 	} while (g_section_header->sh_type != SHT_STRTAB);
-	// TODO: parse string tab
+	// TODO: parse string tab */
 
 	/* fseek(fp, g_elf_header->e_shoff, SEEK_SET);
 	do { // located to symtab entry
