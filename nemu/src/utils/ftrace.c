@@ -68,7 +68,7 @@ void init_ftrace(const char *elf_file) {
 
 	// only save FUNC entry for ftrace.h
 	for (int i = 0; i < cnt_symtab_full; i++) {
-		if (symtab_full[i].st_info == STT_FUNC) {
+		if (ELF32_ST_TYPE(symtab_full[i].st_info) == STT_FUNC) {
 			g_f_symtab[g_cnt_symtab++] = symtab_full[i];
 		}
 	}
