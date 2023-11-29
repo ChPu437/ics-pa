@@ -65,6 +65,8 @@ void init_ftrace(const char *elf_file) {
 	fseek(fp, section_header[index_symtab].sh_offset, SEEK_SET); // *fp to symtab start
 	success = fread(symtab_full, section_header[index_symtab].sh_entsize, cnt_symtab_full, fp);
 	assert(success);
+
+	// only save FUNC entry for ftrace.h
 	for (int i = 0; i < cnt_symtab_full; i++) {
 		if (symtab_full[i].st_info == STT_FUNC) {
 			g_f_symtab[g_cnt_symtab++] = symtab_full[i];

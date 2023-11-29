@@ -1,6 +1,7 @@
 #include <elf.h>
 #include <stdio.h>
-#define FSTACK_SIZE 1024;
+#define FSTACK_SIZE 1024
+#define FBUF_SIZE FSTACK_SIZE * 2
 
 /*
  * Elf32_Ehdr -> e_shoff // offset for section header
@@ -39,18 +40,39 @@ extern char g_f_strtab[200][200];
 extern Elf32_Sym g_f_symtab[100000];
 extern int g_cnt_symtab;
 
+static struct { // 输出用buf，中间处理过程还是得留个stack
+	char inst_buf[FBUF_SIZE][200];
+	int8_t indent[FBUF_SIZE]; // 记录每一个位置的缩进个数
+	int32_t cnt;
+} ftrace_buf;
+
 // TODO: now trace log from buf_log, this depends on ITRACE
 // while ftrace dose not need to depends on ITRACE
 void ftrace_update(char* log) {
 	if (!g_f_init) return;
 	// TODO: check if current instruction into a new function / return to upper
+	static uint32_t last_addr = 0;
+	static uint32_t current_addr = 0;
+	sscanf(log, "%X:", &current_addr);
+	for (int i = 0; i < g_cnt_symtab; i++) {
+		if (g_f_symtab[i].st_value == current_addr) {
+			sprintf(ftrace_buf.inst_buf[ftrace_buf.cnt++],"%X: call [%s@%X]\n", last_addr, g_f_strtab[g_f_symtab[i].st_name], current_addr);
+		}
+	}
 	// 还要记录上一条指令位置(caller_address: N*\t [callee@callee_address])
+	last_addr = current_addr;
 }
 
 void ftrace_dump() {
 	if (!g_f_init) return;
 	for (int i = 0; i < 20; i++) {
 		printf("!!!ftrace: %s\n", g_f_strtab[i]);
+	}
+	printf("\nFunction call trace:\n");
+	for (int i = 0; i < ftrace_buf.cnt; i++) {
+		for (int j = 0; j < ftrace_buf.indent[i]; j++)
+			putchar(' '), putchar(' ');
+		printf("%s\n", ftrace_buf.inst_buf[i]);
 	}
 	// TODO: output
 }
