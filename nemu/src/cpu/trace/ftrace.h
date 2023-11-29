@@ -54,7 +54,6 @@ void ftrace_update(char* log) {
 	static uint32_t last_addr = 0;
 	static uint32_t current_addr = 0;
 	sscanf(log, "%X:", &current_addr);
-	printf("\n!!!ftracr-current-addr:%X\n", current_addr);
 	for (int i = 0; i < g_cnt_symtab; i++) {
 		if (g_f_symtab[i].st_value == current_addr) {
 			sprintf(ftrace_buf.inst_buf[ftrace_buf.cnt++],"%X: call [%s@%X]\n", last_addr, g_f_strtab[g_f_symtab[i].st_name], current_addr);
@@ -68,6 +67,9 @@ void ftrace_dump() {
 	if (!g_f_init) return;
 	for (int i = 0; i < 20; i++) {
 		printf("!!!ftrace: %s\n", g_f_strtab[i]);
+	}
+	for (int i = 0; i < g_cnt_symtab; i++) {
+		printf("!!!ftrace-symtab-value: %X\n", g_f_symtab[i].st_value);
 	}
 	printf("\nFunction call trace:\n");
 	for (int i = 0; i < ftrace_buf.cnt; i++) {
