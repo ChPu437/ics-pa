@@ -71,12 +71,12 @@ void ftrace_dump() {
 	for (int i = 0; i < g_cnt_symtab; i++) {
 		printf("!!!ftrace-symtab-value: %X\n", g_f_symtab[i].st_value);
 	}
-	printf("\nFunction call trace:\n");
+/*	printf("\nFunction call trace:\n");
 	for (int i = 0; i < ftrace_buf.cnt; i++) {
 		for (int j = 0; j < ftrace_buf.indent[i]; j++)
 			putchar(' '), putchar(' ');
 		printf("%s\n", ftrace_buf.inst_buf[i]);
-	}
+	} */
 	// TODO: output
 }
 
