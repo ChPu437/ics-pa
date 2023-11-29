@@ -81,6 +81,7 @@ void ftrace_update(char* log) {
 	sscanf(log, "%X:", &current_addr);
 
 	// 处理返回的情况
+	// TODO: 无法处理自己调用自己
 	if (isReturn(current_addr)) {
 		--ftrace_stack.top;
 		ftrace_buf.last_addr[ftrace_buf.cnt] = last_addr;
