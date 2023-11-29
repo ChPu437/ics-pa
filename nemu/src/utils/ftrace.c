@@ -18,7 +18,7 @@ Elf32_Shdr g_section_header[FTRACE_MAX_SH_SIZE];
 // char g_f_strtab[FTRACE_STRTAB_SIZE][FTRACE_MAX_STR_LENG];
 
 void init_ftrace(const char *elf_file) {
-	if (!elf_file) assert(0);
+	if (!elf_file) return;
 	FILE *fp = fopen(elf_file, "r");
 	assert(fp); // Check if file can be opened
 
