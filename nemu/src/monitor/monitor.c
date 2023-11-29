@@ -177,7 +177,7 @@ void am_init_monitor() {
   init_isa();
   load_img();
   IFDEF(CONFIG_DEVICE, init_device());
-  IFDEF(CONFIG_FTRACE, ftrace_enabled ? init_ftrace(img_file) : 0);
+  IFDEF(CONFIG_FTRACE, init_ftrace(img_file));
   welcome();
 }
 #endif
