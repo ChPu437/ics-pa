@@ -30,8 +30,8 @@ void init_ftrace(const char *elf_file) {
 
 	fseek(fp, g_elf_header.e_shoff, SEEK_SET); // *fp to section header start
 	// success = fread(g_section_header, g_elf_header.e_shentsize, 1, fp);
-	success = fread(g_section_header, g_elf_header.e_shentsize, g_elf_header.e_shnum, fp);
-	// assert(success);
+	success = fread(g_section_header, sizeof(Elf32_Shdr), g_elf_header.e_shnum, fp);
+	assert(success);
 	// TODO: parse string tab 
 
 	// TODO: parse symbol tab
