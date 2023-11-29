@@ -25,7 +25,7 @@ void init_ftrace(const char *elf_file) {
 
 	fseek(fp, 0, SEEK_SET); // *fp to file start
 	success = fread(&g_elf_header, sizeof(Elf32_Ehdr), 1, fp); // read header to g_f_header
-	assert(success);
+	assert(!success);
 
 	// TODO: this didn't work (deadloop)
 	// // Check if we got the right header, seems
