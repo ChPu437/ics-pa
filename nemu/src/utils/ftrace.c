@@ -6,6 +6,7 @@
 #include <common.h>
 #include <elf.h>
 
+#include <stdio.h>
 void init_ftrace(const char *elf_file) {
-
+	printf("\n!!!!!init_ftrace\n\n");
 }

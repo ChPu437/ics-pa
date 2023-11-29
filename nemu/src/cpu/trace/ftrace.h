@@ -35,6 +35,7 @@ extern void* symtab;
 
 /* static struct g_elf_symtab{
 	char* name;
+	uint32_t address;
 }; */
 
 // TODO: now trace log from buf_log, this depends on ITRACE
@@ -44,7 +45,7 @@ void ftrace_update(char* log) {
 }
 
 void ftrace_dump() {
-	printf("\n!!!!!!testftrace\n\n");
+
 }
 
 // 想法：读入log用sscanf暴力读出指令地址，匹配指令地址是否为函数入口
