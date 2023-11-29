@@ -134,14 +134,16 @@ void init_monitor(int argc, char *argv[]) {
   /* Perform ISA dependent initialization. */
   init_isa();
 
+  // Init ftrace
+  // // Since we open the img_file first and then close, we don't want this
+  // // interfere with load_img() so put here.
+  IFDEF(CONFIG_FTRACE, ftrace_enabled ? init_ftrace(img_file) : 0);
+
   /* Load the image to memory. This will overwrite the built-in image. */
   long img_size = load_img();
 
   /* Initialize differential testing. */
   init_difftest(diff_so_file, img_size, difftest_port);
-
-  // Init ftrace
-  IFDEF(CONFIG_FTRACE, ftrace_enabled ? init_ftrace(img_file) : 0);
 
   /* Initialize the simple debugger. */
   init_sdb();
@@ -175,9 +177,8 @@ void am_init_monitor() {
   init_rand();
   init_mem();
   init_isa();
-  load_img();
   IFDEF(CONFIG_DEVICE, init_device());
-  IFDEF(CONFIG_FTRACE, init_ftrace(img_file));
+  load_img();
   welcome();
 }
 #endif

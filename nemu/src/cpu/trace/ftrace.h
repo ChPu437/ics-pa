@@ -1,6 +1,7 @@
 #include <elf.h>
 #include <stdio.h>
 #define FSTACK_SIZE 1024;
+#define DEBUG
 
 /*
  * Elf32_Ehdr -> e_shoff // offset for section header
@@ -31,8 +32,10 @@
  * TODO: 输出格式(地址、缩进、注释)
  */
 
-extern FILE *g_f_file;
 extern bool g_f_init;
+#ifdef DEBUG
+extern Elf32_Ehdr g_elf_header;
+#endif
 // g_f_symbol;
 
 // TODO: now trace log from buf_log, this depends on ITRACE
@@ -45,8 +48,8 @@ void ftrace_update(char* log) {
 
 void ftrace_dump() {
 	if (!g_f_init) return;
+	printf("\nftrace: %u\n\n", g_elf_header.e_shoff);
 	// TODO: output
-	fclose(g_f_file);
 }
 
 // 想法：读入log用sscanf暴力读出指令地址，匹配指令地址是否为函数入口
