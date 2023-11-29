@@ -175,7 +175,6 @@ static long load_img() {
 }
 
 void am_init_monitor() {
-	assert(0);
   init_rand();
   init_mem();
   init_isa();
