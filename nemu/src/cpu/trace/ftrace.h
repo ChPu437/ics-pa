@@ -34,7 +34,7 @@
 extern bool g_f_init;
 
 extern Elf32_Ehdr g_elf_header;
-extern Elf32_Shdr* g_section_header;
+extern Elf32_Shdr g_section_header[1000000];
 
 // TODO: now trace log from buf_log, this depends on ITRACE
 // while ftrace dose not need to depends on ITRACE
