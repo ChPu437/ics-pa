@@ -154,7 +154,7 @@ static int decode_exec(Decode *s) {
 
   INSTPAT("??????? ????? ????? ??? ????? 00101 11", auipc  , U, R(rd) = imm + s->pc);
 
-  INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall, I);
+  INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall, I, isa_raise_intr(0, s->pc));
   // Extended instruction end
 
   // Testing extended instruction
