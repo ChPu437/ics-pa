@@ -29,13 +29,9 @@ void init_ftrace(const char *elf_file) {
 	assert(success);
 
 	// TODO: this didn't work (deadloop)
-	// // Check if we got the right header, seems
-	// // that the fread failed right into the loop
-	// do { // located to strtab entry
 	fseek(fp, g_elf_header.e_shoff, SEEK_SET);
 	success = fread(g_section_header, sizeof(Elf32_Shdr), g_elf_header.e_shnum, fp);
 	assert(success);
-	// } while (g_section_header.sh_type != SHT_STRTAB);
 	// TODO: parse string tab 
 
 	// TODO: parse symbol tab
