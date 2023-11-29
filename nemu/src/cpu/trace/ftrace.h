@@ -1,5 +1,6 @@
 #include <elf.h>
 #include <stdio.h>
+#define INST_INDENT 2
 #define FSTACK_SIZE 1024
 #define FBUF_SIZE FSTACK_SIZE * 2
 
@@ -43,6 +44,7 @@ extern char g_strtab_str[200 * 200];
 
 static struct { // 输出用buf，中间处理过程还是得留个stack
 	char inst_buf[FBUF_SIZE][200];
+	int32_t last_addr[FBUF_SIZE];
 	int8_t indent[FBUF_SIZE]; // 记录每一个位置的缩进个数
 	int32_t cnt;
 } ftrace_buf;
@@ -57,7 +59,8 @@ void ftrace_update(char* log) {
 	sscanf(log, "%X:", &current_addr);
 	for (int i = 0; i < g_cnt_symtab; i++) {
 		if (g_f_symtab[i].st_value == current_addr) {
-			sprintf(ftrace_buf.inst_buf[ftrace_buf.cnt++],"%X: call [%s@%X]\n", last_addr, g_strtab_str + g_f_symtab[i].st_name, current_addr);
+			ftrace_buf.last_addr[ftrace_buf.cnt] = last_addr;
+			sprintf(ftrace_buf.inst_buf[ftrace_buf.cnt++],"call [%s@%X]\n", g_strtab_str + g_f_symtab[i].st_name, current_addr);
 		}
 	}
 	// 还要记录上一条指令位置(caller_address: N*\t [callee@callee_address])
@@ -74,8 +77,9 @@ void ftrace_dump() {
 	}
 	printf("\nFunction call trace:\n");
 	for (int i = 0; i < ftrace_buf.cnt; i++) {
-		for (int j = 0; j < ftrace_buf.indent[i]; j++)
-			putchar(' '), putchar(' ');
+		printf("%X: ", ftrace_buf.last_addr[i]);	
+		for (int j = 0; j < ftrace_buf.indent[i] * INST_INDENT; j++)
+			putchar(' ');
 		printf("%s", ftrace_buf.inst_buf[i]);
 	}
 	// TODO: output
