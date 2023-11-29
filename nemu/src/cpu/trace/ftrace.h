@@ -31,11 +31,13 @@
  * TODO: 输出格式(地址、缩进、注释)
  */
 
-extern bool g_f_init;
+// extern Elf32_Ehdr g_elf_header;
+// extern Elf32_Shdr g_section_header[100000];
 
-extern Elf32_Ehdr g_elf_header;
-extern Elf32_Shdr g_section_header[100000];
+extern bool g_f_init;
 extern char g_f_strtab[200][200];
+extern Elf32_Sym g_f_symtab[100000];
+extern int g_cnt_symtab;
 
 // TODO: now trace log from buf_log, this depends on ITRACE
 // while ftrace dose not need to depends on ITRACE
@@ -47,8 +49,6 @@ void ftrace_update(char* log) {
 
 void ftrace_dump() {
 	if (!g_f_init) return;
-	printf("\n!!!ftrace: %u\n", g_elf_header.e_shnum);
-	printf("!!!ftrace: %u\n", g_section_header[0].sh_name);
 	for (int i = 0; i < 20; i++) {
 		printf("!!!ftrace: %s\n", g_f_strtab[i]);
 	}
