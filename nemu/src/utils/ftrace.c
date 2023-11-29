@@ -24,7 +24,7 @@ int g_cnt_symtab = 0;
 bool g_f_init = 0;
 
 void init_ftrace(const char *elf_file) {
-	if (!elf_file) assert(0);
+	if (!elf_file) return; // am mode or none -f specified
 	FILE *fp = fopen(elf_file, "r");
 	assert(fp); // Check if file can be opened
 
