@@ -32,6 +32,7 @@
  */
 
 extern void* symtab;
+extern bool _f_init;
 
 /* static struct g_elf_symtab{
 	char* name;
@@ -45,6 +46,7 @@ void ftrace_update(char* log) {
 }
 
 void ftrace_dump() {
+	printf("\n!!!!ftrace: %d\n\n", _f_init);
 }
 
 // 想法：读入log用sscanf暴力读出指令地址，匹配指令地址是否为函数入口
