@@ -13,7 +13,7 @@
 
 bool g_f_init = 0;
 Elf32_Ehdr g_elf_header;
-// static Elf32_Shdr g_section_header;
+static Elf32_Shdr g_section_header;
 // static char g_f_strtab[FTRACE_STRTAB_SIZE][FTRACE_MAX_STR_LENG];
 
 void init_ftrace(const char *elf_file) {
@@ -30,11 +30,11 @@ void init_ftrace(const char *elf_file) {
 	// TODO: this didn't work (deadloop)
 	// // Check if we got the right header, seems
 	// // that the fread failed right into the loop
-	/* fseek(fp, g_elf_header.e_shoff, SEEK_SET);
-	do { // located to strtab entry
+	// fseek(fp, g_elf_header.e_shoff, SEEK_SET);
+	// do { // located to strtab entry
 		success = fread(&g_section_header, sizeof(Elf32_Shdr), 1, fp);
 		assert(success);
-	} while (g_section_header.sh_type != SHT_STRTAB);
+	// } while (g_section_header.sh_type != SHT_STRTAB);
 	// TODO: parse string tab 
 
 	fseek(fp, g_elf_header.e_shoff, SEEK_SET);
