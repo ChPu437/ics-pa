@@ -52,7 +52,7 @@ static char *img_file = NULL;
 static int difftest_port = 1234;
 
 #ifdef CONFIG_FTRACE
-static int ftrace_enabled = 1; // we now enable this by default
+static char* ftrace_file = NULL;
 #endif
 
 static long load_img() {
@@ -95,7 +95,7 @@ static int parse_args(int argc, char *argv[]) {
       case 'l': log_file = optarg; break;
       case 'd': diff_so_file = optarg; break;
 #ifdef CONFIG_FTRACE
-			case 'f': ftrace_enabled = 1; break;
+			case 'f': ftrace_file = optarg; break;
 #endif
       case 1: img_file = optarg; return 0;
       default:
@@ -138,7 +138,7 @@ void init_monitor(int argc, char *argv[]) {
   // Init ftrace
   // // Since we open the img_file first and then close, we don't want this
   // // interfere with load_img() so put here.
-  IFDEF(CONFIG_FTRACE, ftrace_enabled ? init_ftrace(img_file) : 0);
+  IFDEF(CONFIG_FTRACE, init_ftrace(ftrace_file));
 
   /* Load the image to memory. This will overwrite the built-in image. */
   long img_size = load_img();
