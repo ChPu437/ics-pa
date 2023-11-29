@@ -23,11 +23,11 @@ void init_ftrace(const char *elf_file) {
 	assert(fp); // Check if file can be opened
 	g_f_file = fp; // copy pointer
 
-	/* bool success = 0;
+	//bool success = 0;
 
 	fseek(fp, 0, SEEK_SET); // *fp to file start
-	success = fread(g_elf_header, sizeof(Elf32_Ehdr), 1, fp); // read header to g_f_header
-	assert(success); */
+	// success = fread(g_elf_header, sizeof(Elf32_Ehdr), 1, fp); // read header to g_f_header
+	// assert(success);
 
 	/* fseek(fp, g_elf_header->e_shoff, SEEK_SET);
 	do { // located to strtab entry
