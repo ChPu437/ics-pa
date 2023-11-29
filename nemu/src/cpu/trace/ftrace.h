@@ -1,7 +1,7 @@
 #include <elf.h>
 #include <stdio.h>
 #define INST_INDENT 2
-#define FSTACK_SIZE 1024
+#define FSTACK_SIZE 100000
 #define FBUF_SIZE FSTACK_SIZE * 2
 
 /*
@@ -49,7 +49,7 @@ static struct {
 } ftrace_stack;
 
 static struct { // 输出用buf，中间处理过程还是得留个stack
-	char inst_buf[FBUF_SIZE][200];
+	char inst_buf[FBUF_SIZE][1000];
 	int32_t last_addr[FBUF_SIZE];
 	int8_t indent[FBUF_SIZE]; // 记录每一个位置的缩进个数
 	int32_t cnt;
