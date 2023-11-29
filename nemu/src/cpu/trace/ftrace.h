@@ -64,6 +64,7 @@ static bool isReturn(uint32_t addr) {
 	for (int i = 0; i < g_cnt_symtab; i++) {
 		if (ftrace_stack.last_addr[top - 1] == g_f_symtab[i].st_value) {
 			last_index = i;
+			printf("\n!!!ftrace-last-index: %s\n", g_strtab_str + g_f_symtab[i].st_name);
 		}
 	}
 	if (ftrace_stack.last_addr[top - 1] <= addr && addr <= ftrace_stack.last_addr[top - 1] + g_f_symtab[last_index].st_size) {
