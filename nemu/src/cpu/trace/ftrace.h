@@ -43,8 +43,8 @@ extern int g_cnt_symtab;
 extern char g_strtab_str[200 * 200];
 
 static struct {
-	uint32_t inst[FSTACK_SIZE];
-	uint32_t last_addr[FSTACK_SIZE];
+	uint32_t inst[FSTACK_SIZE]; // 当前指令头
+	uint32_t last_addr[FSTACK_SIZE]; // 跳转进来的位置
 	int32_t top;
 } ftrace_stack;
 
@@ -58,16 +58,16 @@ static struct { // 输出用buf，中间处理过程还是得留个stack
 // TODO: now trace log from buf_log, this depends on ITRACE
 // while ftrace dose not need to depends on ITRACE
 static bool isReturn(uint32_t addr) {
-	if (!ftrace_stack.top) return 0;
+	if (ftrace_stack.top <= 2) return 0;
 	int last_index = 0;
 	int top = ftrace_stack.top;
 	for (int i = 0; i < g_cnt_symtab; i++) {
-		if (ftrace_stack.last_addr[top - 1] == g_f_symtab[i].st_value) {
+		if (ftrace_stack.inst[top - 2] == g_f_symtab[i].st_value) {
 			last_index = i;
-			printf("\n!!!ftrace-last-index: %s\n", g_strtab_str + g_f_symtab[i].st_name);
+			// printf("\n!!!ftrace-last-index: %s\n", g_strtab_str + g_f_symtab[i].st_name);
 		}
 	}
-	if (ftrace_stack.last_addr[top - 1] <= addr && addr <= ftrace_stack.last_addr[top - 1] + g_f_symtab[last_index].st_size) {
+	if (ftrace_stack.inst[top - 2] <= addr && addr <= ftrace_stack.inst[top - 2] + g_f_symtab[last_index].st_size) {
 		return 1;
 	}
 	return 0;
