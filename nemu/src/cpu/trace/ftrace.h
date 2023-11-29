@@ -39,7 +39,6 @@ extern bool g_f_init;
 extern char g_f_strtab[200][200];
 extern Elf32_Sym g_f_symtab[100000];
 extern int g_cnt_symtab;
-extern char* strtab_str;
 
 static struct { // 输出用buf，中间处理过程还是得留个stack
 	char inst_buf[FBUF_SIZE][200];
@@ -57,8 +56,7 @@ void ftrace_update(char* log) {
 	sscanf(log, "%X:", &current_addr);
 	for (int i = 0; i < g_cnt_symtab; i++) {
 		if (g_f_symtab[i].st_value == current_addr) {
-			// sprintf(ftrace_buf.inst_buf[ftrace_buf.cnt++],"%X: call [%s@%X]\n", last_addr, g_f_strtab[g_f_symtab[i].st_name], current_addr);
-			sprintf(ftrace_buf.inst_buf[ftrace_buf.cnt++],"%X: call [%s@%X]\n", last_addr, strtab_str + g_f_symtab[i].st_name, current_addr);
+			sprintf(ftrace_buf.inst_buf[ftrace_buf.cnt++],"%X: call [%s@%X]\n", last_addr, g_f_strtab[g_f_symtab[i].st_name], current_addr);
 		}
 	}
 	// 还要记录上一条指令位置(caller_address: N*\t [callee@callee_address])
