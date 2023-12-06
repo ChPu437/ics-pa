@@ -14,6 +14,10 @@
 ***************************************************************************************/
 
 #include "sdb.h"
+#include <assert.h>
+#include <stdint.h>
+#include <string.h>
+#include <malloc.h>
 
 #define NR_WP 32
 
@@ -22,7 +26,8 @@ typedef struct watchpoint {
   struct watchpoint *next;
 
   /* TODO: Add more members if necessary */
-
+  char* expr;
+  uint32_t val; // value of current EXPR
 } WP;
 
 static WP wp_pool[NR_WP] = {};
@@ -40,4 +45,90 @@ void init_wp_pool() {
 }
 
 /* TODO: Implement the functionality of watchpoint */
+int new_wp(char* EXPR) {
+	assert(free_ != NULL);
+	WP* new = free_;
+	free_ = free_->next;
 
+	new->next = NULL;
+	if(head == NULL) {
+		head = new;
+		new->NO = 1;
+	} else {
+		WP* last = head;
+		while(last->next != NULL)
+			last = last->next;
+		last->next = new;
+		new->NO = last->NO + 1;
+	}
+
+
+	new->expr = malloc((strlen(EXPR) + 1) * sizeof(char)); // remember the end tag!
+	strcpy(new->expr, EXPR);
+	bool success = 0;
+	new->val = expr(EXPR, &success); 
+	assert(success);
+
+	return 0;
+}
+
+int free_wp(int index) {
+	assert(head != NULL);
+	// assert(index <= head->NO); // if exceeded max index
+	// // This may be problematic since the index can? get out of order
+
+	WP *last = NULL, *curr = head, *nnext = head->next;
+	while (curr->NO != index) {
+		last = curr;
+		curr = curr -> next;
+		if (curr == NULL) {
+			printf("Find no watchpoint with index %d!\n", index);
+			return 1;
+		}
+		nnext = curr -> next; // nnext is the next of new curr
+	}
+
+	if(last) last->next = nnext;
+	else head = nnext; // last == NULL indicates that we are on head;
+
+	while (nnext != NULL) {
+		(nnext->NO)--;
+		nnext = nnext->next;
+	}
+
+	curr->val = 0;
+	free(curr->expr);
+	curr->expr = NULL;
+	
+	last = free_;
+	while(last->next != NULL) last = last->next;
+	last->next = curr;
+	curr->NO = last->NO + 1;
+
+	return 0;
+}
+
+void dump_wp() {
+	WP* curr = head;
+	while(curr != NULL) {
+		printf("%d\t%s\t%u\n", curr->NO, curr->expr, curr->val);
+		curr = curr->next;
+	}
+}
+
+bool update_wp() {
+	WP* curr = head;
+	bool ret = 0;
+	while(curr != NULL) {
+		bool success = 0;
+		uint32_t new_val = expr(curr->expr, &success);
+		assert(success);
+		if (curr->val != new_val) {
+			printf("Watchpoint %d triggered! %s: %u -> %u\n", curr->NO, curr->expr, curr->val, new_val);
+			curr->val = new_val;
+			ret = 1;
+		}
+		curr = curr->next;
+	} 
+	return ret;
+}

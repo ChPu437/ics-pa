@@ -17,6 +17,18 @@
 #include <cpu/decode.h>
 #include <cpu/difftest.h>
 #include <locale.h>
+#ifdef CONFIG_WATCHPOINT
+#include "../monitor/sdb/sdb.h"
+#endif
+#ifdef CONFIG_IRINGBUF
+#include "./trace/iringbuf.h"
+#endif
+#ifdef CONFIG_MTRACE
+#include "./trace/mtrace.h"
+#endif
+#ifdef CONFIG_FTRACE
+#include "./trace/ftrace.h"
+#endif
 
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
@@ -31,13 +43,30 @@ static uint64_t g_timer = 0; // unit: us
 static bool g_print_step = false;
 
 void device_update();
+#ifdef CONFIG_IRINGBUF
+void iringbuf_update(char* log);
+void iringbuf_dump();
+#endif
+#ifdef CONFIG_FTRACE
+void ftrace_update(char* log);
+void ftrace_dump();
+#endif
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #ifdef CONFIG_ITRACE_COND
   if (ITRACE_COND) { log_write("%s\n", _this->logbuf); }
 #endif
+
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
+  IFDEF(CONFIG_IRINGBUF, iringbuf_update(_this->logbuf));
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
+
+#ifdef CONFIG_WATCHPOINT
+	if(update_wp())
+		nemu_state.state = NEMU_STOP;
+#endif
+
+	IFDEF(CONFIG_FTRACE, ftrace_update(_this->logbuf));
 }
 
 static void exec_once(Decode *s, vaddr_t pc) {
@@ -80,6 +109,7 @@ static void execute(uint64_t n) {
     if (nemu_state.state != NEMU_RUNNING) break;
     IFDEF(CONFIG_DEVICE, device_update());
   }
+  IFDEF(CONFIG_FTRACE, ftrace_dump());
 }
 
 static void statistic() {
@@ -93,6 +123,8 @@ static void statistic() {
 
 void assert_fail_msg() {
   isa_reg_display();
+  IFDEF(CONFIG_IRINGBUF, iringbuf_dump());
+  IFDEF(CONFIG_FTRACE, ftrace_dump());
   statistic();
 }
 

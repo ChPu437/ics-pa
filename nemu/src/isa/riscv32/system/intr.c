@@ -15,6 +15,21 @@
 
 #include <isa.h>
 
+/*
+在PA中, 我们只使用如下3个CSR寄存器:
+
+    mepc寄存器 - 存放触发异常的PC
+    mstatus寄存器 - 存放处理器的状态
+    mcause寄存器 - 存放触发异常的原因
+
+riscv32触发异常后硬件的响应过程如下:
+
+    将当前PC值保存到mepc寄存器
+    在mcause寄存器中设置异常号
+    从mtvec寄存器中取出异常入口地址
+    跳转到异常入口地址
+ */
+
 word_t isa_raise_intr(word_t NO, vaddr_t epc) {
   /* TODO: Trigger an interrupt/exception with ``NO''.
    * Then return the address of the interrupt/exception vector.

@@ -13,16 +13,26 @@
 * See the Mulan PSL v2 for more details.
 ***************************************************************************************/
 
+#include <assert.h>
 #include <isa.h>
 #include <cpu/cpu.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <macro.h>
 #include "sdb.h"
+// Extended include
+#include <memory/paddr.h>
+#define MAX_EXPR_LENGTH 256
 
 static int is_batch_mode = false;
 
 void init_regex();
 void init_wp_pool();
+#ifdef CONFIG_IRINGBUF
+void iringbuf_init();
+#endif
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
@@ -47,12 +57,20 @@ static int cmd_c(char *args) {
   return 0;
 }
 
-
 static int cmd_q(char *args) {
+  nemu_state.state = NEMU_QUIT;
   return -1;
 }
 
 static int cmd_help(char *args);
+
+// Extended commands
+static int cmd_si(char *args);
+static int cmd_info(char *args);
+static int cmd_x(char *args);
+static int cmd_p(char *args);
+static int cmd_w(char *args);
+static int cmd_d(char *args);
 
 static struct {
   const char *name;
@@ -62,6 +80,12 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
+  { "si", "Run N instructions and pause, N = 1 by default", cmd_si },
+  { "info", "Print the specified information of SUBCOMMAND", cmd_info },
+  { "x", "Print the memory value start from EXPR of length N", cmd_x },
+  { "p", "Calculate and print the value of EXPR", cmd_p },
+  { "w", "Set watchpoint on EXPR", cmd_w},
+  { "d", "Delete watchpoint with index N", cmd_d},
 
   /* TODO: Add more commands */
 
@@ -91,6 +115,125 @@ static int cmd_help(char *args) {
   }
   return 0;
 }
+
+// Extended commands
+static int cmd_si(char *args) {
+	/*
+	 * args[] parsed from str[] without the first substr(cmd)
+	 */
+	uint64_t N = 1;
+
+	if (args == NULL) {
+		printf("This command requires 1 argument! Usage: si [step]\n");
+		return 1;
+	}
+	if (!~sscanf(args, "%lu", &N)) {
+		printf("Invalid argument: %s\n", args);
+		return 1;
+	}
+	if (N == 0) {
+		return 0; // Do nothing when we run 0 instructions
+	}
+	
+	cpu_exec(N);
+	return 0;
+}
+
+static int cmd_info(char *args) {
+	if (args == NULL) {
+		printf("This command needs 1 argument! Usage: info [w/r]\n");
+		return 1;
+	}
+	switch(args[0]) {
+		case 'w':
+			printf("List of watchpoints:\n");
+			printf("NO\tExpr\tVal\n");
+			dump_wp();
+			break;
+		case 'r':
+			isa_reg_display();
+			break;
+		default:
+			printf("Unknown argument: %c\n", args[0]);
+			return 1;
+	}
+	return 0;
+}
+
+
+static int cmd_x(char *args) {
+	char expr_s[MAX_EXPR_LENGTH] = {'\0'};
+	int n;
+
+	if (args != NULL) {
+		if (!~sscanf(args, "%d %s", &n, expr_s)) {
+			printf("Unable to parse arguments: %s\n", args);
+			return 1;
+		} else {
+			if (n == 0) return 0;
+			if (expr_s[0] == '\0') {
+				printf("This command requires two args! Usage: x [step] [address]\n");
+				return 1;
+			}
+		}
+	} else {
+		printf("This command requires two args! Usage: x [step] [address]\n");
+		return 1;
+	}
+	// TODO: error handler (0 and non-digit)
+	bool success = false;
+	paddr_t expr_i = expr(expr_s, &success);
+	if (!success) {
+		printf("Unable to parse expression: %s\n", expr_s);
+		return 1;
+	}
+
+	for (int i = 0; i < n; i++)
+		printf("0x%08x: 0x%08x\n", expr_i + 4 * i, paddr_read(expr_i + 4 * i, 4));
+	return 0;
+}
+
+static int cmd_p(char *args) {
+	if (args == NULL) {
+		printf("This command requires 1 argument! Usage: p [expr]\n");
+		return 1;
+	}
+
+	bool success;
+	int64_t result = expr(args, &success);
+
+	if (!success) {
+		printf("Unable to parse expression: %s\n", args);
+		return 1;
+	}
+
+	printf("%ld\n", result);
+
+	return 0;
+}
+
+static int cmd_w(char *args) {
+	bool success = 0;
+	expr(args, &success);
+	if (!success) return 1;
+	return new_wp(args);
+}
+
+static int cmd_d(char *args) {
+	int N;
+	
+	if (args == NULL) {
+		printf("This command requires 1 argument! Usage: d [watchpoint_id]\n");
+		return 1;
+	}
+	if (!~sscanf(args, "%d", &N)) {
+		printf("Unable to parse argument: %s\n", args);
+		return 1;
+	}
+
+	return free_wp(N);
+}
+
 
 void sdb_set_batch_mode() {
   is_batch_mode = true;
@@ -140,4 +283,7 @@ void init_sdb() {
 
   /* Initialize the watchpoint pool. */
   init_wp_pool();
+
+  // Initialize ring buffer for instruction tracing
+  IFDEF(CONFIG_IRINGBUF, iringbuf_init());
 }

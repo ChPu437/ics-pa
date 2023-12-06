@@ -47,8 +47,8 @@ static void init_screen() {
   sprintf(title, "%s-NEMU", str(__GUEST_ISA__));
   SDL_Init(SDL_INIT_VIDEO);
   SDL_CreateWindowAndRenderer(
-      SCREEN_W * (MUXDEF(CONFIG_VGA_SIZE_400x300, 2, 1)),
-      SCREEN_H * (MUXDEF(CONFIG_VGA_SIZE_400x300, 2, 1)),
+      SCREEN_W * (MUXDEF(CONFIG_VGA_SIZE_800x600, 1, 2)),
+      SCREEN_H * (MUXDEF(CONFIG_VGA_SIZE_800x600, 1, 2)),
       0, &window, &renderer);
   SDL_SetWindowTitle(window, title);
   texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,
@@ -70,9 +70,17 @@ static inline void update_screen() {
 #endif
 #endif
 
-void vga_update_screen() {
+#define SYNC_MASK = 
+void vga_update_screen() { 
   // TODO: call `update_screen()` when the sync register is non-zero,
   // then zero out the sync register
+  if (mmio_read(CONFIG_VGA_CTL_MMIO + 4, 1)) { // am/ioe/gpu.c: SYNC_ADDR = (VGACTL_ADDR + 4)
+  // if (*(uint8_t*)(vgactl_port_base + 4)) { // am/ioe/gpu.c: SYNC_ADDR = (VGACTL_ADDR + 4)
+//		printf("!vga sync\n");
+	  update_screen();
+	  mmio_write(CONFIG_VGA_CTL_MMIO + 4, 1, 0);
+	  // *(uint8_t*)(vgactl_port_base + 4) = 0;
+	}
 }
 
 void init_vga() {
