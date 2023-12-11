@@ -35,6 +35,7 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
 }
 
 void yield() {
+	// yield保存-1到a7, a7应该代表异常号
   asm volatile("li a7, -1; ecall");
 }
 
