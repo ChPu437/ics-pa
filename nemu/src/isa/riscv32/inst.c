@@ -25,6 +25,9 @@
 #define Mr vaddr_read
 #define Mw vaddr_write
 
+extern word_t csr_read(uint32_t idx);
+extern word_t* csr_write(uint32_t idx);
+
 enum {
   TYPE_I, TYPE_U, TYPE_S,
   TYPE_N, // none
