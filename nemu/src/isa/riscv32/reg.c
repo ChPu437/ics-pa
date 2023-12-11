@@ -24,9 +24,19 @@ const char *regs[] = {
   "s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6"
 };
 
+const uint32_t csr_idx[] = {
+	0x305, 0x341, 0x300, 0x342
+};
+const char *csrs[] = {
+	"mtvec", "mepc", "mstatus", "mcause"
+};
+
 void isa_reg_display() {
-	for (uint8_t i = 0; i < 32; i++) {
+	for (uint8_t i = 0; i < sizeof(regs) / sizeof(void*); i++) {
 		printf("%s: 0x%x\n", regs[i], cpu.gpr[i]);
+	}
+	for (uint8_t i = 0; i < sizeof(csrs) / sizeof(void*); i++) {
+		printf("%s: 0x%x\n", csrs[i], cpu.csr[i]);
 	}
 }
 
