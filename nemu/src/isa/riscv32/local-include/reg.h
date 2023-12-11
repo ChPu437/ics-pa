@@ -33,6 +33,7 @@ static inline const char* reg_name(int idx, int width) {
 // we imitate the process above to implement our own csr helper function
 
 #define DEBUG
+#include <isa.h>
 static inline int check_csr_idx(uint32_t idx) {
 #ifdef DEBUG
   extern const char* csrs[];
@@ -41,7 +42,7 @@ static inline int check_csr_idx(uint32_t idx) {
 	for (int i = 0; i < 4; i++) {
 		if (idx == csr_idx[i]) {
 #ifdef DEBUG
-			printf("%s\n", csrs[i]);
+			printf("%s: %d\n", csrs[i], cpu.csr[i]);
 #endif
 			return i;
 		}
