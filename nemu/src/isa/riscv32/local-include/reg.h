@@ -43,7 +43,7 @@ static inline int check_csr_idx(uint32_t idx) {
 	for (int i = 0; i < 4; i++) {
 		if (idx == csr_idx[i]) {
 #ifdef DEBUG
-			printf("%s: %d\n", csrs[i], cpu.csr[i]);
+			printf("%s: %X\n", csrs[i], cpu.csr[i]);
 #endif
 			return i;
 		}
