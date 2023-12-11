@@ -34,11 +34,15 @@ static inline const char* reg_name(int idx, int width) {
 
 #define DEBUG
 static inline int check_csr_idx(uint32_t idx) {
-  IFDEF(DEBUG, extern const char* csrs[];)
+#ifdef DEBUG
+  extern const char* csrs[];
+#endif
 	extern const uint32_t csr_idx[4];
 	for (int i = 0; i < 4; i++) {
 		if (idx == csr_idx[i]) {
-			IFDEF(DEBUG, printf("%s\n", csrs[i]);)
+#ifdef DEBUG
+			printf("%s\n", csrs[i]);
+#endif
 			return i;
 		}
 	}
