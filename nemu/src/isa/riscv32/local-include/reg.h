@@ -16,8 +16,8 @@
 #ifndef __RISCV32_REG_H__
 #define __RISCV32_REG_H__
 
-#include <isa.h>
 #include <common.h>
+#include <isa.h>
 
 static inline int check_reg_idx(int idx) {
   IFDEF(CONFIG_RT_CHECK, assert(idx >= 0 && idx < 32));
