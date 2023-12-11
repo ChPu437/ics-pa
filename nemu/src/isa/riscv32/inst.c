@@ -175,7 +175,7 @@ static int decode_exec(Decode *s) {
   // INSTPAT("??????? ????? ????? 001 00000 11100 11", csrw   , CSR, R(rd) = ); // csrrw, rd == x0 即为 csrw
   // x0 本来就写不进去，没必要单独列一条指令
   INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw   , CSR, R(rd) = ZEXT(CSRR(imm), 32), CSRW(imm) = src1); // csrrw, rd == x0 即为 csrw
-  // INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , I, isa_raise_intr(R(17), s->pc)); // R(17) == a7
+  INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , I, isa_raise_intr(R(17), s->pc)); // R(17) == a7
 
   // Extended instruction end
 
@@ -189,7 +189,7 @@ static int decode_exec(Decode *s) {
 
   // Testing extended instruction end
 
-  // INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
+  INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
   																						 
   // Notice that you SHOULDN'T place ANY instruction under the instruction below, since it matches ANY sequence
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
