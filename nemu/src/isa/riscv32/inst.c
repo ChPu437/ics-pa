@@ -20,6 +20,8 @@
 #include <stdint.h>
 
 #define R(i) gpr(i)
+#define CSRR(i) csr_read(i)
+#define CSRW(i) *csr_write(i)
 #define Mr vaddr_read
 #define Mw vaddr_write
 
@@ -170,8 +172,6 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? ??? ????? 00101 11", auipc  , U, R(rd) = imm + s->pc);
 
 	// privilliged and yield 
-#define CSRR(i) csr_read(i)
-#define CSRW(i) *csr_write(i)
   // INSTPAT("??????? ????? ????? 001 00000 11100 11", csrw   , CSR, R(rd) = ); // csrrw, rd == x0 即为 csrw
   // x0 本来就写不进去，没必要单独列一条指令
   INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw   , CSR, R(rd) = ZEXT(CSRR(imm), 32), CSRW(imm) = src1); // csrrw, rd == x0 即为 csrw
