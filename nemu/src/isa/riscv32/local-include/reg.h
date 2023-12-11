@@ -42,7 +42,7 @@ static inline int check_csr_idx(uint32_t idx) {
   assert(0);
 }
 
-#define csr_read(idx) cpu.csr[check_csr_idx(idx)]
+#define csr_read(idx) (const word_t)cpu.csr[check_csr_idx(idx)]
 #define csr_write(idx) &cpu.csr[check_csr_idx(idx)]
 
 static inline const char* csr_name(int idx, int width) {
