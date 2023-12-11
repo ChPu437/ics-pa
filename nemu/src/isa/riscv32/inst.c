@@ -174,8 +174,8 @@ static int decode_exec(Decode *s) {
 #define CSRW(i) *csr_write(i)
   // INSTPAT("??????? ????? ????? 001 00000 11100 11", csrw   , CSR, R(rd) = ); // csrrw, rd == x0 即为 csrw
   // x0 本来就写不进去，没必要单独列一条指令
-  INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw   , CSR, R(rd) = ZEXT(CSRR(imm), 32), CSRW(imm) = src1,assert(CSRR(imm) == 0x800013A8)); // csrrw, rd == x0 即为 csrw
-  INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , I, isa_raise_intr(R(17), s->pc)); // R(17) == a7
+  INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw   , CSR, R(rd) = ZEXT(CSRR(imm), 32), CSRW(imm) = src1); // csrrw, rd == x0 即为 csrw
+  INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , I, s->dnpc = isa_raise_intr(R(17), s->pc)); // R(17) == a7
 
   // Extended instruction end
 
