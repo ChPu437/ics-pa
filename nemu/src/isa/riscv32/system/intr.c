@@ -40,7 +40,6 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
    * 2: mstatus
    * 3: mcause
    */
-  assert(0);
 	cpu.csr[1] = epc;
 	cpu.csr[3] = NO;
 	cpu.csr[2] = nemu_state.state;
