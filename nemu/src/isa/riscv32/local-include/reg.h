@@ -36,6 +36,7 @@ static inline int check_csr_idx(uint32_t idx) {
 	extern const uint32_t csr_idx[4];
 	for (int i = 0; i < 4; i++) {
 		if (idx == csr_idx[i]) {
+			assert(0);
 			return i;
 		}
 	}
