@@ -38,11 +38,11 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 		ramdisk_read(&phdr, off_phdr + size_phdr * i, sizeof(Elf_Phdr));
 		if (phdr.p_type != PT_LOAD) continue;
 		Elf32_Off off_pent = phdr.p_offset;
-		uint32_t vaddr_pent = phdr.p_vaddr;
+		Elf32_Addr vaddr_pent = phdr.p_vaddr;
 		uint32_t filesz_pent = phdr.p_filesz;
 		uint32_t memsz_pent = phdr.p_memsz;
-		ramdisk_read(&vaddr_pent, off_pent, filesz_pent);
-		memset(&vaddr_pent + filesz_pent, 0, memsz_pent - filesz_pent);
+		ramdisk_read((void*)vaddr_pent, off_pent, filesz_pent);
+		memset((uint32_t*)vaddr_pent + filesz_pent, 0, memsz_pent - filesz_pent);
 		// entry_addr = entry_addr > vaddr_pent ? vaddr_pent : entry_addr;
 		printf("%x %x %p\n",  filesz_pent, memsz_pent, vaddr_pent);
 	}
