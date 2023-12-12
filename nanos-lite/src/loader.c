@@ -44,9 +44,8 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 		ramdisk_read((void*)vaddr_pent, off_pent, filesz_pent);
 		memset((uint32_t*)vaddr_pent + filesz_pent, 0, memsz_pent - filesz_pent);
 		entry_addr = entry_addr > vaddr_pent ? vaddr_pent : entry_addr;
-		printf("%x %x %p\n",  filesz_pent, memsz_pent, vaddr_pent);
+		// printf("%x %x %p\n",  filesz_pent, memsz_pent, vaddr_pent);
 	}
-
 
 	assert(entry_addr != 0xffffffff);
   return entry_addr; // 返回入口点地址
