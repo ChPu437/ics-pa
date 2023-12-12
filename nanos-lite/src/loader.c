@@ -44,7 +44,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 		ramdisk_read(&vaddr_pent, off_pent, filesz_pent);
 		memset(&vaddr_pent + filesz_pent, 0, memsz_pent - filesz_pent);
 		// entry_addr = entry_addr > vaddr_pent ? vaddr_pent : entry_addr;
-		printf("%d %X\n", cnt_phdr, vaddr_pent);
+		printf("%d %p\n", filesz_pent, vaddr_pent);
 	}
 
 
