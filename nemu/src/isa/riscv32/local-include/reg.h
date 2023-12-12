@@ -32,7 +32,7 @@ static inline const char* reg_name(int idx, int width) {
 
 // we imitate the process above to implement our own csr helper function
 
-#define DEBUG
+// #define DEBUG
 #ifdef DEBUG
 #include <isa.h>
 extern const char* csrs[];

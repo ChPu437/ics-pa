@@ -4,8 +4,20 @@
 
 static Context* (*user_handler)(Event, Context*) = NULL;
 
+#define DEBUG
+
 Context* __am_irq_handle(Context *c) {
   if (user_handler) {
+#ifdef DEBUG
+		printf("------------start context------------\n");
+		for (int i = 0; i < 32; i++) {
+			printf("reg%d: %d\n", i, c->gpr[i]);
+		}
+		printf("mcause: %d\n", c->mcause);
+		printf("mstatus: %u\n", c->mstatus);
+		printf("mepc: %u\n", c->mepc);
+		printf("-------------end context-------------\n");
+#endif
     Event ev = {0};
     switch (c->mcause) {
       default: ev.event = EVENT_ERROR; break;
