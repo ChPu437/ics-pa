@@ -214,9 +214,14 @@ int printf(const char *fmt, ...) {
 				case 'X':
 					io_format.spec = SPEC_HEX;
 					uint32_t tmp_x = va_arg(ap, unsigned int);
+					bool flag_zero = 1; // 前导零标记
 					for (int i = 8; i > 0; i--) {
 						uint32_t tmp_buf = BITS(tmp_x, 4 * i - 1, 4 * (i - 1));
-						if(!tmp_buf) continue;
+						if(!tmp_buf) {
+							if(!flag_zero) buf[cnt_buf++] = '0';
+							continue;
+						}
+						flag_zero = 0;
 						if(tmp_buf <= 9) {
 							buf[cnt_buf++] = tmp_buf + '0';
 						} else {
