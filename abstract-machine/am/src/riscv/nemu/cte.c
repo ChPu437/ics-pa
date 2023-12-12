@@ -13,8 +13,8 @@ Context* __am_irq_handle(Context *c) {
 		for (int i = 0; i < 32; i++) {
 			printf("reg%d: %X\n", i, c->gpr[i]);
 		}
-		printf("mcause: %u\n", c->mcause);
-		printf("mstatus: %u\n", c->mstatus);
+		printf("mcause: %d\n", c->mcause);
+		printf("mstatus: %d\n", c->mstatus);
 		printf("mepc: %X\n", c->mepc);
 		printf("-------------end context-------------\n");
 #endif
