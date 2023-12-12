@@ -202,6 +202,7 @@ int printf(const char *fmt, ...) {
 					char* tmp_s = va_arg(ap, char*);
 					for (int i = 0; *(tmp_s + i) != '\0'; i++) {
 						buf[cnt_buf++] = *(tmp_s + i);
+						if (cnt_buf == BUF_SIZE) buf_flush(); // 提前刷新缓冲区防止溢出
 					}
 					break;
 				case 'p':
