@@ -177,7 +177,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw   , CSR, R(rd) = ZEXT(CSRR(imm), 32), CSRW(imm) = src1); // csrrw, rd == x0 即为 csrw
   INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs   , CSR, R(rd) = ZEXT(CSRR(imm), 32), CSRW(imm) = CSRR(imm) | src1); // csrrw, rd == x0 即为 csrw
   INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, s->dnpc = isa_raise_intr(R(17), s->pc)); // R(17) == a7
-  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, ); // R(17) == a7
+  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, s->dnpc = isa_return_intr()); // R(17) == a7
 
   // Extended instruction end
 

@@ -49,3 +49,11 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
 word_t isa_query_intr() {
   return INTR_EMPTY;
 }
+
+word_t isa_return_intr() {
+	// 我们自行定义这个函数，来实现RISC“由软件决定下一步是回到发生中断的位置还是发生中断的下一个位置”
+	switch(cpu.csr[3]) {
+		case -1: return cpu.csr[1] + 4;// yield
+		default: assert(0); // Not implemented
+	}
+}
