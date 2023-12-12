@@ -46,9 +46,9 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 		entry_addr = entry_addr > vaddr_pent ? vaddr_pent : entry_addr;
 	}
 
-	assert(0);
 
 	assert(entry_addr != 0xffffffff);
+	printf("%X\n", entry_addr);
   return entry_addr; // 返回入口点地址
 }
 
