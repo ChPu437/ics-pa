@@ -26,6 +26,8 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   uint32_t cnt_phdr = ehdr.e_phnum;
   Elf32_Off off_phdr = ehdr.e_phoff;
 
+  printf("%u %u %u\n", size_phdr, cnt_phdr, off_phdr);
+
   // for each pheader:
   // // if p_type == PT_LOAD:
   // // // read p_offset (文件中的段起点偏移量)
@@ -44,7 +46,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 		ramdisk_read(&vaddr_pent, off_pent, filesz_pent);
 		memset(&vaddr_pent + filesz_pent, 0, memsz_pent - filesz_pent);
 		// entry_addr = entry_addr > vaddr_pent ? vaddr_pent : entry_addr;
-		printf("%d %p\n", filesz_pent, vaddr_pent);
+		printf("%d %p\n",  vaddr_pent);
 	}
 
 
