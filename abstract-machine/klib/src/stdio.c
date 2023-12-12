@@ -222,21 +222,20 @@ int printf(const char *fmt, ...) {
 																									// TODO: 注意其他格式化输出可能也有相同的问题，但是好像其他几种定长数据长度都不会超过目前的bufsize……
 					}
 					break;
-				case 'p':
-					TODO();
-					break;
 				case 'o':
 					TODO();
 					break;
 				case 'x':
 				case 'X':
 					io_format.spec = SPEC_HEX;
+				case 'p':
+					io_format.spec = SPEC_PTR;
 					uint32_t tmp_x = va_arg(ap, unsigned int);
 					bool flag_zero = 1; // 前导零标记
 					for (int i = 8; i > 0; i--) {
 						uint32_t tmp_buf = BITS(tmp_x, 4 * i - 1, 4 * (i - 1));
 						if(!tmp_buf) {
-							if(!flag_zero) buf[cnt_buf++] = '0';
+							if(!flag_zero || io_format.spec == SPEC_PTR) buf[cnt_buf++] = '0';
 							continue;
 						}
 						flag_zero = 0;
