@@ -17,7 +17,6 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 
   // read elf header
   ramdisk_read((void*)ehdr, 0, sizeof(Elf_Ehdr));
-	assert(0);
   assert(ehdr);
 
   // TODO: check magic
