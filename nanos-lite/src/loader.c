@@ -12,12 +12,12 @@
 extern size_t ramdisk_read(void *buf, size_t offset, size_t len);
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
-	assert(0);
   Elf_Ehdr* ehdr = NULL;
 	Elf_Phdr* phdr = NULL;
 
   // read elf header
   ramdisk_read((void*)ehdr, 0, sizeof(Elf_Ehdr));
+	assert(0);
   assert(ehdr);
 
   // TODO: check magic
