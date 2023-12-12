@@ -2,7 +2,7 @@
 
 static Context* do_event(Event e, Context* c) {
   switch (e.event) {
-		case EVENT_YIELD: printf("yield break detected!"); break;
+		case EVENT_YIELD: printf("yield event detected!"); break;
     default: panic("Unhandled event ID = %d", e.event);
   }
 
