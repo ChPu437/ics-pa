@@ -203,6 +203,7 @@ int printf(const char *fmt, ...) {
 					for (int i = 0; *(tmp_s + i) != '\0'; i++) {
 						buf[cnt_buf++] = *(tmp_s + i);
 						if (cnt_buf == BUF_SIZE) buf_flush(); // 提前刷新缓冲区防止溢出
+																									// TODO: 注意其他格式化输出可能也有相同的问题，但是好像其他几种定长数据长度都不会超过目前的bufsize……
 					}
 					break;
 				case 'p':
