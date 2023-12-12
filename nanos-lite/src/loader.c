@@ -12,20 +12,19 @@
 extern size_t ramdisk_read(void *buf, size_t offset, size_t len);
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
-  Elf_Ehdr* ehdr = NULL;
-	Elf_Phdr* phdr = NULL;
+  Elf_Ehdr ehdr;
+	Elf_Phdr phdr;
 
   // read elf header
-  ramdisk_read((void*)ehdr, 0, sizeof(Elf_Ehdr));
-  assert(ehdr);
+  ramdisk_read(&ehdr, 0, sizeof(Elf_Ehdr));
 
   // TODO: check magic
 
   // get program header size, count, and 1st entry offset
   // and then get the pointer for pheader entrys
-  uint32_t size_phdr = ehdr->e_phentsize;
-  uint32_t cnt_phdr = ehdr->e_phnum;
-  Elf32_Off off_phdr = ehdr->e_phoff;
+  uint32_t size_phdr = ehdr.e_phentsize;
+  uint32_t cnt_phdr = ehdr.e_phnum;
+  Elf32_Off off_phdr = ehdr.e_phoff;
 
   // for each pheader:
   // // if p_type == PT_LOAD:
@@ -36,15 +35,14 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   // // // 然后将段读入内存，将超出filesz的memsz部分全部设零
   uintptr_t entry_addr = 0xffffffff;
 	for (int i = 0; i < cnt_phdr; i++) {
-		ramdisk_read((void*)phdr, off_phdr + size_phdr * i, sizeof(Elf_Phdr));
-		assert(phdr);
-		if (phdr->p_type != PT_LOAD) continue;
-		Elf32_Off off_pent = phdr->p_offset;
-		Elf32_Addr vaddr_pent = phdr->p_vaddr;
-		uint32_t filesz_pent = phdr->p_filesz;
-		uint32_t memsz_pent = phdr->p_memsz;
-		ramdisk_read((void*)vaddr_pent, off_pent, filesz_pent);
-		memset((uint32_t*)vaddr_pent + filesz_pent, 0, memsz_pent - filesz_pent);
+		ramdisk_read(&phdr, off_phdr + size_phdr * i, sizeof(Elf_Phdr));
+		if (phdr.p_type != PT_LOAD) continue;
+		Elf32_Off off_pent = phdr.p_offset;
+		Elf32_Addr vaddr_pent = phdr.p_vaddr;
+		uint32_t filesz_pent = phdr.p_filesz;
+		uint32_t memsz_pent = phdr.p_memsz;
+		ramdisk_read(&vaddr_pent, off_pent, filesz_pent);
+		memset(&vaddr_pent + filesz_pent, 0, memsz_pent - filesz_pent);
 		entry_addr = entry_addr > vaddr_pent ? vaddr_pent : entry_addr;
 	}
 
