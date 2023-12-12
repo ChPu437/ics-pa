@@ -33,7 +33,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   // // // // p_filesz (该段在文件中的字节大小(确定读取终点))
   // // // // p_memsz (该段在虚存中的字节大小)
   // // // 然后将段读入内存，将超出filesz的memsz部分全部设零
-	uintptr_t entry_addr = 0;
+	uintptr_t entry_addr = 0xffffffff;
 	for (int i = 0; i < cnt_phdr; i++) {
 		ramdisk_read(&phdr, off_phdr + size_phdr * i, sizeof(Elf_Phdr));
 		if (phdr.p_type != PT_LOAD) continue;
@@ -43,7 +43,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 		uint32_t memsz_pent = phdr.p_memsz;
 		ramdisk_read((void*)vaddr_pent, off_pent, filesz_pent);
 		memset((uint32_t*)vaddr_pent + filesz_pent, 0, memsz_pent - filesz_pent);
-		// entry_addr = entry_addr > vaddr_pent ? vaddr_pent : entry_addr;
+		entry_addr = entry_addr > vaddr_pent ? vaddr_pent : entry_addr;
 		printf("%x %x %p\n",  filesz_pent, memsz_pent, vaddr_pent);
 	}
 
