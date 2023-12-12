@@ -33,6 +33,6 @@ typedef struct {
 
 #define isa_mmu_check(vaddr, len, type) (MMU_DIRECT)
 
-word_t isa_return_intr();
+word_t isa_return_intr(); // custom func for implement mret
 
 #endif
