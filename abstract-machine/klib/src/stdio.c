@@ -17,7 +17,7 @@
 #define BITS(x, hi, lo) (((x) >> (lo)) & BITMASK((hi) - (lo) + 1)) // similar to x[hi:lo] in verilog
 
 static inline void TODO() {
-	panic("Not implemented.\n");
+	panic("stdio.c: Not implemented.\n");
 } 
 
 enum FORMAT_FLAGS {
@@ -33,6 +33,7 @@ enum FORMAT_SPECIFIER {
 	SPEC_STR, // s, 字符串(char数组)
 	SPEC_CHAR, // c, 单个字符
 	SPEC_HEX, // x or X, unsigned hex
+	SPEC_PTR, // p, pointer (32位系统即输出一个32位长度16进制数)
 	// SPEC_FLOAT, // f // No need to implement float
 };
 
@@ -98,6 +99,21 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 							*y = z;
 						}
 						cnt_write += len_int; // Update cnt_write
+					}
+					break;
+				case 'p': // 32 bit pointer
+					tmp = va_arg(ap, unsigned int);
+					for (int i = 8; i > 0; i--) {
+						uint32_t tmp_buf = BITS(tmp, 4 * i - 1, 4 * (i - 1));
+						if(!tmp_buf) {
+							*(out + (cnt_write++)) = '0';
+							continue;
+						}
+						if(tmp_buf <= 9) {
+							*(out + (cnt_write++)) = tmp_buf + '0';
+						} else {
+							*(out + (cnt_write++)) = tmp_buf - 9 + 'A' - 1;
+						}
 					}
 					break;
 				default:
