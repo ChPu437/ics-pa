@@ -24,6 +24,8 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   assert(ehdr.e_ident[2] == 'L');
   assert(ehdr.e_ident[3] == 'F');
 
+  // TODO: optional: ISA Check
+
   // get program header size, count, and 1st entry offset
   // and then get the pointer for pheader entrys
   uint32_t size_phdr = ehdr.e_phentsize;
