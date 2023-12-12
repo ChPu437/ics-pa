@@ -12,6 +12,7 @@
 extern size_t ramdisk_read(void *buf, size_t offset, size_t len);
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
+	assert(0);
   Elf_Ehdr* ehdr = NULL;
 	Elf_Phdr* phdr = NULL;
 
@@ -54,8 +55,6 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 
 void naive_uload(PCB *pcb, const char *filename) {
   uintptr_t entry = loader(pcb, filename);
-
-	assert(0);
   Log("Jump to entry = %p", entry);
   ((void(*)())entry) ();
 }
