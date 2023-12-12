@@ -26,7 +26,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   uint32_t cnt_phdr = ehdr.e_phnum;
   Elf32_Off off_phdr = ehdr.e_phoff;
 
-  printf("%u %u %u\n", size_phdr, cnt_phdr, off_phdr);
+  printf("%d %d %d\n", size_phdr, cnt_phdr, off_phdr);
 
   // for each pheader:
   // // if p_type == PT_LOAD:
