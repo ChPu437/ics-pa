@@ -18,7 +18,11 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   // read elf header
   ramdisk_read(&ehdr, 0, sizeof(Elf_Ehdr));
 
-  // TODO: check magic
+  // check magic
+  assert(ehdr.e_ident[0] == 0x7f);
+  assert(ehdr.e_ident[1] == 'E');
+  assert(ehdr.e_ident[2] == 'L');
+  assert(ehdr.e_ident[3] == 'F');
 
   // get program header size, count, and 1st entry offset
   // and then get the pointer for pheader entrys
