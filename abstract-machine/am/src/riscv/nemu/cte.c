@@ -11,10 +11,10 @@ Context* __am_irq_handle(Context *c) {
 #ifdef DEBUG
 		printf("------------start context------------\n");
 		for (int i = 0; i < 32; i++) {
-			printf("reg%d: %d\n", i, c->gpr[i]);
+			printf("reg%d: %X\n", i, c->gpr[i]);
 		}
-		printf("mcause: %d\n", c->mcause);
-		printf("mstatus: %u\n", c->mstatus);
+		printf("mcause: %X\n", c->mcause);
+		printf("mstatus: %X\n", c->mstatus);
 		printf("mepc: %u\n", c->mepc);
 		printf("-------------end context-------------\n");
 #endif
