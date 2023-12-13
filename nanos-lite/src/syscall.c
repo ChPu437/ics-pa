@@ -1,6 +1,7 @@
 #include <common.h>
 #include "syscall.h"
 
+#define SYS_exit 0
 #define SYS_yield 1
 
 void do_syscall(Context *c) {
@@ -8,6 +9,7 @@ void do_syscall(Context *c) {
   a[0] = c->GPR1;
 
   switch (a[0]) {
+//		case SYS_exit:  sys_exit(c);  break;
 		case SYS_yield: sys_yield(c); break;
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
