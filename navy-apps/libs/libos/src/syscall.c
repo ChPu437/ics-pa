@@ -81,11 +81,11 @@ void *_sbrk(intptr_t increment) {
 	program_break += increment; 
 	if (_syscall_(SYS_brk, program_break, 0, 0)) {
 		// 正常运行时，brk 返回 0
-		return (void*)last_break;
+		return last_break;
 	}
 	else {
 		program_break = last_break;
-		return (void*)-1;
+		return -1;
 	}
 }
 
