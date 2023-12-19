@@ -78,6 +78,10 @@ void *_sbrk(intptr_t increment) {
 	intptr_t last_break = program_break; // 返回旧的program_break
 	program_break += increment; // 堆区向高位增长
 
+	intptr_t test = &_end;
+	char* buf[200];
+	sprintf(buf, "%d %d!!!end", program_break, test);
+	_write(1, buf, 100);
 	// assert((intptr_t)&_end == program_break); // failed
 	/*
 	 * 注意这里的&_end发生了改变！！！
