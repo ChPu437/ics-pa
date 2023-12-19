@@ -77,6 +77,10 @@ void *_sbrk(intptr_t increment) {
 	intptr_t last_shift = program_break_shift; // 返回旧的program_break
 	program_break_shift += increment; // 堆区向高位增长
 
+	char buf[256];
+	sprintf(buf, "%d\n", increment);
+	_write(1, buf, 200);
+
 	if (!_syscall_(SYS_brk, (intptr_t)&_end + program_break_shift, 0, 0)) {
 		// 正常运行时，brk 返回 0
 		return (void*)((intptr_t)&_end + last_shift);
