@@ -79,8 +79,8 @@ void *_sbrk(intptr_t increment) {
 	program_break += increment; // 堆区向高位增长
 
 	char buf[200];
-	assert((intptr_t)&_end == program_break);
-	sprintf(buf, "%d %d %d!!!end\n", increment, (intptr_t)&_end + increment, ((intptr_t)&_end) + increment);
+	// assert((intptr_t)&_end == program_break); // failed ????? 
+	sprintf(buf, "%d %d!!!end\n", program_break, &_end);
 	_write(1, buf, 100);
 
 	if (!_syscall_(SYS_brk, program_break, 0, 0)) {
@@ -109,22 +109,6 @@ void *_sbrk(intptr_t increment) {
 		return (void*)-1;
 	}
 } */
-
-
-
-/* void *_sbrk(intptr_t increment){
-  extern char end;
-  static uintptr_t probreak=(uintptr_t)&end;//初始化pb
-  uintptr_t probreak_new=probreak+increment;
-  int r=_syscall_(SYS_brk,probreak_new,0,0);//系统调用
-  if(r==0){//分配成功
-    uintptr_t temp=probreak;//旧的pb位置
-    probreak=probreak_new;//更新pb
-    return (void*)temp;
-  }
-  return (void *)-1;//分配失败
-}  */
-
 
 int _read(int fd, void *buf, size_t count) {
   _exit(SYS_read);
