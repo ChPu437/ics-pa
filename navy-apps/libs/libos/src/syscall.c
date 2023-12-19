@@ -78,7 +78,7 @@ void *_sbrk(intptr_t increment) {
 	program_break_shift += increment; // 堆区向高位增长
 
 	char buf[256];
-	sprintf(buf, "%X %X %d\n", end, &end, increment);
+	sprintf(buf, "%X %X\n", &end, &end + increment);
 	_write(1, buf, 200);
 
 	if (!_syscall_(SYS_brk, &end + program_break_shift, 0, 0)) {
