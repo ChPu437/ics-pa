@@ -4,7 +4,7 @@
 #define SYS_EXIT 0
 #define SYS_YIELD 1
 #define SYS_WRITE 4
-#define SYS_BRK 11
+#define SYS_BRK 9
 
 void do_syscall(Context *c) {
   uintptr_t a[4];
