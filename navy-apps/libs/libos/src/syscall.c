@@ -63,6 +63,7 @@ int _open(const char *path, int flags, mode_t mode) {
 
 int _write(int fd, void *buf, size_t count) {
   return _syscall_(SYS_write, fd, (intptr_t)buf, count);
+  // 这里注意navy-apps的c库的实现是一个个write，看上一个write是否成功再write下一个
 }
 
 void *_sbrk(intptr_t increment) {
