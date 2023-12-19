@@ -73,8 +73,8 @@ int _write(int fd, void *buf, size_t count) {
 
 extern char _end;
 void *_sbrk(intptr_t increment) {
-	static intptr_t program_break_shift = 0;
-	intptr_t last_shift = program_break_shift; // 返回旧的program_break
+	static uintptr_t program_break_shift = 0;
+	uintptr_t last_shift = program_break_shift; // 返回旧的program_break
 	program_break_shift += increment; // 堆区向高位增长
 
 	char buf[256];
