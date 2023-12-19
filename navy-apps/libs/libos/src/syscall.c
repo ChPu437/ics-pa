@@ -82,10 +82,9 @@ void *_sbrk(intptr_t increment) {
 	/*
 	 * 注意这里的&_end发生了改变！！！
 	 * static类型在编译器初始化，得到的_end是hello程序的_end
-	 * 运行期取到的_end是nanos的_end!!!
+	 * 运行期取到的_end在变化？
 	 */
 	
-	_syscall_(SYS_brk, (intptr_t)&_end, 0, 0);
 	if (!_syscall_(SYS_brk, program_break, 0, 0)) {
 		// 正常运行时，brk 返回 0
 		return (void*)(last_break);
