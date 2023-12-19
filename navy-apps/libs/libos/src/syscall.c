@@ -80,6 +80,7 @@ void *_sbrk(intptr_t increment) {
 	char buf[256];
 	sprintf(buf, "%d!!end\n", increment);
 	_write(1, buf, 20);
+	if (increment > 2e5) return (void*)-1;
 
 	if (!_syscall_(SYS_brk, (intptr_t)&_end + program_break_shift, 0, 0)) {
 		// 正常运行时，brk 返回 0
