@@ -71,13 +71,13 @@ int _write(int fd, void *buf, size_t count) {
 	 */
 }
 
-extern int end;
+extern char end;
 void *_sbrk(intptr_t increment) {
-	static intptr_t program_break = -1; // 用不合法值初始化
-	if (program_break == -1) {
-		program_break = end;
+	static void* program_break = (void*)-1; // 用不合法值初始化
+	if (program_break == (void*)-1) {
+		program_break = (void*)end;
 	}
-	intptr_t last_break = program_break; // 返回旧的program_break
+	void* last_break = program_break; // 返回旧的program_break
 	program_break += increment; 
 	if (_syscall_(SYS_brk, program_break, 0, 0)) {
 		// 正常运行时，brk 返回 0
