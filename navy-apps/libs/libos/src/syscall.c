@@ -73,18 +73,15 @@ int _write(int fd, void *buf, size_t count) {
 
 extern char end;
 void *_sbrk(intptr_t increment) {
-	static intptr_t program_break = -1;
-	if (program_break == -1) {
-		program_break = end;
-	}
-	intptr_t last_break = program_break; // 返回旧的program_break
-	program_break -= increment; // 堆区在内存最高位
-	if (!_syscall_(SYS_brk, program_break, 0, 0)) {
+	static intptr_t program_break_shift = 0;
+	intptr_t last_shift = program_break_shift; // 返回旧的program_break
+	program_break_shift -= increment; // 堆区在内存最高位
+	if (!_syscall_(SYS_brk, end + program_break_shift, 0, 0)) {
 		// 正常运行时，brk 返回 0
-		return (void*)last_break;
+		return (void*)(end + last_shift);
 	}
 	else {
-		program_break = last_break;
+		program_break_shift = last_shift;
 		return (void*)-1;
 	}
 }
