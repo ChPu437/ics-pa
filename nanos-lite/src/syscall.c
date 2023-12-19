@@ -4,6 +4,7 @@
 #define SYS_EXIT 0
 #define SYS_YIELD 1
 #define SYS_WRITE 4
+#define SYS_BRK -1
 
 void do_syscall(Context *c) {
   uintptr_t a[4];
@@ -13,6 +14,7 @@ void do_syscall(Context *c) {
 		case SYS_EXIT:  sys_exit(c);  break;
 		case SYS_YIELD: sys_yield(c); break;
 		case SYS_WRITE: sys_write(c); break;
+		case SYS_BRK:   sys_brk(c); break;
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
 }

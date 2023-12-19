@@ -62,12 +62,31 @@ int _open(const char *path, int flags, mode_t mode) {
 }
 
 int _write(int fd, void *buf, size_t count) {
-  return _syscall_(SYS_write, fd, (intptr_t)buf, count);
-  // 这里注意navy-apps的c库的实现是一个个write，看上一个write是否成功再write下一个
+	return _syscall_(SYS_write, fd, (intptr_t)buf, count);
+	/*
+	 * 在Navy的Newlib中, sbrk()最终会调用_sbrk(), 它在navy-apps/libs/libos/src/syscall.c中定义. 
+	 * 框架代码让_sbrk()总是返回-1, 表示堆区调整失败, 事实上, 用户程序在第一次调用printf()的时候会尝试通过malloc()
+	 * 申请一片缓冲区, 来存放格式化的内容. 若申请失败, 就会逐个字符进行输出. 如果你在Nanos-lite中打开strace, 
+	 * 你会发现用户程序通过printf()输出的时候, 确实是逐个字符地调用write()来输出的. 
+	 */
 }
 
+extern int end;
 void *_sbrk(intptr_t increment) {
-  return (void *)-1;
+	static intptr_t program_break = -1; // 用不合法值初始化
+	if (program_break == -1) {
+		program_break = end;
+	}
+	intptr_t last_break = program_break; // 返回旧的program_break
+	program_break += increment; 
+	if (_syscall_(SYS_brk, program_break, 0, 0)) {
+		// 正常运行时，brk 返回 0
+		return (void*)last_break;
+	}
+	else {
+		program_break = last_break;
+		return (void*)-1;
+	}
 }
 
 int _read(int fd, void *buf, size_t count) {
