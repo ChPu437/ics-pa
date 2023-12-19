@@ -71,7 +71,7 @@ int _write(int fd, void *buf, size_t count) {
 	 */
 }
 
-extern char _end;
+/* extern char _end;
 void *_sbrk(intptr_t increment) {
 	static intptr_t program_break_shift = 0;
 	intptr_t last_shift = program_break_shift; // 返回旧的program_break
@@ -80,7 +80,6 @@ void *_sbrk(intptr_t increment) {
 	char buf[256];
 	sprintf(buf, "%d!!end\n", increment);
 	_write(1, buf, 20);
-	if (increment > 2e5) return (void*)-1;
 
 	if (!_syscall_(SYS_brk, (intptr_t)&_end + program_break_shift, 0, 0)) {
 		// 正常运行时，brk 返回 0
@@ -90,7 +89,21 @@ void *_sbrk(intptr_t increment) {
 		program_break_shift = last_shift;
 		return (void*)-1;
 	}
+} */
+
+void *_sbrk(intptr_t increment){
+  extern char end;
+  static uintptr_t probreak=(uintptr_t)&end;//初始化pb
+  uintptr_t probreak_new=probreak+increment;
+  int r=_syscall_(SYS_brk,probreak_new,0,0);//系统调用
+  if(r==0){//分配成功
+    uintptr_t temp=probreak;//旧的pb位置
+    probreak=probreak_new;//更新pb
+    return (void*)temp;
+  }
+  return (void *)-1;//分配失败
 }
+
 
 int _read(int fd, void *buf, size_t count) {
   _exit(SYS_read);
