@@ -22,7 +22,8 @@ Context* __am_irq_handle(Context *c) {
     	// syscall可能有很多类型，这里我们统一case到EVENT_SYSCALL，具体是哪一种syscall放到nanos_lite/do_syscall处理
 			case  0: // SYS_exit
 			case  1: // SYS_yield
-//			case  4: // SYS_write
+			case  4: // SYS_write
+			case  9: // SYS_brk
 				ev.event = EVENT_SYSCALL;
 				break;
 			case -1: ev.event = EVENT_YIELD;   break;
