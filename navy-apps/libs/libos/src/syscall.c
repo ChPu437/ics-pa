@@ -79,7 +79,7 @@ void *_sbrk(intptr_t increment) {
 	}
 	void* last_break = program_break; // 返回旧的program_break
 	program_break += increment; 
-	if (_syscall_(SYS_brk, program_break, 0, 0)) {
+	if (!_syscall_(SYS_brk, program_break, 0, 0)) {
 		// 正常运行时，brk 返回 0
 		return last_break;
 	}
