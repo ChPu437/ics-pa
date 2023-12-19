@@ -74,19 +74,38 @@ int _write(int fd, void *buf, size_t count) {
 extern char _end;
 void *_sbrk(intptr_t increment) {
 	// static uintptr_t program_break_shift = 0;
+	static intptr_t program_break = &_end;
+	intptr_t last_break = program_break; // 返回旧的program_break
+	program_break += increment; // 堆区向高位增长
+
+	if (!_syscall_(SYS_brk, program_break, 0, 0)) {
+		// 正常运行时，brk 返回 0
+		return (void*)(last_break);
+	}
+	else {
+		program_break = last_break;
+		return (void*)-1;
+	}
+} 
+
+/* extern char _end;
+void *_sbrk(intptr_t increment) {
+	// static uintptr_t program_break_shift = 0;
 	static uintptr_t program_break_shift = &_end;
 	uintptr_t last_shift = program_break_shift; // 返回旧的program_break
 	program_break_shift += increment; // 堆区向高位增长
 
-	if (!_syscall_(SYS_brk, program_break_shift, 0, 0)) {
+	if (!_syscall_(SYS_brk, (uintptr_t)&_end + program_break_shift, 0, 0)) {
 		// 正常运行时，brk 返回 0
-		return (void*)(last_shift);
+		return (void*)((uintptr_t)&_end + last_shift);
 	}
 	else {
 		program_break_shift = last_shift;
 		return (void*)-1;
 	}
-} 
+} */
+
+
 
 /* void *_sbrk(intptr_t increment){
   extern char end;
