@@ -6,7 +6,7 @@ static Context* do_event(Event e, Context* c) {
   switch (e.event) {
 		case EVENT_YIELD: Log("yield event detected!"); break;
 		case EVENT_SYSCALL: Log("syscall event detected!"); do_syscall(c); break;
-    default: panic("Unhandled event ID = %d, %d", e.event, EVENT_SYSCALL);
+    default: panic("Unhandled event ID = %d", e.event);
   }
 
   return c;

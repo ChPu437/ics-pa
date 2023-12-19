@@ -26,7 +26,7 @@ Context* __am_irq_handle(Context *c) {
 				ev.event = EVENT_SYSCALL;
 				break;
 			case -1: ev.event = EVENT_YIELD;   break;
-      default: ev.event = EVENT_ERROR;   break;
+      default: printf("Unhandled mcause ID = %d\n", c->mcause); ev.event = EVENT_ERROR;   break;
     }
 
     c = user_handler(ev, c);
