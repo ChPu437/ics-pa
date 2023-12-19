@@ -78,6 +78,8 @@ void *_sbrk(intptr_t increment) {
 	intptr_t last_break = program_break; // 返回旧的program_break
 	program_break += increment; // 堆区向高位增长
 
+	printf("%d\n", increment);
+
 	if (!_syscall_(SYS_brk, program_break, 0, 0)) {
 		// 正常运行时，brk 返回 0
 		return (void*)(last_break);
@@ -86,12 +88,12 @@ void *_sbrk(intptr_t increment) {
 		program_break = last_break;
 		return (void*)-1;
 	}
-} 
+}  
 
 /* extern char _end;
 void *_sbrk(intptr_t increment) {
 	// static uintptr_t program_break_shift = 0;
-	static uintptr_t program_break_shift = &_end;
+	static uintptr_t program_break_shift = 0;
 	uintptr_t last_shift = program_break_shift; // 返回旧的program_break
 	program_break_shift += increment; // 堆区向高位增长
 
