@@ -73,13 +73,10 @@ int _write(int fd, void *buf, size_t count) {
 
 extern char _end;
 void *_sbrk(intptr_t increment) {
-	static uintptr_t program_break_shift = 0;
+	// static uintptr_t program_break_shift = 0;
+	static uintptr_t program_break_shift = &_end;
 	uintptr_t last_shift = program_break_shift; // 返回旧的program_break
 	program_break_shift += increment; // 堆区向高位增长
-
-	char buf[256];
-	sprintf(buf, "%d!!end\n", increment);
-	_write(1, buf, 20);
 
 	if (!_syscall_(SYS_brk, (uintptr_t)&_end + program_break_shift, 0, 0)) {
 		// 正常运行时，brk 返回 0
@@ -102,7 +99,7 @@ void *_sbrk(intptr_t increment) {
     return (void*)temp;
   }
   return (void *)-1;//分配失败
-} */
+}  */
 
 
 int _read(int fd, void *buf, size_t count) {
