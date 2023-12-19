@@ -55,6 +55,7 @@ word_t isa_return_intr() {
 	switch(cpu.csr[3]) {
 		case -1: // yield
 		case  4: // SYS_write
+		case  9: // SYS_brk
 			return cpu.csr[1] + 4;
 		default: assert(0); // Not implemented
 	}
