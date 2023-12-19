@@ -78,11 +78,14 @@ void *_sbrk(intptr_t increment) {
 	intptr_t last_break = program_break; // 返回旧的program_break
 	program_break += increment; // 堆区向高位增长
 
-	char buf[200];
-	// assert((intptr_t)&_end == program_break); // failed ????? 
-	sprintf(buf, "%d %d!!!end\n", program_break, &_end);
-	_write(1, buf, 100);
-
+	// assert((intptr_t)&_end == program_break); // failed
+	/*
+	 * 注意这里的&_end发生了改变！！！
+	 * static类型在编译器初始化，得到的_end是hello程序的_end
+	 * 运行期取到的_end是nanos的_end!!!
+	 */
+	
+	_syscall_(SYS_brk, (intptr_t)&_end, 0, 0);
 	if (!_syscall_(SYS_brk, program_break, 0, 0)) {
 		// 正常运行时，brk 返回 0
 		return (void*)(last_break);
