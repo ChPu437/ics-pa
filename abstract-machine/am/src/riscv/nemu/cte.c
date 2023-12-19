@@ -4,7 +4,7 @@
 
 static Context* (*user_handler)(Event, Context*) = NULL;
 
-#define DEBUG
+// #define DEBUG
 Context* __am_irq_handle(Context *c) {
   if (user_handler) {
 #ifdef DEBUG
