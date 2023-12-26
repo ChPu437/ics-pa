@@ -16,7 +16,7 @@ size_t fs_read(int fd, void *buf, size_t len) {
 	if (len + file_table[fd].open_offset > file_table[fd].size) {
 		return -1;
 	}
-	ramdisk_read(buf, file_table[fd].open_offset + file_table[fd].disk_offset, len);
+	ramdisk_read(buf, file_table[fd].disk_offset + file_table[fd].open_offset, len);
 	file_table[fd].open_offset += len;
 	return len;
 }
@@ -28,11 +28,10 @@ size_t fs_write(int fd, const void *buf, size_t len) {
 		for (int i = 0; i < len; i++) 
 			putch(*((char*)buf + i));
 	} else {
-
-		if (len + file_table[fd].disk_offset + file_table[fd].open_offset > file_table[fd].size) 
+		if (len + file_table[fd].open_offset > file_table[fd].size) 
 			return -1;
+		ramdisk_write(buf, file_table[fd].disk_offset + file_table[fd].open_offset, len);
 		file_table[fd].open_offset += len;
-		ramdisk_write(buf, file_table[fd].disk_offset, len);
 	}
 	return len;
 }
