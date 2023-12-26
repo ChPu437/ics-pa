@@ -17,13 +17,12 @@ extern int fs_lseek(int fd, size_t offset, int whence);
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
 	int fd = fs_open(filename, 0, 0);
-	printf("!!!%d\n", fd);
   Elf_Ehdr ehdr;
 	Elf_Phdr phdr;
 
   // read elf header
   // ramdisk_read(&ehdr, file_offset, sizeof(Elf_Ehdr));
-  fs_read(fd, &ehdr, sizeof(Elf_Ehdr));
+  assert(~fs_read(fd, &ehdr, sizeof(Elf_Ehdr)));
 
   // check magic
   assert(ehdr.e_ident[0] == 0x7f);
@@ -48,16 +47,16 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   // // // 然后将段读入内存，将超出filesz的memsz部分全部设零
 	for (int i = 0; i < cnt_phdr; i++) {
 		// ramdisk_read(&phdr, off_phdr + size_phdr * i, sizeof(Elf_Phdr));
-		fs_lseek(fd, off_phdr + size_phdr * i, SEEK_SET);
-		fs_read(fd, &phdr, sizeof(Elf_Phdr));
+		assert(~fs_lseek(fd, off_phdr + size_phdr * i, SEEK_SET));
+		assert(~fs_read(fd, &phdr, sizeof(Elf_Phdr)));
 		if (phdr.p_type != PT_LOAD) continue;
 		Elf32_Off off_pent = phdr.p_offset;
 		Elf32_Addr vaddr_pent = phdr.p_vaddr;
 		uint32_t filesz_pent = phdr.p_filesz;
 		uint32_t memsz_pent = phdr.p_memsz;
 		// ramdisk_read((void*)(uintptr_t)vaddr_pent, off_pent, filesz_pent);
-		fs_lseek(fd, off_pent, SEEK_SET);
-		fs_read(fd, (void*)(uintptr_t)vaddr_pent, filesz_pent);
+		assert(~fs_lseek(fd, off_pent, SEEK_SET));
+		assert(~fs_read(fd, (void*)(uintptr_t)vaddr_pent, filesz_pent));
 		memset((uint32_t*)(uintptr_t)vaddr_pent + filesz_pent, 0, memsz_pent - filesz_pent);
 		// printf("%x %x %p\n",  filesz_pent, memsz_pent, vaddr_pent);
 	}
