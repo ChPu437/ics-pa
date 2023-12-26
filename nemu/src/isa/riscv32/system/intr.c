@@ -54,7 +54,12 @@ word_t isa_return_intr() {
 	// 我们自行定义这个函数，来实现RISC“由软件决定下一步是回到发生中断的位置还是发生中断的下一个位置”
 	switch(cpu.csr[3]) {
 		case -1: // yield
+		case  1: // SYS_yield
+		case  2: // SYS_open
+		case  3: // SYS_read
 		case  4: // SYS_write
+		case  7: // SYS_close
+		case  8: // SYS_lseek
 		case  9: // SYS_brk
 			return cpu.csr[1] + 4;
 		default: assert(0); // Not implemented
