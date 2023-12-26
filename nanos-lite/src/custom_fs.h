@@ -41,17 +41,18 @@ size_t fs_lseek(int fd, size_t offset, int whence) {
 	assert(fd >= 0 && fd <= file_count);
 	switch(whence) {
 		case SEEK_SET:
-			if (offset >= file_table[fd].size) return -1;
+			// if (offset >= file_table[fd].size) return -1;
+			// lseek允许offset大于文件大小，这个判断应该发生在rw过程中
 			file_table[fd].open_offset = offset;
 			break;
 		case SEEK_CUR:
-			if (offset + file_table[fd].open_offset >= file_table[fd].size)
-				return -1;
+			// if (offset + file_table[fd].open_offset >= file_table[fd].size)
+			// 	return -1;
 			file_table[fd].open_offset += offset;
 			break;
 		case SEEK_END:
-			if (offset != 0) return -1;
-			file_table[fd].open_offset = file_table[fd].size - 1;
+			// if (offset != 0) return -1;
+			file_table[fd].open_offset = file_table[fd].size;
 			break;
 		default:
 			assert(0);
