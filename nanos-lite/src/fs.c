@@ -1,5 +1,8 @@
 #include <fs.h>
 
+extern uint8_t ramdisk_start;
+extern uint8_t ramdisk_end;
+
 typedef size_t (*ReadFn) (void *buf, size_t offset, size_t len);
 typedef size_t (*WriteFn) (const void *buf, size_t offset, size_t len);
 
@@ -9,6 +12,7 @@ typedef struct {
   size_t disk_offset;
   ReadFn read;
   WriteFn write;
+  size_t open_offset;
 } Finfo;
 
 enum {FD_STDIN, FD_STDOUT, FD_STDERR, FD_FB};
@@ -37,8 +41,8 @@ int ramdisk_size = 0;
 
 void init_fs() {
   // TODO: initialize the size of /dev/fb
+  // ramdisk.c 中有 RAMDISK_SIZE
   // // 由于规定文件紧密排列且不能超过原大小且不能创建新文件，
-  // // 可以认为ramdisk大小就是最后一个文件末尾的字节数加1
 	file_count = sizeof(file_table) / sizeof(Finfo);
-	ramdisk_size = file_table[file_count - 1].size + file_table[file_count - 1].disk_offset;
+	ramdisk_size = &ramdisk_end - &ramdisk_start;
 }
