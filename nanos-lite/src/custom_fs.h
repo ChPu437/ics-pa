@@ -15,8 +15,7 @@ size_t fs_read(int fd, void *buf, size_t len) {
 	assert(fd >= 0 && fd <= file_count);
 
 	if (len + file_table[fd].open_offset - 1 > file_table[fd].size)
-		// return -1;
-		assert(0);
+		printf("$$$%d %d %d\n", len, file_table[fd].open_offset, file_table[fd].size);
 	ramdisk_read(buf, file_table[fd].disk_offset + file_table[fd].open_offset, len);
 	file_table[fd].open_offset += len;
 	return len;
