@@ -17,6 +17,7 @@ extern int fs_lseek(int fd, size_t offset, int whence);
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
 	int fd = fs_open(filename, 0, 0);
+	printf("!!!%d\n", fd);
   Elf_Ehdr ehdr;
 	Elf_Phdr phdr;
 
