@@ -11,6 +11,7 @@ int32_t sys_open(const char *pathname, int flags, int mode) {
 #ifdef HAS_NAVY
 	return fs_open(pathname, flags, mode);
 #else
+	assert(0);
 	return -1;
 #endif
 }
