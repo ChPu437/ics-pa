@@ -7,15 +7,26 @@ void sys_exit() {
 	halt(0);	
 }
 
+int32_t sys_read(int fd, char* buf, size_t count) {
+#ifdef HAS_NAVY
+	return fs_read(fd, buf, count);
+#else
+	return -1;
+#endif
+}
+
 int32_t sys_write(int fd, const char* buf, size_t count) {
+#ifdef HAS_NAVY
+	return fs_write(fd, buf, count);
+#else
 	if (fd != 1 && fd != 2) {
 		assert(0);
-		// return fs_write(fd, buf, count);
 	}
 	for (int i = 0; i < count; i++) {
 		putch(*(buf + i));
 	}
 	return count;
+#endif
 }
 
 int32_t sys_brk(intptr_t addr) {
