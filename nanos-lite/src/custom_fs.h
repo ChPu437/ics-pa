@@ -13,7 +13,7 @@ int fs_open(const char *pathname, int flags, int mode) {
 
 size_t fs_read(int fd, void *buf, size_t len) {
 	assert(fd >= 0 && fd <= file_count);
-	if (len + file_table[fd].disk_offset + file_table[fd].open_offset > file_table[fd].size) {
+	if (len + file_table[fd].open_offset > file_table[fd].size) {
 		return -1;
 	}
 	ramdisk_read(buf, file_table[fd].open_offset + file_table[fd].disk_offset, len);
@@ -39,13 +39,11 @@ size_t fs_lseek(int fd, size_t offset, int whence) {
 			file_table[fd].open_offset = offset;
 			break;
 		case SEEK_CUR:
-			assert(0);
 			if (offset + file_table[fd].open_offset >= file_table[fd].size)
 				return -1;
 			file_table[fd].open_offset += offset;
 			break;
 		case SEEK_END:
-			assert(0);
 			if (offset != 0) return -1;
 			file_table[fd].open_offset = file_table[fd].size;
 			break;
