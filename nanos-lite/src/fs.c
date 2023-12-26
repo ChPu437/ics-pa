@@ -31,6 +31,14 @@ static Finfo file_table[] __attribute__((used)) = {
 #include "files.h"
 };
 
+int file_count = 0;
+int ramdisk_size = 0;
+#include "custom_fs.h"
+
 void init_fs() {
   // TODO: initialize the size of /dev/fb
+  // // 由于规定文件紧密排列且不能超过原大小且不能创建新文件，
+  // // 可以认为ramdisk大小就是最后一个文件末尾的字节数加1
+	file_count = sizeof(file_table) / sizeof(Finfo);
+	ramdisk_size = file_table[file_count - 1].size + file_table[file_count - 1].disk_offset;
 }
