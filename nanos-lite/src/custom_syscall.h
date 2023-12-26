@@ -9,6 +9,9 @@ void sys_exit() {
 
 int32_t sys_write(int fd, const char* buf, size_t count) {
 	if (fd != 1 && fd != 2) assert(0);
+	for (int i = 0; i < count; i++) {
+		putch(*(buf + i));
+	}
 	return count;
 }
 
