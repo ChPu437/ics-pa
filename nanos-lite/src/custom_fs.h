@@ -14,7 +14,7 @@ int fs_open(const char *pathname, int flags, int mode) {
 size_t fs_read(int fd, void *buf, size_t len) {
 	assert(fd >= 0 && fd <= file_count);
 
-	if (len + file_table[fd].open_offset > file_table[fd].size)
+	if (len + file_table[fd].open_offset - 1 > file_table[fd].size)
 		// return -1;
 		assert(0);
 	ramdisk_read(buf, file_table[fd].disk_offset + file_table[fd].open_offset, len);
@@ -29,7 +29,7 @@ size_t fs_write(int fd, const void *buf, size_t len) {
 		for (int i = 0; i < len; i++) 
 			putch(*((char*)buf + i));
 	} else {
-		if (len + file_table[fd].open_offset > file_table[fd].size) 
+		if (len + file_table[fd].open_offset - 1 > file_table[fd].size) 
 			return -1;
 		ramdisk_write(buf, file_table[fd].disk_offset + file_table[fd].open_offset, len);
 		file_table[fd].open_offset += len;
