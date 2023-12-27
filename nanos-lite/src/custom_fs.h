@@ -14,6 +14,9 @@ int fs_open(const char *pathname, int flags, int mode) {
 size_t fs_read(int fd, void *buf, size_t len) {
 	assert(fd >= 0 && fd <= file_count);
 
+	if (file_table[fd].read != NULL)
+		return file_table[fd].read(buf, 0, len);
+
 	size_t count = len;
 	if (len + file_table[fd].open_offset - 1 > file_table[fd].size)
 		count = file_table[fd].size - file_table[fd].open_offset;
@@ -25,16 +28,20 @@ size_t fs_read(int fd, void *buf, size_t len) {
 size_t fs_write(int fd, const void *buf, size_t len) {
 	assert(fd >= 0 && fd <= file_count);
 
-	if (fd == 1 || fd == 2) {
+	if (file_table[fd].write != NULL)
+		return file_table[fd].write(buf, 0, len);
+		// 由于PA3.3中需要的几个设备都是字符设备，我们姑且不管offset的事情
+		// 实际情况应该根据设备确定是否需要判断溢出
+
+	/* if (fd == 1 || fd == 2) {
 		for (int i = 0; i < len; i++) 
 			putch(*((char*)buf + i));
-	} else {
-		size_t count = len;
-		if (len + file_table[fd].open_offset - 1 > file_table[fd].size)
-			count = file_table[fd].size - file_table[fd].open_offset;
-		ramdisk_write(buf, file_table[fd].disk_offset + file_table[fd].open_offset, count);
-		file_table[fd].open_offset += count;
-	}
+	} else { */
+	size_t count = len;
+	if (len + file_table[fd].open_offset - 1 > file_table[fd].size)
+		count = file_table[fd].size - file_table[fd].open_offset;
+	ramdisk_write(buf, file_table[fd].disk_offset + file_table[fd].open_offset, count);
+	file_table[fd].open_offset += count;
 	return len;
 }
 
