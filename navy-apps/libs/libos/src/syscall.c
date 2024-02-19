@@ -77,14 +77,17 @@ void *_sbrk(intptr_t increment) {
 	intptr_t last_break = program_break; // 返回旧的program_break
 	program_break += increment; // 堆区向高位增长
 
-	// intptr_t test = &_end;
-	// char* buf[200];
-	// sprintf(buf, "%d %d!!!end", program_break, test);
-	// _write(1, buf, 100);
+	// test for _end value
+	intptr_t testA = (intptr_t)&_end;
+	static intptr_t testB = (intptr_t)&_end;
+
+	char* buf[200];
+	sprintf(buf, "%d %d %d!!!end", program_break, testA, testB);
+	_write(1, buf, 100);
 	// assert((intptr_t)&_end == program_break); // failed
 	/*
 	 * 注意这里的&_end发生了改变！！！
-	 * static类型在编译器初始化，得到的_end是hello程序的_end
+	 * static类型在编译期初始化，得到的_end是hello程序的_end
 	 * 运行期取到的_end是个啥？
 	 */
 	
@@ -128,7 +131,7 @@ off_t _lseek(int fd, off_t offset, int whence) {
 }
 
 int _gettimeofday(struct timeval *tv, struct timezone *tz) {
-  _exit(SYS_gettimeofday);
+  _syscall_(SYS_gettimeofday, 0, 0, 0);
   return 0;
 }
 

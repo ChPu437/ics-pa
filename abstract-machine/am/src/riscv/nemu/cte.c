@@ -28,9 +28,10 @@ Context* __am_irq_handle(Context *c) {
 			case  7: // SYS_close
 			case  8: // SYS_lseek
 			case  9: // SYS_brk
+			case 19: // SYS_gettimeofday
 				ev.event = EVENT_SYSCALL;
 				break;
-			case -1: ev.event = EVENT_YIELD;   break;
+			case -1: ev.event = EVENT_YIELD; break;
       default: printf("Unhandled mcause ID = %d\n", c->mcause); ev.event = EVENT_ERROR;   break;
     }
 

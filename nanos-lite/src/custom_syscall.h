@@ -43,3 +43,5 @@ int32_t sys_lseek(int fd, size_t offset, int whence) {
 int32_t sys_brk(intptr_t addr) {
 	return 0;
 }
+
+// int32_t sys_gettimeofday() {}
