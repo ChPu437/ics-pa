@@ -78,11 +78,12 @@ void *_sbrk(intptr_t increment) {
 	program_break += increment; // 堆区向高位增长
 
 	// test for _end value
+	static intptr_t testC = (intptr_t)&_end;
 	intptr_t testA = (intptr_t)&_end;
 	static intptr_t testB = (intptr_t)&_end;
 
 	char* buf[200];
-	sprintf(buf, "%d %d %d!!!end", program_break, testA, testB);
+	sprintf(buf, "%d %d %d %d!!!end", program_break, testC, testA, testB);
 	_write(1, buf, 100);
 	// assert((intptr_t)&_end == program_break); // failed
 	/*
