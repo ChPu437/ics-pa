@@ -13,7 +13,7 @@ int main() {
 
 	struct timeval last_time, curr_time;
 	gettimeofday(&last_time, NULL);
-	for (int i = 0; i < 100; i++) {
+	for (int i = 0; i < 500; i++) {
 		gettimeofday(&curr_time, NULL);
 		if (checktime(&last_time, &curr_time)) {
 			printf("Another 0.5s passed!\n");
