@@ -44,4 +44,8 @@ int32_t sys_brk(intptr_t addr) {
 	return 0;
 }
 
-// int32_t sys_gettimeofday() {}
+int32_t sys_gettimeofday(void* tp, void* tzp) {
+	// this should return 0 on success, whatever other on error
+	assert(tzp == NULL);
+	return 0;
+}

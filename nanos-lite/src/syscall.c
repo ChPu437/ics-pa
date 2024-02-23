@@ -22,7 +22,7 @@ void do_syscall(Context *c) {
 		case SYS_close: c->GPRx = sys_close((int)c->GPR2); break;
 		case SYS_lseek: c->GPRx = sys_lseek((int)c->GPR2, (size_t)c->GPR3, (int)c->GPR4); break;
 		case SYS_brk:   c->GPRx = sys_brk((intptr_t)c->GPR2); break;
-		// case SYS_gettimeofday: c->GPRx = sys_gettimeofday(); break;
+		case SYS_gettimeofday: c->GPRx = sys_gettimeofday((void*)c->GPR2, (void*)c->GPR3); break;
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
 }
