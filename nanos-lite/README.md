@@ -1,3 +1,5 @@
+to switch program (calling `native_uload()`): src/proc.c
+
 # Nanos-lite
 
 Nanos-lite is the simplified version of Nanos (http://cslab.nju.edu.cn/opsystem).
