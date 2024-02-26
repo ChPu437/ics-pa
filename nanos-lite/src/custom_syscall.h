@@ -44,25 +44,34 @@ int32_t sys_brk(intptr_t addr) {
 	return 0;
 }
 
+/*
 const int32_t _secs_min = 60;
 const int32_t _secs_hour = 60 * _secs_min;
 const int32_t _secs_day = 24 * _secs_hour;
 const int32_t _secs_odd_year = 365 * _secs_day;
 const int32_t _secs_even_year = 366 * _secs_day;
+*/
 struct timeval {
 	int32_t tv_sec; // time_t
 	int32_t tv_usec; // suseconds_t
 };
 int32_t sys_gettimeofday(intptr_t tp, intptr_t tzp) {
+	/* it should conventionally give the time since 19700101, but since we don't implement RTC, so use UPTIME instead.
 	AM_TIMER_RTC_T rtc;
 	rtc = io_read(AM_TIMER_RTC);
 	// this should return 0 on success, whatever other on error
 	assert((void*)tzp == NULL);
 	struct timeval* _tp = (void*)tp;
 
-	int _cycles = rtc.year / 4;
+	int _cycles = rtc.year - _base_year / 4;
 	_tp->tv_sec = _cycles * (_secs_even_year + 3 * _secs_odd_year) + (rtc.year % 4) * _secs_odd_year;
 	_tp->tv_usec = _tp->tv_sec * 1000000; // no 1e6 since no RV32F
-	
+	*/
+
+	assert((void*)tzp == NULL);
+	struct timeval* _tp = (void*)tp;
+	_tp->tv_usec = io_read(AM_TIMER_UPTIME).us;
+	_tp->tv_sec = _tp->tv_usec / 1000000;
+
 	return 0;
 }
