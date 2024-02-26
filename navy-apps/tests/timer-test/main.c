@@ -13,6 +13,7 @@ int main() {
 	printf("size of type \"time_t\" and  \"suseconds_t:\" %u, %u\n", sizeof(time_t), sizeof(suseconds_t));
 
 	struct timeval last_time, curr_time;
+	printf("%p %p\n", &last_time, &curr_time);
 	gettimeofday(&last_time, NULL);
 	for (int i = 0; i < 500; i++) {
 		gettimeofday(&curr_time, NULL);
