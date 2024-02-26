@@ -23,28 +23,29 @@ size_t serial_write(const void *buf, size_t offset, size_t len) {
 }
 
 size_t events_read(void *buf, size_t offset, size_t len) {
+	int count = 0;
 	// 读出一条事件信息
 	AM_INPUT_KEYBRD_T ev = io_read(AM_INPUT_KEYBRD);
-	if (ev.keycode == AM_KEY_NONE) return 0; // 没有按下、松开按键，无有效事件
+	if (ev.keycode == AM_KEY_NONE) return 0; // 无有效事件
 
-	if (len) ((char*)buf)[offset + 0] = 'k';
+	if (len) ((char*)buf)[offset + count++] = 'k';
 	len--;
 	if (ev.keydown) {
-		if (len) ((char*)buf)[offset + 1] = 'd';
+		if (len) ((char*)buf)[offset + count++] = 'd';
 		len--;
 	} else {
-		if (len) ((char*)buf)[offset + 1] = 'u';
+		if (len) ((char*)buf)[offset + count++] = 'u';
 		len--;
 	}
-	if (len) ((char*)buf)[offset + 2] = ' ';
+	if (len) ((char*)buf)[offset + count++] = ' ';
 	len--;
 
-	offset += 3;
-	for (int i = 0; len > 0; i++, len--) {
-		((char*)buf)[offset + i] = keyname[ev.keycode][i];
+	for (int i = 0; len > 0 && keyname[ev.keycode][i] != '\0'; i++, len--) {
+		((char*)buf)[offset + count++] = keyname[ev.keycode][i];
 	}
+	if (len) ((char*)buf)[offset + count++] = '\n';
 
-  return 1;
+  return count;
 }
 
 size_t dispinfo_read(void *buf, size_t offset, size_t len) {

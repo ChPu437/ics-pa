@@ -17,7 +17,26 @@ uint32_t NDL_GetTicks() {
 }
 
 int NDL_PollEvent(char *buf, int len) {
-  return 0;
+	/*
+	 https://bytes.com/topic/c/answers/218856-fopen-vs-open
+
+	 Buffering is not the issue: files accessed with open() and friends are
+	 buffered, too.
+
+	 The real issue, apart from portability (open() and friends are actually
+	 *very* portable, even if the standard doesn't guarantee it), is that,
+	 on certain platforms, read() and write() are OS primitives and, therefore,
+	 much more expensive than ordinary library calls. No big deal when used
+	 with large data chunks, but using read() instead of getc() and write()
+	 instead of putc() may destroy the program's performance. That's why
+	 the <stdio.h> I/O routines add one *additional* layer of buffering.
+	 */
+	FILE* fp = fopen("/dev/events", "r");
+	int count = 0;
+	do {
+		buf[count] = fgetc(fp);
+	} while(buf[count++] != '\n');
+  return 1;
 }
 
 void NDL_OpenCanvas(int *w, int *h) {
