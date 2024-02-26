@@ -3,6 +3,7 @@
 
 int checktime(const struct timeval* last_time, struct timeval* curr_time) {
 	gettimeofday(curr_time, NULL);
+	printf("%ld\n", curr_time->tv_usec);
 	if (curr_time->tv_sec == last_time->tv_sec)
 		return curr_time->tv_usec - last_time->tv_usec > 500000;
 	return 1;
@@ -15,8 +16,6 @@ int main() {
 	struct timeval last_time, curr_time;
 	gettimeofday(&last_time, NULL);
 	for (int i = 0; i < 50000; i++) {
-		gettimeofday(&curr_time, NULL);
-		printf("%ld\n", curr_time.tv_usec);
 		if (checktime(&last_time, &curr_time)) {
 			printf("Another 0.5s passed!\n");
 			last_time = curr_time;
