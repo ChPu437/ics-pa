@@ -16,7 +16,7 @@ int main() {
 	gettimeofday(&last_time, NULL);
 	for (int i = 0; i < 500; i++) {
 		gettimeofday(&curr_time, NULL);
-		printf("%d\n", curr_time.tv_sec);
+//		printf("%d\n", curr_time.tv_sec);
 		if (checktime(&last_time, &curr_time)) {
 			printf("Another 0.5s passed!\n");
 			last_time = curr_time;
