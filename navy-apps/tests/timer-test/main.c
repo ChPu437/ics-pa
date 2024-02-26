@@ -14,7 +14,6 @@ int main() {
 
 	struct timeval last_time, curr_time;
 	gettimeofday(&last_time, NULL);
-	printf("bao\n");
 	for (int i = 0; i < 500; i++) {
 		gettimeofday(&curr_time, NULL);
 		if (checktime(&last_time, &curr_time)) {
