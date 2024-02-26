@@ -54,10 +54,8 @@ struct timeval {
 	int32_t tv_usec; // suseconds_t
 };
 int32_t sys_gettimeofday(void* tp, void* tzp) {
-	Log("gettimeofday detected!");
 	AM_TIMER_RTC_T rtc;
 	rtc = io_read(AM_TIMER_RTC);
-	Log("io_read done!");
 	// this should return 0 on success, whatever other on error
 	assert(tzp == NULL);
 	struct timeval* _tp = tp;
@@ -65,6 +63,7 @@ int32_t sys_gettimeofday(void* tp, void* tzp) {
 	int cycles = rtc.year / 4;
 	_tp->tv_sec = cycles * (_secs_even_year + 3 * _secs_odd_year) + (rtc.year % 4) * _secs_odd_year;
 	_tp->tv_usec = _tp->tv_sec * 1e6;
-
+	
+	Log("gettimeofday finished!");
 	return 0;
 }
