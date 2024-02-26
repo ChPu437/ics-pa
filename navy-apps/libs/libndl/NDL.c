@@ -32,10 +32,14 @@ int NDL_PollEvent(char *buf, int len) {
 	 the <stdio.h> I/O routines add one *additional* layer of buffering.
 	 */
 	FILE* fp = fopen("/dev/events", "r");
+
 	int count = 0;
 	do {
 		buf[count] = fgetc(fp);
+		printf("polling...\n");
 	} while(buf[count++] != '\n');
+	fclose(fp);
+
   return 1;
 }
 
