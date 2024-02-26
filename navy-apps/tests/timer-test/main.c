@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <time.h>
+#include <sys/time.h>
 
 int checktime(const struct timeval* last_time, struct timeval* curr_time) {
 	gettimeofday(curr_time, NULL);
@@ -10,6 +10,7 @@ int checktime(const struct timeval* last_time, struct timeval* curr_time) {
 
 int main() {
 	printf("------Start of timer test------\n");
+	printf("size of type \"time_t\" and  \"suseconds_t:\" %u, %u\n", sizeof(time_t), sizeof(suseconds_t));
 
 	struct timeval last_time, curr_time;
 	gettimeofday(&last_time, NULL);
