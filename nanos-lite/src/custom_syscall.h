@@ -62,7 +62,7 @@ int32_t sys_gettimeofday(intptr_t tp, intptr_t tzp) {
 
 	int _cycles = rtc.year / 4;
 	_tp->tv_sec = _cycles * (_secs_even_year + 3 * _secs_odd_year) + (rtc.year % 4) * _secs_odd_year;
-	_tp->tv_usec = _tp->tv_sec * 1e6;
+	_tp->tv_usec = _tp->tv_sec * 1000000; // no 1e6 since no RV32F
 	
 	return 0;
 }
