@@ -14,9 +14,9 @@ int main() {
 
 	struct timeval last_time, curr_time;
 	gettimeofday(&last_time, NULL);
-	for (int i = 0; i < 500; i++) {
+	for (int i = 0; i < 50000; i++) {
 		gettimeofday(&curr_time, NULL);
-//		printf("%d\n", curr_time.tv_sec);
+		printf("%ld\n", curr_time.tv_usec);
 		if (checktime(&last_time, &curr_time)) {
 			printf("Another 0.5s passed!\n");
 			last_time = curr_time;
