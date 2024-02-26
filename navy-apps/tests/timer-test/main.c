@@ -10,12 +10,13 @@ int checktime(const struct timeval* last_time, struct timeval* curr_time) {
 
 int main() {
 	printf("------Start of timer test------\n");
-	printf("size of type \"time_t\" and  \"suseconds_t:\" %u, %u\n", sizeof(time_t), sizeof(suseconds_t));
+	printf("size of type \"time_t\" and  \"suseconds_t\": %u, %u\n", sizeof(time_t), sizeof(suseconds_t));
 
 	struct timeval last_time, curr_time;
 	gettimeofday(&last_time, NULL);
 	for (int i = 0; i < 500; i++) {
 		gettimeofday(&curr_time, NULL);
+		printf("%d\n", curr_time.tv_sec);
 		if (checktime(&last_time, &curr_time)) {
 			printf("Another 0.5s passed!\n");
 			last_time = curr_time;
