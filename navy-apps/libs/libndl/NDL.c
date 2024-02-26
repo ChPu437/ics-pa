@@ -12,7 +12,7 @@ struct timeval _NDL_init_time;
 
 uint32_t NDL_GetTicks() {
 	struct timeval curr_time; 
-	gettimofday(&curr_time, NULL);
+	gettimeofday(&curr_time, NULL);
   return curr_time.tv_usec - _NDL_init_time.tv_usec;
 }
 
