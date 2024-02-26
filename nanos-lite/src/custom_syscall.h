@@ -60,6 +60,7 @@ int32_t sys_gettimeofday(struct timeval* tp, void* tzp) {
 	assert(tzp == NULL);
 //	struct timeval* _tp = tp;
 
+	Log("%p", tp);
 	int _cycles = rtc.year / 4;
 	tp->tv_sec = _cycles * (_secs_even_year + 3 * _secs_odd_year) + (rtc.year % 4) * _secs_odd_year;
 	tp->tv_usec = tp->tv_sec * 1e6;
