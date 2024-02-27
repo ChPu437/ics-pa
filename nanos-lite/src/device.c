@@ -83,7 +83,7 @@ size_t fb_write(const void *buf, size_t offset, size_t len) {
 	uint32_t pixel = *(uint32_t*)buf;
   int screen_width = io_read(AM_GPU_CONFIG).width;
   // int screen_height = io_read(AM_GPU_CONFIG).height;
-  int x = _mod(offset, screen_width);
+  int x = _mod(offset, screen_width) / 4; // 因为fb是W*H*4的数组
   int y = offset / screen_width;
 	io_write(AM_GPU_FBDRAW, x, y, &pixel, 1, 1, 1);
 	
