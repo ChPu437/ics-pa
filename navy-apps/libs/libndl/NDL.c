@@ -34,11 +34,13 @@ int NDL_PollEvent(char *buf, int len) {
 	FILE* fp = fopen("/dev/events", "r");
 
 	int count = 0;
-	if (buf[count] == (char)255) return 0;
-	do {
+	char ch = fgetc(fp);
+	if (ch == (char)255 || ch == '\0') return 0;
+	buf[count++] = ch;
+	for (; count <= len && buf[count - 1] != '\n'; count++) {
 		buf[count] = fgetc(fp);
-		// printf("char: %d\n", buf[count]);
-	} while(count++ < len);
+	}
+
 	fclose(fp);
 
   return 1;
