@@ -91,13 +91,12 @@ int NDL_Init(uint32_t flags) {
 	// get display info
 	FILE* dispinfo = fopen("/proc/dispinfo", "r");
 	char key = fgetc(dispinfo);
-	printf("%c\n", key);
 	if (key == 'W') {
-		fscanf(dispinfo, "%d", &screen_w);
-		fscanf(dispinfo, "%d", &screen_h);
+		fscanf(dispinfo, "IDTH: %d", &screen_w);
+		fscanf(dispinfo, "HEIGHT: %d", &screen_h);
 	} else {
-		fscanf(dispinfo, "%d", &screen_h);
-		fscanf(dispinfo, "%d", &screen_w);
+		fscanf(dispinfo, "EIGHT: %d", &screen_h);
+		fscanf(dispinfo, "WIDTH: %d", &screen_w);
 	}
 	printf("NDL get screen info: w=%d, h=%d\n", screen_w, screen_h);
 	fclose(dispinfo);
