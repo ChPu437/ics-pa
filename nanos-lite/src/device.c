@@ -78,7 +78,7 @@ static int _mod(const int x, const int y) {
 }
 size_t fb_write(const void *buf, size_t offset, size_t len) {
 	// 显示设备需要支持lseek
-	Log("fb write triggered");
+	// Log("fb write triggered");
 
 	uint32_t pixel = *(uint32_t*)buf;
   int screen_width = io_read(AM_GPU_CONFIG).width;
