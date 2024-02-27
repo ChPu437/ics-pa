@@ -23,6 +23,7 @@ size_t serial_write(const void *buf, size_t offset, size_t len) {
 }
 
 size_t events_read(void *buf, size_t offset, size_t len) {
+	Log("events_read() triggered!");
 	int count = 0;
 	// 读出一条事件信息
 	AM_INPUT_KEYBRD_T ev = io_read(AM_INPUT_KEYBRD);
