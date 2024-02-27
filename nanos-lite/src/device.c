@@ -83,7 +83,10 @@ size_t fb_write(const void *buf, size_t offset, size_t len) {
 	uint32_t pixel = *(uint32_t*)buf;
   int screen_width = io_read(AM_GPU_CONFIG).width;
   // int screen_height = io_read(AM_GPU_CONFIG).height;
-	io_write(AM_GPU_FBDRAW, _mod(offset, screen_width), offset / screen_width, &pixel, 1, 1, 1);
+  int x = _mod(offset, screen_width);
+  int y = offset / screen_width;
+	io_write(AM_GPU_FBDRAW, x, y, &pixel, 1, 1, 1);
+	Log("printing %x to display with coordinate %d, %d.", pixel, x, y);
 
   return 0;
 }
