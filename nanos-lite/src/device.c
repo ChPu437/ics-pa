@@ -49,15 +49,28 @@ size_t events_read(void *buf, size_t offset, size_t len) {
   return count;
 }
 
+static int _get_width(int x) {
+	int count = 1;
+	while(x > 10) {
+		x /= 10, count++;
+	}
+	return count;
+}
 size_t dispinfo_read(void *buf, size_t offset, size_t len) {
 	assert(offset == 0); // offset应该始终为0, 因为并不支持lseek
-	int count = 0;
   int screen_width = io_read(AM_GPU_CONFIG).width;
   int screen_height = io_read(AM_GPU_CONFIG).height;
   Log("dispinfo get screen info w=%d, h=%d", screen_width, screen_height);
 
+	char* _buf = (char*)buf;
+	int len_width = _get_width(screen_width);
+	int len_height = _get_width(screen_height);
+	int totlen = 7 + len_width + 1 + 8 + len_height + 1;
+		// WIDTH: screen_width\nHEIGHT: screen_height\0
+	if (len > totlen)
+		sprintf(_buf + offset, "WIDTH: %d\nHEIGHT: %d", screen_width, screen_height);
 
-  return count;
+  return totlen;
 }
 
 size_t fb_write(const void *buf, size_t offset, size_t len) {
