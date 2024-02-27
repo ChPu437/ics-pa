@@ -73,9 +73,17 @@ size_t dispinfo_read(void *buf, size_t offset, size_t len) {
   return totlen;
 }
 
+static int _mod(const int x, const int y) {
+	return x - (x / y) * y;
+}
 size_t fb_write(const void *buf, size_t offset, size_t len) {
 	// 显示设备需要支持lseek
 	Log("fb write triggered");
+
+	uint32_t pixel = *(uint32_t*)buf;
+  int screen_width = io_read(AM_GPU_CONFIG).width;
+  // int screen_height = io_read(AM_GPU_CONFIG).height;
+	io_write(AM_GPU_FBDRAW, _mod(offset, screen_width), offset / screen_width, &pixel, 1, 1, 1);
 
   return 0;
 }
