@@ -30,7 +30,7 @@ size_t fs_write(int fd, const void *buf, size_t len) {
 
 	if (file_table[fd].write != NULL) // 当文件指定了写入函数时
 		return file_table[fd].write(buf, file_table[fd].open_offset, len);
-		// 由于PA3.3中需要的几个设备都是字符设备，我们姑且不管offset的事情
+		// ~~由于PA3.3中需要的几个设备都是字符设备，我们姑且不管offset的事情~~
 		// 实际情况应该根据设备确定是否需要判断溢出
 
 	/* if (fd == 1 || fd == 2) {
