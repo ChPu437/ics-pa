@@ -37,7 +37,7 @@ int NDL_PollEvent(char *buf, int len) {
 	do {
 		buf[count] = fgetc(fp);
 		printf("char: %c\n", buf[count]);
-	} while(buf[count++] != '\n');
+	} while(buf[count] != '\n' && count++ < len);
 	fclose(fp);
 
   return 1;
