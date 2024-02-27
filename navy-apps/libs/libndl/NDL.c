@@ -4,6 +4,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/time.h>
+#include <fcntl.h>
 
 static int evtdev = -1;
 static int fbdev = -1;
@@ -67,6 +68,16 @@ void NDL_OpenCanvas(int *w, int *h) {
 }
 
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
+	// draw a rectangent and sync the display
+	// 使用system open保证即时更新
+	int display = open("/dev/fb", O_APPEND);
+	for (int i = 0; i < h && i < screen_h; i++) {
+		for (int j = 0; j < w && j < screen_w; j++) {
+			lseek(display, 4 * (i * screen_w + j), SEEK_SET);
+			write(display, pixels + i * w + j, 4);
+		}
+	}
+	close(display);
 }
 
 void NDL_OpenAudio(int freq, int channels, int samples) {
@@ -89,6 +100,7 @@ int NDL_Init(uint32_t flags) {
   }
 
 	// get display info
+	// // we now don't consider the display size change during process
 	FILE* dispinfo = fopen("/proc/dispinfo", "r");
 	/* char key = fgetc(dispinfo);
 	if (key == 'W') {
@@ -98,6 +110,7 @@ int NDL_Init(uint32_t flags) {
 		fscanf(dispinfo, "EIGHT: %d\n", &screen_h);
 		fscanf(dispinfo, "WIDTH: %d", &screen_w);
 	} */
+	// // hard-written for now
 	fscanf(dispinfo, "WIDTH: %d\nHEIGHT: %d", &screen_w, &screen_h);
 	printf("NDL get screen info: w=%d, h=%d\n", screen_w, screen_h);
 	fclose(dispinfo);
