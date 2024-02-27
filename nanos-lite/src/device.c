@@ -80,12 +80,15 @@ size_t fb_write(const void *buf, size_t offset, size_t len) {
 	// 显示设备需要支持lseek
 	// Log("fb write triggered, offset = %d", offset);
 
-	uint32_t pixel = *(uint32_t*)buf;
+	uint32_t* pixel = (uint32_t*)buf;
   int screen_width = io_read(AM_GPU_CONFIG).width;
   // int screen_height = io_read(AM_GPU_CONFIG).height;
-  int x = _mod(offset / 4, screen_width); // 因为fb是W*H*4的数组
-  int y = offset / 4 / screen_width;
-	io_write(AM_GPU_FBDRAW, x, y, &pixel, 1, 1, 1);
+  // int x = _mod(offset / 4, screen_width); // 因为fb是W*H*4的数组
+  // int y = offset / 4 / screen_width;
+  int x = _mod(offset , screen_width); // 这里在ndl一侧将*4去掉了 
+  int y = offset / screen_width;
+
+	io_write(AM_GPU_FBDRAW, x, y, pixel, len, 1, 1);
 	
 	// Log("printing %x to display with coordinate %d, %d.", pixel, x, y);
 

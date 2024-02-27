@@ -72,10 +72,14 @@ void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
 	// 使用system open保证即时更新
 	int display = open("/dev/fb", O_APPEND);
 	for (int i = 0; i < h && i < screen_h; i++) {
-		for (int j = 0; j < w && j < screen_w; j++) {
+		/* for (int j = 0; j < w && j < screen_w; j++) {
 			lseek(display, 4 * (i * screen_w + j), SEEK_SET);
 			write(display, pixels + i * w + j, 4);
-		}
+		} */
+
+		// Buffered IO to speed up
+		lseek(display, i * screen_w + x, SEEK_SET);
+		write(display, pixels + i * w, w);
 	}
 	close(display);
 }
