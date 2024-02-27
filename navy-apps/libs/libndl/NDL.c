@@ -40,7 +40,7 @@ int NDL_PollEvent(char *buf, int len) {
 	for (; count <= len && buf[count - 1] != '\n'; count++) {
 		buf[count] = fgetc(fp);
 	}
-
+	buf[count - 1] = '\0';
 	fclose(fp);
 
   return 1;
