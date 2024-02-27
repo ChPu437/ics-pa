@@ -8,7 +8,7 @@
 static int evtdev = -1;
 static int fbdev = -1;
 static int screen_w = 0, screen_h = 0;
-struct timeval _NDL_init_time;
+static struct timeval _NDL_init_time;
 
 uint32_t NDL_GetTicks() {
 	struct timeval curr_time; 
@@ -40,7 +40,7 @@ int NDL_PollEvent(char *buf, int len) {
 	for (; count <= len && buf[count - 1] != '\n'; count++) {
 		buf[count] = fgetc(fp);
 	}
-	buf[count - 1] = '\0';
+	buf[count - 1] = '\0'; // currently don't know if we need the LF
 	fclose(fp);
 
   return 1;
@@ -88,6 +88,20 @@ int NDL_Init(uint32_t flags) {
     evtdev = 3;
   }
 
+	// get display info
+	FILE* dispinfo = fopen("/proc/dispinfo", "r");
+	char key = fgetc(dispinfo);
+	if (key == 'W') {
+		fscanf(dispinfo, "%d", &screen_w);
+		fscanf(dispinfo, "%d", &screen_h);
+	} else {
+		fscanf(dispinfo, "%d", &screen_h);
+		fscanf(dispinfo, "%d", &screen_w);
+	}
+	printf("NDL get screen info: w=%d, h=%d\n", screen_w, screen_h);
+	fclose(dispinfo);
+
+	// get initialization base time
 	gettimeofday(&_NDL_init_time, NULL);
   return 0;
 }

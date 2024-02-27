@@ -15,7 +15,7 @@ static const char *keyname[256] __attribute__((used)) = {
 };
 
 size_t serial_write(const void *buf, size_t offset, size_t len) {
-	assert(offset == 0); // 对于stdout和stderr，offset应该始终为0
+	assert(offset == 0); // 对于stdout和stderr，offset应该始终为0, 因为并不支持lseek
   for (int i = 0; i < len; i++) {
 		putch(*((char*)buf + offset + i));
 	}
@@ -50,7 +50,14 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 }
 
 size_t dispinfo_read(void *buf, size_t offset, size_t len) {
-  return 0;
+	assert(offset == 0); // offset应该始终为0, 因为并不支持lseek
+	int count = 0;
+  int screen_width = io_read(AM_GPU_CONFIG).width;
+  int screen_height = io_read(AM_GPU_CONFIG).height;
+  Log("dispinfo get screen info w=%d, h=%d", screen_width, screen_height);
+
+
+  return count;
 }
 
 size_t fb_write(const void *buf, size_t offset, size_t len) {
