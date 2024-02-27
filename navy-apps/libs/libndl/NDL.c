@@ -5,11 +5,17 @@
 #include <unistd.h>
 #include <sys/time.h>
 #include <fcntl.h>
+#include <assert.h>
 
 static int evtdev = -1;
 static int fbdev = -1;
 static int screen_w = 0, screen_h = 0;
 static struct timeval _NDL_init_time;
+
+void NDL_TODO(char* func) {
+	printf("Function \"%s\" not implemnted! Exit now.\n", func);
+	assert(0);
+}
 
 uint32_t NDL_GetTicks() {
 	struct timeval curr_time; 
@@ -85,16 +91,20 @@ void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
 }
 
 void NDL_OpenAudio(int freq, int channels, int samples) {
+	NDL_TODO("NDL_OpenAudio");
 }
 
 void NDL_CloseAudio() {
+	NDL_TODO("NDL_CloseAudio");
 }
 
 int NDL_PlayAudio(void *buf, int len) {
+	NDL_TODO("NDL_PlayAudio");
   return 0;
 }
 
 int NDL_QueryAudio() {
+	NDL_TODO("NDL_QueryAudio");
   return 0;
 }
 
