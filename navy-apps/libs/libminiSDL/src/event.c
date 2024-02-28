@@ -19,7 +19,21 @@ int SDL_PollEvent(SDL_Event *ev) {
 }
 
 int SDL_WaitEvent(SDL_Event *event) {
-	NDL_TODO("");
+	char buf[32], key[32];
+	while (!NDL_PollEvent(buf, sizeof(buf) + 1));
+	switch (buf[1]) {
+		case 'd':
+			event->type = SDL_KEYDOWN;
+			event->key.keysym.sym;
+			break;
+		case 'u':
+			event->type = SDL_KEYUP;
+			break;
+		default:
+			printf("Event not implemented\n");
+			NDL_TODO("");
+			break;
+	}
   return 1;
 }
 
