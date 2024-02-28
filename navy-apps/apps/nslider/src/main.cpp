@@ -20,13 +20,13 @@ static SDL_Surface *slide = NULL;
 static int cur = 0;
 
 void render() {
-	pritnf("into render!");
+	printf("into render!");
   if (slide) {
     SDL_FreeSurface(slide);
   }
   char fname[256];
   sprintf(fname, path, cur);
-	pritnf("into loadbmp!");
+	printf("into loadbmp!");
   slide = SDL_LoadBMP(fname);
   printf("into assert!");
   assert(slide);
