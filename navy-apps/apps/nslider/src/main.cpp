@@ -17,6 +17,7 @@ const int N = 8;
 const char *path = "/share/slides/slides-%d.bmp";
 
 static SDL_Surface *slide = NULL;
+static int* pt = NULL;
 static int cur = 0;
 
 void render() {
@@ -48,7 +49,7 @@ void next(int rep) {
 }
 
 int main() {
-	assert(slide == NULL);
+	assert(pt == NULL);
 	printf("into init!\n");
   SDL_Init(0);
 	printf("into videomode!\n");
