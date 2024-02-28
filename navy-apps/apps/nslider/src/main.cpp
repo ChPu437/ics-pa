@@ -48,6 +48,7 @@ void next(int rep) {
 }
 
 int main() {
+	slide = NULL; // why?
 	printf("into init!\n");
   SDL_Init(0);
 	printf("into videomode!\n");
