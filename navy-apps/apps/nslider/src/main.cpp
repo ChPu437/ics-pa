@@ -49,13 +49,13 @@ void next(int rep) {
 
 int main() {
   SDL_Init(0);
-	printf("into videomode!");
+	printf("into videomode!\n");
 
   SDL_Surface *screen = SDL_SetVideoMode(W, H, 32, SDL_HWSURFACE);
 
   int rep = 0, g = 0;
 
-  printf("prepare render!");
+  printf("prepare render!\n");
 
   render();
 
