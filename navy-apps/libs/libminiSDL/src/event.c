@@ -1,5 +1,6 @@
 #include <NDL.h>
 #include <SDL.h>
+#include <string.h>
 
 #define keyname(k) #k,
 
@@ -50,6 +51,7 @@ int SDL_WaitEvent(SDL_Event *event) {
 			NDL_TODO("");
 			break;
 	}
+	printf("SDLK: %d\n", *sym);
   return 1;
 }
 
