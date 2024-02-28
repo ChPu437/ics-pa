@@ -54,6 +54,7 @@ void next(int rep) {
 int main() {
 	// assert(jelly == NULL);
 	// assert(slide == NULL);
+	cur = 0; // why?
 	slide = NULL; // why?
 	printf("into init!\n");
   SDL_Init(0);
