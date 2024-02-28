@@ -54,7 +54,7 @@ int main() {
 	// assert(jelly == NULL);
 	// assert(slide == NULL);
 	// cur = 0; // why?
-	// slide = NULL; // why?
+	slide = NULL; // why?
 
   SDL_Init(0);
   SDL_Surface *screen = SDL_SetVideoMode(W, H, 32, SDL_HWSURFACE);
