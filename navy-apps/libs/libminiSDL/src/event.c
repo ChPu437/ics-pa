@@ -21,15 +21,14 @@ int SDL_PollEvent(SDL_Event *ev) {
 
 int SDL_WaitEvent(SDL_Event *event) {
 	char buf[32];
-	int* sym = &event->key.keysym.sym;
 	while (!NDL_PollEvent(buf, sizeof(buf) + 1));
-	printf("SDLK: %d\n", *sym);
+	printf("SDLK: %d\n", event->key.keysym.sym);
 	switch (buf[1]) {
 		case 'd':
 			event->type = SDL_KEYDOWN;
 			// TODO: regex-ify the compare
 			// if (strcmp(buf, "kd UP")) 	*sym = SDLK_UP;
-			if (strcmp(buf, "kd DOWN")) *sym = SDLK_DOWN;
+			if (strcmp(buf, "kd DOWN")) event->key.keysym.sym = SDLK_DOWN;
 			/* if (strcmp(buf, "kd 0")) 		*sym = SDLK_0;
 			if (strcmp(buf, "kd 1")) 		*sym = SDLK_1;
 			if (strcmp(buf, "kd 2")) 		*sym = SDLK_2;
@@ -52,7 +51,7 @@ int SDL_WaitEvent(SDL_Event *event) {
 			NDL_TODO("");
 			break;
 	}
-	printf("SDLK: %d\n", *sym);
+	printf("SDLK: %d\n", event->key.keysym.sym);
   return 1;
 }
 
