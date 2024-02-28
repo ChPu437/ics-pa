@@ -16,22 +16,21 @@ const int N = 8;
 // slides path pattern (starts from 0)
 const char *path = "/share/slides/slides-%d.bmp";
 
-static SDL_Surface *gimp = NULL;
-static SDL_Surface *slide = NULL;
+static SDL_Surface *Nslide = NULL;
 static int cur = 0;
 
 void render() {
-	printf("into render! slide = %p\n", slide);
-  if (slide) {
-    SDL_FreeSurface(slide);
+	printf("into render! Nslide = %p\n", Nslide);
+  if (Nslide) {
+    SDL_FreeSurface(Nslide);
   }
   char fname[256];
   sprintf(fname, path, cur);
 	printf("into loadbmp!\n");
-  slide = SDL_LoadBMP(fname);
+  Nslide = SDL_LoadBMP(fname);
   printf("into assert!\n");
-  assert(slide);
-  SDL_UpdateRect(slide, 0, 0, 0, 0);
+  assert(Nslide);
+  SDL_UpdateRect(Nslide, 0, 0, 0, 0);
 }
 
 void prev(int rep) {
@@ -49,8 +48,7 @@ void next(int rep) {
 }
 
 int main() {
-	assert(gimp==NULL);
-	slide = NULL; // why?
+	assert(Nslide == NULL);
 	printf("into init!\n");
   SDL_Init(0);
 	printf("into videomode!\n");
