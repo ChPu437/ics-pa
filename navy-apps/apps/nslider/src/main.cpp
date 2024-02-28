@@ -29,8 +29,8 @@ void render() {
   char fname[256];
   sprintf(fname, path, cur);
 	printf("into loadbmp!\n");
-  // slide = SDL_LoadBMP(fname);
-  jelly = SDL_LoadBMP(fname);
+  slide = SDL_LoadBMP(fname);
+  // jelly = SDL_LoadBMP(fname);
   printf("into assert!\n");
   // assert(slide);
   assert(jelly);
