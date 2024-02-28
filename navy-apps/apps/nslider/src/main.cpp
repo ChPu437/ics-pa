@@ -16,6 +16,7 @@ const int N = 8;
 // slides path pattern (starts from 0)
 const char *path = "/share/slides/slides-%d.bmp";
 
+static SDL_Surface *gimp = NULL;
 static SDL_Surface *slide = NULL;
 static int cur = 0;
 
@@ -48,6 +49,7 @@ void next(int rep) {
 }
 
 int main() {
+	assert(gimp==NULL);
 	slide = NULL; // why?
 	printf("into init!\n");
   SDL_Init(0);
