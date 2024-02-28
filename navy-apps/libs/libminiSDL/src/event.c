@@ -22,26 +22,26 @@ int SDL_PollEvent(SDL_Event *ev) {
 int SDL_WaitEvent(SDL_Event *event) {
 	char buf[32];
 	while (!NDL_PollEvent(buf, sizeof(buf) + 1));
+	uint8_t* sym = &event->key.keysym.sym;
 	// printf("SDLK: %d\n", event->key.keysym.sym);
 	switch (buf[1]) {
 		case 'd':
 			event->type = SDL_KEYDOWN;
 			// TODO: regex-ify the compare
-			if (strcmp(buf, "kd UP")) event->key.keysym.sym = SDLK_UP;
-			if (strcmp(buf, "kd DOWN")) event->key.keysym.sym = SDLK_DOWN;
-			if (strcmp(buf, "kd 0")) event->key.keysym.sym = SDLK_0;
-			if (strcmp(buf, "kd 1")) event->key.keysym.sym = SDLK_1;
-			if (strcmp(buf, "kd 2")) event->key.keysym.sym = SDLK_2;
-			if (strcmp(buf, "kd 3")) event->key.keysym.sym = SDLK_3;
-			if (strcmp(buf, "kd 4")) event->key.keysym.sym = SDLK_4;
-			if (strcmp(buf, "kd 5")) event->key.keysym.sym = SDLK_5;
-			if (strcmp(buf, "kd 6")) event->key.keysym.sym = SDLK_6;
-			if (strcmp(buf, "kd 7")) event->key.keysym.sym = SDLK_7;
-			if (strcmp(buf, "kd 8")) event->key.keysym.sym = SDLK_8;
-			if (strcmp(buf, "kd 9")) event->key.keysym.sym = SDLK_9;
-			if (strcmp(buf, "kd G")) event->key.keysym.sym = SDLK_G;
-			if (strcmp(buf, "kd J")) event->key.keysym.sym = SDLK_J;
-			if (strcmp(buf, "kd K")) event->key.keysym.sym = SDLK_K;
+			// if (strcmp(buf, "kd UP")) 	*sym = SDLK_UP;
+			if (!strcmp(buf, "kd UP")) event->key.keysym.sym = SDLK_UP;
+			if (!strcmp(buf, "kd DOWN")) event->key.keysym.sym = SDLK_DOWN;
+			if (!strcmp(buf, "kd 2")) 		*sym = SDLK_2;
+			if (!strcmp(buf, "kd 3")) 		*sym = SDLK_3;
+			if (!strcmp(buf, "kd 4")) 		*sym = SDLK_4;
+			if (!strcmp(buf, "kd 5")) 		*sym = SDLK_5;
+			if (!strcmp(buf, "kd 6")) 		*sym = SDLK_6;
+			if (!strcmp(buf, "kd 7")) 		*sym = SDLK_7;
+			if (!strcmp(buf, "kd 8")) 		*sym = SDLK_8;
+			if (!strcmp(buf, "kd 9")) 		*sym = SDLK_9;
+			if (!strcmp(buf, "kd G")) 		*sym = SDLK_G;
+			if (!strcmp(buf, "kd J")) 		*sym = SDLK_J;
+			if (!strcmp(buf, "kd K")) 		*sym = SDLK_K;
 			break;
 		case 'u':
 			event->type = SDL_KEYUP;
