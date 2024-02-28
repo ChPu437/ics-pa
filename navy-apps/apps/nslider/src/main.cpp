@@ -51,12 +51,14 @@ int main() {
   SDL_Init(0);
 	printf("into videomode!\n");
 
+	assert(slide == NULL);
   SDL_Surface *screen = SDL_SetVideoMode(W, H, 32, SDL_HWSURFACE);
+
+	assert(slide == NULL);
 
   int rep = 0, g = 0;
 
   printf("prepare render!\n");
-	assert(slide == NULL);
   render();
 
   while (1) {
