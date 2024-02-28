@@ -56,7 +56,7 @@ int main() {
   int rep = 0, g = 0;
 
   printf("prepare render!\n");
-
+	assert(slide == NULL);
   render();
 
   while (1) {
