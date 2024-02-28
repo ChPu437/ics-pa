@@ -53,6 +53,8 @@ int main() {
 
   int rep = 0, g = 0;
 
+  printf("prepare render!");
+
   render();
 
   while (1) {
