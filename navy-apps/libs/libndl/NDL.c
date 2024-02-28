@@ -131,7 +131,7 @@ int NDL_Init(uint32_t flags) {
 
 	// get initialization base time
 	gettimeofday(&_NDL_init_time, NULL);
-	Log("NDL initiallization success!");
+	printf("NDL initiallization success!\n");
   return 0;
 }
 
