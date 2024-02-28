@@ -31,7 +31,6 @@ void render() {
 	printf("try to load %s!\n", fname);
   slide = SDL_LoadBMP(fname);
   // jelly = SDL_LoadBMP(fname);
-  printf("into assert!\n");
   assert(slide);
   // assert(jelly);
   SDL_UpdateRect(slide, 0, 0, 0, 0);
@@ -56,14 +55,11 @@ int main() {
 	// assert(slide == NULL);
 	cur = 0; // why?
 	slide = NULL; // why?
-	printf("into init!\n");
-  SDL_Init(0);
-	printf("into videomode!\n");
 
+  SDL_Init(0);
   SDL_Surface *screen = SDL_SetVideoMode(W, H, 32, SDL_HWSURFACE);
   int rep = 0, g = 0;
 
-  printf("prepare render!\n");
   render();
 
   while (1) {
