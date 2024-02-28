@@ -28,9 +28,9 @@ int SDL_WaitEvent(SDL_Event *event) {
 		case 'd':
 			event->type = SDL_KEYDOWN;
 			// TODO: regex-ify the compare
-			if (strcmp(buf, "kd UP")) 	*sym = SDLK_UP;
-			/* if (strcmp(buf, "kd DOWN")) *sym = SDLK_DOWN;
-			if (strcmp(buf, "kd 0")) 		*sym = SDLK_0;
+			// if (strcmp(buf, "kd UP")) 	*sym = SDLK_UP;
+			if (strcmp(buf, "kd DOWN")) *sym = SDLK_DOWN;
+			/* if (strcmp(buf, "kd 0")) 		*sym = SDLK_0;
 			if (strcmp(buf, "kd 1")) 		*sym = SDLK_1;
 			if (strcmp(buf, "kd 2")) 		*sym = SDLK_2;
 			if (strcmp(buf, "kd 3")) 		*sym = SDLK_3;
