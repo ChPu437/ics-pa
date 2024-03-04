@@ -71,8 +71,8 @@ int main(int argc, char *argv[], char *envp[]) {
 	printf("%p %p %p\n", font, screen, logo_sf);
   printf("%d\n", screen==NULL);
  	SDL_Init(0);
-  assert(0);
   screen = SDL_SetVideoMode(0, 0, 32, SDL_HWSURFACE);
+  assert(0);
 
   font = new BDF_Font(font_fname);
   logo_sf = SDL_LoadBMP("/share/pictures/projectn.bmp");
