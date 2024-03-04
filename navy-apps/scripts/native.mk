@@ -1,4 +1,5 @@
 LD = $(CXX)
+CFLAGS += -g
 
 ### Run an application with $(ISA)=native
 
