@@ -26,7 +26,7 @@ void render() {
 	printf("into render! slide = %p\n", slide);
   if (slide) {
   // if (jelly) {
-    SDL_FreeSurface(slide);
+    // SDL_FreeSurface(slide);
   }
   char fname[256];
   sprintf(fname, path, cur);
