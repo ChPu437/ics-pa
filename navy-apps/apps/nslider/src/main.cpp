@@ -16,11 +16,8 @@ const int N = 8;
 // slides path pattern (starts from 0)
 const char *path = "/share/slides/slides-%d.bmp";
 
-// static SDL_Surface *jelly = NULL;
 static SDL_Surface *slide = NULL;
 static int cur = 0;
-// SDL_Surface *slide = NULL;
-// int cur = 0;
 
 void render() {
 	printf("into render! slide = %p\n", slide);
@@ -53,12 +50,9 @@ void next(int rep) {
 }
 
 int main() {
-	// assert(jelly == NULL);
-	assert(slide == NULL);
-	assert(cur == 0);
-	// cur = 0; // why?
-	// slide = NULL; // why?
+	printf("%d %p\n", cur, slide);
 
+	assert(0);
   SDL_Init(0);
   // SDL_Surface *screen = SDL_SetVideoMode(W, H, 32, SDL_HWSURFACE);
   int rep = 0, g = 0;
