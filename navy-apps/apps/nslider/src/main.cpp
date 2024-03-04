@@ -26,12 +26,12 @@ void render() {
 	printf("into render! slide = %p\n", slide);
   if (slide) {
   // if (jelly) {
-    // SDL_FreeSurface(slide);
+    SDL_FreeSurface(slide);
   }
   char fname[256];
   sprintf(fname, path, cur);
 	printf("try to load %s!\n", fname);
-  // slide = SDL_LoadBMP(fname);
+  slide = SDL_LoadBMP(fname);
   // jelly = SDL_LoadBMP(fname);
   assert(slide);
   // assert(jelly);
@@ -55,11 +55,12 @@ void next(int rep) {
 int main() {
 	// assert(jelly == NULL);
 	assert(slide == NULL);
-	cur = 0; // why?
-	slide = NULL; // why?
+	assert(cur == 0);
+	// cur = 0; // why?
+	// slide = NULL; // why?
 
   SDL_Init(0);
-  SDL_Surface *screen = SDL_SetVideoMode(W, H, 32, SDL_HWSURFACE);
+  // SDL_Surface *screen = SDL_SetVideoMode(W, H, 32, SDL_HWSURFACE);
   int rep = 0, g = 0;
 
   render();
