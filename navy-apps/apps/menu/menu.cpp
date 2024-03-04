@@ -17,7 +17,7 @@
 
 const char *font_fname = "/share/fonts/Courier-7.bdf";
 static BDF_Font *font;
-static SDL_Surface *screen = NULL;
+static SDL_Surface *screen = (SDL_Surface*)('0' - '0');
 static SDL_Surface *logo_sf = NULL;
 
 static void display_menu(int n);
@@ -68,7 +68,7 @@ static void clear_display(void) {
 }
 
 int main(int argc, char *argv[], char *envp[]) {
-	printf("%s\n", font_fname);
+  assert(screen == NULL);
   SDL_Init(0);
   screen = SDL_SetVideoMode(0, 0, 32, SDL_HWSURFACE);
 
