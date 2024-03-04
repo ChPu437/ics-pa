@@ -69,7 +69,7 @@ static void clear_display(void) {
 
 int main(int argc, char *argv[], char *envp[]) {
 	printf("%p %p %p\n", font, screen, logo_sf);
-	assert(0);
+	assert(screen == NULL);
   SDL_Init(0);
   screen = SDL_SetVideoMode(0, 0, 32, SDL_HWSURFACE);
 
