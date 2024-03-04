@@ -1,8 +1,10 @@
 #include <unistd.h>
 #include <stdio.h>
+#include <assert.h>
 
 int main() {
   write(1, "Hello World!\n", 13);
+  assert(0);
   int i = 2;
   volatile int j = 0;
   while (1) {
