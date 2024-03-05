@@ -36,7 +36,6 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 				= src->pixels[(i + copy_y) * src->w + (j + copy_x)];
 		}
 	}
-	printf("into blit surface!\n");
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
