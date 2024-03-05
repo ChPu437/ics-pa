@@ -5,21 +5,26 @@
 #include <stdlib.h>
 
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) {
+	printf("into blit surface!\n");
   assert(dst && src);
   assert(dst->format->BitsPerPixel == src->format->BitsPerPixel);
 	int copy_y, copy_x, copy_h, copy_w;
 	if (srcrect == NULL) {
 		copy_y = 0, copy_h = src->h;
 		copy_x = 0, copy_w = src->w;
+	printf("%d %d %d %d\n", copy_x, copy_y, copy_w, copy_h);
 	} else {
 		copy_y = srcrect->y;
 		copy_x = srcrect->x;
 		copy_h = srcrect->h;
 		copy_w = srcrect->w;
-		// if (copy_h > src->h - copy_y) copy_h = src->h - copy_y;
-		// if (copy_w > src->w - copy_x) copy_w = src->w - copy_x;
+	printf("%d %d %d %d\n", copy_x, copy_y, copy_w, copy_h);
+		if (copy_h > src->h - copy_y) copy_h = src->h - copy_y;
+		if (copy_w > src->w - copy_x) copy_w = src->w - copy_x;
 	}
 	
+	printf("%d %d %d %d\n", copy_x, copy_y, copy_w, copy_h);
+
 	int dst_x, dst_y;
 	if (dstrect == NULL) {
 		dst_x = dst_y = 0;
@@ -27,8 +32,9 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 		dst_x = dstrect->x;
 		dst_y = dstrect->y;
 	}
-	// if (copy_h > dst->h - dst_y) copy_h = dst->h - dst_y;
-	// if (copy_w > dst->w - dst_x) copy_w = dst->w - dst_x;
+	if (copy_h > dst->h - dst_y) copy_h = dst->h - dst_y;
+	if (copy_w > dst->w - dst_x) copy_w = dst->w - dst_x;
+	printf("%d %d %d %d\n", copy_x, copy_y, copy_w, copy_h);
 
 	for (int i = 0; i < copy_h; i++) {
 		for (int j = 0; j < copy_w; j++) {
