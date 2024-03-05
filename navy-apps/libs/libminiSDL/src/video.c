@@ -31,7 +31,7 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 	}
 	if (copy_h > dst->h - dst_y) copy_h = dst->h - dst_y;
 	if (copy_w > dst->w - dst_x) copy_w = dst->w - dst_x;
-	// printf("%d %d %d %d %d %d\n", copy_w, copy_h, dst_x, dst_y, dst->w, dst->h);
+	printf("%d %d %d %d %d %d\n", copy_w, copy_h, dst_x, dst_y, dst->w, dst->h);
 
 	for (int i = 0; i < copy_h; i++) {
 		for (int j = 0; j < copy_w; j++) {
