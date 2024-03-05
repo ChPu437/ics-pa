@@ -22,16 +22,13 @@ static int cur = 0;
 void render() {
 	printf("into render! slide = %p\n", slide);
   if (slide) {
-  // if (jelly) {
     SDL_FreeSurface(slide);
   }
   char fname[256];
   sprintf(fname, path, cur);
 	printf("try to load %s!\n", fname);
   slide = SDL_LoadBMP(fname);
-  // jelly = SDL_LoadBMP(fname);
   assert(slide);
-  // assert(jelly);
   SDL_UpdateRect(slide, 0, 0, 0, 0);
 }
 

@@ -7,11 +7,57 @@
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) {
   assert(dst && src);
   assert(dst->format->BitsPerPixel == src->format->BitsPerPixel);
-	NDL_TODO("SDL_BlitSurface");
+	int i, j, copy_h, copy_w;
+	if (srcrect == NULL) {
+		i = 0, copy_h = src->h;
+		j = 0, copy_w = src->w;
+	} else {
+		i = srcrect->y;
+		j = srcrect->x;
+		copy_h = i + srcrect->h;
+		if (copy_h > src->h) copy_h = src->h;
+		copy_w = j + srcrect->w;
+		if (copy_w > src->w) copy_w = src->w;
+	}
+	
+	int dst_x, dst_y;
+	if (dstrect == NULL) {
+		dst_x = dst_y = 0;
+	} else {
+		dst_x = dstrect->x;
+		dst_y = dstrect->y;
+		if (copy_h > dstrect->h + i) copy_h = dstrect->h + i;
+		if (copy_h > dst->h - dst_y + i) copy_h = dst->h - dst_y + i;
+		if (copy_w > dstrect->w + j) copy_w = dstrect->w + j;
+		if (copy_w > dst->w - dst_x + j) copy_w = dst->w - dst_x + j;
+	}
+
+	for (; i < copy_h; i++) {
+		for (; j < copy_w; j++) {
+			dst->pixels[i * dst->w + j] = src->pixels[i * src->w + j];
+		}
+	}
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
-	NDL_TODO("SDL_FillRect");
+	int i, j, fill_h, fill_w;
+	if (dstrect == NULL) {
+		i = 0, fill_h = dst->h;
+		j = 0, fill_w = dst->w;
+	} else {
+		i = dstrect->y;
+		j = dstrect->x;
+		fill_h = dstrect->y + dstrect->h;
+		if (fill_h > dst->h) fill_h = dst->h;
+		fill_w = dstrect->x + dstrect->w;
+		if (fill_w > dst->w) fill_w = dst->w;
+	}
+	// clip_rect not implemented in miniSDL
+	for (; i < fill_h; i++) {
+		for (; j < fill_w; j++) {
+			dst->pixels[i * dst->w + j] = color;
+		}
+	}
 }
 
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
