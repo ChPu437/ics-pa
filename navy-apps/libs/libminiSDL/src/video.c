@@ -74,6 +74,7 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 		w = s->w;
 		h = s->h;
 	}
+	assert(s->w == w);
 	NDL_DrawRect(s->pixels, x, y, w, h);
 }
 
