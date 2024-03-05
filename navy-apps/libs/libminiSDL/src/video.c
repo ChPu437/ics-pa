@@ -47,22 +47,23 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 	printf("into fill rect!\n");
-	int i, j, fill_h, fill_w;
+	int fill_x, fill_y, fill_h, fill_w;
 	if (dstrect == NULL) {
-		i = 0, fill_h = dst->h;
-		j = 0, fill_w = dst->w;
+		fill_x = fill_y = 0;
+		fill_h = dst->h;
+		fill_w = dst->w;
 	} else {
-		i = dstrect->y;
-		j = dstrect->x;
-		fill_h = dstrect->y + dstrect->h;
-		if (fill_h > dst->h) fill_h = dst->h;
-		fill_w = dstrect->x + dstrect->w;
-		if (fill_w > dst->w) fill_w = dst->w;
+		fill_x = dstrect->x;
+		fill_y = dstrect->y;
+		fill_h = dstrect->h;
+		fill_w = dstrect->w;
+		if (fill_h > dst->h - fill_x) fill_h = dst->h - fill_x;
+		if (fill_w > dst->w - fill_y) fill_w = dst->w - fill_y;
 	}
 	// clip_rect not implemented in miniSDL
-	for (int dst_y = i; dst_y < fill_h; dst_y++) {
-		for (int dst_x = j; dst_x < fill_w; dst_x++) {
-			dst->pixels[dst_y * dst->w + dst_x] = 0;
+	for (int i = 0; i < fill_h; i++) {
+		for (int j = 0; j < fill_w; j++) {
+			dst->pixels[(i + fill_y) * dst->w + (j + fill_x)] = color;
 		}
 	}
 }
