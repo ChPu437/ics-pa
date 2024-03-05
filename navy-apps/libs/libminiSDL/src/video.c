@@ -61,8 +61,8 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 	}
 	// clip_rect not implemented in miniSDL
 	for (int dst_y = i; dst_y < fill_h; dst_y++) {
-		for (int dst_x; dst_x < fill_w; dst_x++) {
-			dst->pixels[i * dst->w + j] = color;
+		for (int dst_x = j; dst_x < fill_w; dst_x++) {
+			dst->pixels[dst_y * dst->w + dst_x] = color;
 		}
 	}
 }
