@@ -101,7 +101,7 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 		printf("8-bit color detected!\n");
 		for (int i = 0; i < w * h; i++) {
 			int pos = (y * w + x + i) * 4 - 1;
-			printf("%d%d%d%d\n", s->pixels[pos], s->pixels[pos+1], s->pixels[pos+2], s->pixels[pos+3]);
+//			printf("%d%d%d%d\n", s->pixels[pos], s->pixels[pos+1], s->pixels[pos+2], s->pixels[pos+3]);
 			buf[i] = (s->pixels[pos + 0] << 16) | (s->pixels[pos + 1] << 8) | (s->pixels[pos + 2]);
 		}
 	} else {
