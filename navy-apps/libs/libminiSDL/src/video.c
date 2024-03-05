@@ -21,21 +21,21 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 		if (copy_w > src->w) copy_w = src->w;
 	}
 	
-	int dst_x, dst_y;
+	int dst_j, dst_i;
 	if (dstrect == NULL) {
-		dst_x = dst_y = 0;
+		dst_j = dst_i = 0;
 	} else {
-		dst_x = dstrect->x;
-		dst_y = dstrect->y;
+		dst_j = dstrect->x;
+		dst_i = dstrect->y;
 		if (copy_h > dstrect->h + i) copy_h = dstrect->h + i;
-		if (copy_h > dst->h - dst_y + i) copy_h = dst->h - dst_y + i;
+		if (copy_h > dst->h - dst_i + i) copy_h = dst->h - dst_i + i;
 		if (copy_w > dstrect->w + j) copy_w = dstrect->w + j;
-		if (copy_w > dst->w - dst_x + j) copy_w = dst->w - dst_x + j;
+		if (copy_w > dst->w - dst_j + j) copy_w = dst->w - dst_j + j;
 	}
 
-	for (; i < copy_h; i++) {
-		for (; j < copy_w; j++) {
-			dst->pixels[i * dst->w + j] = src->pixels[i * src->w + j];
+	for (int dst_y = dst_i, copy_y = i; copy_y < copy_h; copy_y++, dst_y++) {
+		for (int dst_x = dst_j, copy_x; copy_x < copy_w; copy_x++, dst_x++) {
+			dst->pixels[dst_y * dst->w + dst_x] = src->pixels[copy_y * src->w + copy_x];
 		}
 	}
 }
@@ -55,8 +55,8 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 		if (fill_w > dst->w) fill_w = dst->w;
 	}
 	// clip_rect not implemented in miniSDL
-	for (; i < fill_h; i++) {
-		for (; j < fill_w; j++) {
+	for (int dst_y = i; dst_y < fill_h; dst_y++) {
+		for (int dst_x; dst_x < fill_w; dst_x++) {
 			dst->pixels[i * dst->w + j] = color;
 		}
 	}
