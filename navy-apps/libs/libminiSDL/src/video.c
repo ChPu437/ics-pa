@@ -16,8 +16,8 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 		copy_x = srcrect->x;
 		copy_h = srcrect->h;
 		copy_w = srcrect->w;
-		if (copy_h > src->h - copy_y) copy_h = src->h - copy_y;
-		if (copy_w > src->w - copy_x) copy_w = src->w - copy_x;
+		// if (copy_h > src->h - copy_y) copy_h = src->h - copy_y;
+		// if (copy_w > src->w - copy_x) copy_w = src->w - copy_x;
 	}
 	
 	int dst_x, dst_y;
@@ -27,14 +27,18 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 		dst_x = dstrect->x;
 		dst_y = dstrect->y;
 	}
-	if (copy_h > dst->h - dst_y) copy_h = dst->h - dst_y;
-	if (copy_w > dst->w - dst_x) copy_w = dst->w - dst_x;
+	// if (copy_h > dst->h - dst_y) copy_h = dst->h - dst_y;
+	// if (copy_w > dst->w - dst_x) copy_w = dst->w - dst_x;
 
 	for (int i = 0; i < copy_h; i++) {
 		for (int j = 0; j < copy_w; j++) {
 			dst->pixels[(i + dst_y) * dst->w + (j + dst_x)] 
 				= src->pixels[(i + copy_y) * src->w + (j + copy_x)];
 		}
+	}
+	if (dstrect != NULL) {
+		dstrect->w = copy_w;
+		dstrect->h = copy_h;
 	}
 }
 
