@@ -51,7 +51,7 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 		dstrect->w = copy_w;
 		dstrect->h = copy_h;
 	}
-}
+} 
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 	printf("into fill rect!\n");
@@ -88,9 +88,21 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 	// printf("%d\n", w * h * sizeof(uint32_t));
 	uint32_t* buf = malloc(w * h * sizeof(uint32_t));
 	assert(buf != NULL);
-	for (int i = 0; i < w * h; i++) {
-		SDL_Color col_rgba = s->format->palette->colors[s->pixels[y * w + x + i]];
-		buf[i] = col_rgba.r << 16 | col_rgba.g << 8 | col_rgba.b;
+	if (s->format->BitsPerPixel == 8) {
+		for (int i = 0; i < w * h; i++) {
+			int pos = (y * w + x + i);
+			int color_r = (s->pixels[pos] << 2) >> 6;
+			int color_g = (s->pixels[pos] << 4) >> 6;
+			int color_b = (s->pixels[pos] << 6) >> 6;
+			buf[i] = (color_r << 16) | (color_g << 8) | color_b;
+		}
+	} else if (s->format->BitsPerPixel == 32) {
+		for (int i = 0; i < w * h; i++) {
+			int pos = (y * w + x + i) * 4;
+			buf[i] = (s->pixels[pos + 1] << 16) | (s->pixels[pos + 2] << 8) | (s->pixels[pos + 3]);
+		}
+	} else {
+		NDL_TODO("format not implemented!");
 	}
 	SDL_UnlockSurface(s);
 
