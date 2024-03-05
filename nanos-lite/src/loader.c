@@ -59,12 +59,12 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 		assert(~fs_read(fd, (void*)(uintptr_t)vaddr_pent, filesz_pent));
 		// 03/05/24 Loader写挂了…… 这里memset好像没生效
 		// memset((uint32_t*)(uintptr_t)vaddr_pent + filesz_pent, 0, memsz_pent - filesz_pent);
-		printf("%d %d\n", memsz_pent, filesz_pent);
+		// printf("%d %d\n", memsz_pent, filesz_pent);
 		memset((void*)(vaddr_pent + filesz_pent), 0, memsz_pent - filesz_pent);
-		for (int i = 0; i < memsz_pent - filesz_pent; i++) {
+		/* for (int i = 0; i < memsz_pent - filesz_pent; i++) {
 			printf("%d\n", (*((char*)(vaddr_pent + filesz_pent) + i)));
 			assert(*((char*)(vaddr_pent + filesz_pent) + i) == 0);
-		} 
+		} */
 		// printf("%x %x %p\n",  filesz_pent, memsz_pent, vaddr_pent);
 	}
 
