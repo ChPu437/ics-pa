@@ -89,7 +89,7 @@ void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
 		} */
 
 		// Buffered IO to speed up
-		lseek(display, i * screen_w + x, SEEK_SET);
+		lseek(display, i * display_w + x, SEEK_SET);
 		write(display, pixels + i * w, w);
 	}
 	close(display);
