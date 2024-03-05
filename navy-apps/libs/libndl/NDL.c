@@ -10,6 +10,7 @@
 static int evtdev = -1;
 static int fbdev = -1;
 static int screen_w = 0, screen_h = 0;
+static int display_w = 0, display_h = 0;
 static struct timeval _NDL_init_time;
 
 void NDL_TODO(char* func) {
@@ -57,13 +58,7 @@ void NDL_OpenCanvas(int *w, int *h) {
   if (getenv("NWM_APP")) {
     int fbctl = 4;
     fbdev = 5;
-    // 牛魔ndl给的实现没写完
-    printf("去你妈的\n");
-		if (!(*w) && (!(*h))) {
-			*w = screen_w; *h = screen_h;
-		} else {
-	    screen_w = *w; screen_h = *h;
-		}
+    screen_w = *w; screen_h = *h;
     char buf[64];
     int len = sprintf(buf, "%d %d", screen_w, screen_h);
     // let NWM resize the window and create the frame buffer
@@ -77,6 +72,10 @@ void NDL_OpenCanvas(int *w, int *h) {
     }
     close(fbctl);
   }
+	if (!(*w) && !(*h)) {
+		*w = display_w, *h = display_h;
+	}
+	screen_w = *w, screen_h = *h;
 }
 
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
@@ -131,8 +130,8 @@ int NDL_Init(uint32_t flags) {
 		fscanf(dispinfo, "WIDTH: %d", &screen_w);
 	} */
 	// // hard-written for now
-	fscanf(dispinfo, "WIDTH: %d\nHEIGHT: %d", &screen_w, &screen_h);
-	printf("NDL get screen info: w=%d, h=%d\n", screen_w, screen_h);
+	fscanf(dispinfo, "WIDTH: %d\nHEIGHT: %d", &display_w, &display_h);
+	printf("NDL get display info: w=%d, h=%d\n", display_w, display_h);
 	fclose(dispinfo);
 
 	// get initialization base time
