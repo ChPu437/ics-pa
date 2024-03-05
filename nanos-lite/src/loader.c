@@ -60,7 +60,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 		// memset((uint32_t*)(uintptr_t)vaddr_pent + filesz_pent, 0, memsz_pent - filesz_pent);
 		memset((void*)vaddr_pent + filesz_pent, 0, memsz_pent - filesz_pent);
 		for (int i = 0; i < memsz_pent - filesz_pent; i++) {
-			assert(*((int*)vaddr_pent + i) == 0);
+			assert(*((int*)vaddr_pent + filesz_pent + i) == 0);
 		} 
 		// printf("%x %x %p\n",  filesz_pent, memsz_pent, vaddr_pent);
 	}
