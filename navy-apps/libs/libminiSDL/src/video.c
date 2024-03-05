@@ -6,6 +6,7 @@
 
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) {
 	// printf("into blit surface!\n");
+	return;
   assert(dst && src);
   assert(dst->format->BitsPerPixel == src->format->BitsPerPixel);
 	int copy_y, copy_x, copy_h, copy_w;
