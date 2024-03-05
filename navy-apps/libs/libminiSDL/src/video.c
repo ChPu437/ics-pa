@@ -85,8 +85,16 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 		h = s->h;
 	}
 	SDL_LockSurface(s);
-	NDL_DrawRect(s->pixels, x, y, w, h);
+	uint32_t* buf = malloc(w * h);
+	assert(buf == NULL);
+	for (int i = 0; i < w * h; i++) {
+		SDL_Color col_rgba = s->format->palette->colors[s->pixels[x * w + y + i]];
+		buf[i] = col_rgba.r << 16 | col_rgba.g << 8 | col_rgba.b;
+	}
 	SDL_UnlockSurface(s);
+
+	NDL_DrawRect(buf, x, y, w, h);
+	free(buf);
 }
 
 // APIs below are already implemented.
