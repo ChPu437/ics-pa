@@ -51,18 +51,19 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 		assert(~fs_read(fd, &phdr, sizeof(Elf_Phdr)));
 		if (phdr.p_type != PT_LOAD) continue;
 		Elf32_Off off_pent = phdr.p_offset;
-		Elf32_Addr vaddr_pent = phdr.p_vaddr;
+		Elf32_Addr vaddr_pent = phdr.p_vaddr; // uint32_t
 		uint32_t filesz_pent = phdr.p_filesz;
 		uint32_t memsz_pent = phdr.p_memsz;
 		// ramdisk_read((void*)(uintptr_t)vaddr_pent, off_pent, filesz_pent);
 		assert(~fs_lseek(fd, off_pent, SEEK_SET));
 		assert(~fs_read(fd, (void*)(uintptr_t)vaddr_pent, filesz_pent));
+		// 03/05/24 Loader写挂了…… 这里memset好像没生效
 		// memset((uint32_t*)(uintptr_t)vaddr_pent + filesz_pent, 0, memsz_pent - filesz_pent);
 		printf("%d %d\n", memsz_pent, filesz_pent);
-		memset((void*)vaddr_pent + filesz_pent, 0, memsz_pent - filesz_pent);
+		memset((void*)(vaddr_pent + filesz_pent), 0, memsz_pent - filesz_pent);
 		for (int i = 0; i < memsz_pent - filesz_pent; i++) {
-			printf("%d\n", (*((int*)vaddr_pent + filesz_pent + i)));
-			assert(*((int*)vaddr_pent + filesz_pent + i) == 0);
+			printf("%d\n", (*((int*)(vaddr_pent + filesz_pent) + i)));
+			assert(*((int*)(vaddr_pent + filesz_pent) + i) == 0);
 		} 
 		// printf("%x %x %p\n",  filesz_pent, memsz_pent, vaddr_pent);
 	}
