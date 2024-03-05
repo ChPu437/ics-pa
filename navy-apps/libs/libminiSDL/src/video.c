@@ -92,9 +92,9 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 		printf("2-bit color detected!\n");
 		for (int i = 0; i < w * h; i++) {
 			int pos = (y * w + x + i);
-			int color_r = (s->pixels[pos] << 0) >> 6;
+			int color_b = (s->pixels[pos] << 0) >> 6;
 			int color_g = (s->pixels[pos] << 2) >> 6;
-			int color_b = (s->pixels[pos] << 4) >> 6;
+			int color_r = (s->pixels[pos] << 4) >> 6;
 			buf[i] = (color_r << 16) | (color_g << 8) | color_b;
 		}
 	} else if (s->format->BitsPerPixel == 32) {
@@ -102,7 +102,7 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 		for (int i = 0; i < w * h; i++) {
 			int pos = (y * w + x + i) * 4;
 			// printf("%x %x %x %x\n", s->pixels[pos], s->pixels[pos+1], s->pixels[pos+2], s->pixels[pos+3]);
-			buf[i] = (s->pixels[pos + 0] << 16) | (s->pixels[pos + 1] << 8) | (s->pixels[pos + 2]);
+			buf[i] = (s->pixels[pos + 0]) | (s->pixels[pos + 1] << 8) | (s->pixels[pos + 2] << 16);
 			// printf("%X\n", buf[i]);
 		}
 	} else {
