@@ -85,6 +85,7 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 		h = s->h;
 	}
 	SDL_LockSurface(s);
+	printf("%d\n", w * h * sizeof(uint32_t));
 	uint32_t* buf = malloc(w * h * sizeof(uint32_t));
 	assert(buf == NULL);
 	for (int i = 0; i < w * h; i++) {
