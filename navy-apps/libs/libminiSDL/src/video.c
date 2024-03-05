@@ -17,8 +17,8 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 		copy_x = srcrect->x;
 		copy_h = srcrect->h;
 		copy_w = srcrect->w;
-		if (copy_h > src->h - copy_y) copy_h = src->h - copy_y;
-		if (copy_w > src->w - copy_x) copy_w = src->w - copy_x;
+		// if (copy_h > src->h - copy_y) copy_h = src->h - copy_y;
+		// if (copy_w > src->w - copy_x) copy_w = src->w - copy_x;
 	}
 	
 
