@@ -87,7 +87,7 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 	SDL_LockSurface(s);
 	printf("%d\n", w * h * sizeof(uint32_t));
 	uint32_t* buf = malloc(w * h * sizeof(uint32_t));
-	assert(buf == NULL);
+	assert(buf != NULL);
 	for (int i = 0; i < w * h; i++) {
 		SDL_Color col_rgba = s->format->palette->colors[s->pixels[x * w + y + i]];
 		buf[i] = col_rgba.r << 16 | col_rgba.g << 8 | col_rgba.b;
