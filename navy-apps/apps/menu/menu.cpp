@@ -68,7 +68,6 @@ static void clear_display(void) {
 }
 
 int main(int argc, char *argv[], char *envp[]) {
-	printf("%s\n", font_fname);
  	SDL_Init(0);
   screen = SDL_SetVideoMode(0, 0, 32, SDL_HWSURFACE);
 
@@ -143,6 +142,7 @@ static void draw_text_row(char *s, int r) {
 static void display_menu(int n) {
   clear_display();
   SDL_Rect rect = { .x = screen->w - logo_sf->w, .y = 0 };
+  printf("%d %d\n", rect.x, rect.y);
   SDL_BlitSurface(logo_sf, NULL, screen, &rect);
   char buf[80];
   int i;
