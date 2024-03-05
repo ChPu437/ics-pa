@@ -79,6 +79,7 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 			dst->pixels[offset + 3] = color >> 0;
 		}
 	}
+	printf("%0X\n", color);
 	SDL_UnlockSurface(dst);
 }
 
