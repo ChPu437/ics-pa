@@ -101,8 +101,9 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 		printf("8-bit color detected!\n");
 		for (int i = 0; i < w * h; i++) {
 			int pos = (y * w + x + i) * 4;
-			printf("%x %x %x %x\n", s->pixels[pos], s->pixels[pos+1], s->pixels[pos+2], s->pixels[pos+3]);
+			// printf("%x %x %x %x\n", s->pixels[pos], s->pixels[pos+1], s->pixels[pos+2], s->pixels[pos+3]);
 			buf[i] = (s->pixels[pos + 0] << 16) | (s->pixels[pos + 1] << 8) | (s->pixels[pos + 2]);
+			printf("%X\n", buf[i]);
 		}
 	} else {
 		NDL_TODO("format not implemented!");
