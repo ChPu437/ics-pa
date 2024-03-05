@@ -58,7 +58,8 @@ void NDL_OpenCanvas(int *w, int *h) {
     int fbctl = 4;
     fbdev = 5;
     // 牛魔ndl给的实现没写完
-		if (!(*w) && (!*h)) {
+    printf("去你妈的\n");
+		if (!(*w) && (!(*h))) {
 			*w = screen_w; *h = screen_h;
 		} else {
 	    screen_w = *w; screen_h = *h;
