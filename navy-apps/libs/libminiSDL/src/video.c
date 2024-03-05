@@ -9,6 +9,7 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
   assert(dst && src);
   assert(dst->format->BitsPerPixel == src->format->BitsPerPixel);
 	int copy_y, copy_x, copy_h, copy_w;
+	printf("into blit surface!\n");
 	if (srcrect == NULL) {
 		copy_y = 0, copy_h = src->h;
 		copy_x = 0, copy_w = src->w;
@@ -22,6 +23,7 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 	}
 	
 	int dst_x, dst_y;
+	printf("into blit surface!\n");
 	if (dstrect == NULL) {
 		dst_x = dst_y = 0;
 	} else {
@@ -31,6 +33,7 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 	if (copy_h > dst->h - dst_y) copy_h = dst->h - dst_y;
 	if (copy_w > dst->w - dst_x) copy_w = dst->w - dst_x;
 
+	printf("into blit surface!\n");
 	for (int i = 0; i < copy_h; i++) {
 		for (int j = 0; j < copy_w; j++) {
 			dst->pixels[(i + dst_y) * dst->w + (j + dst_x)] 
