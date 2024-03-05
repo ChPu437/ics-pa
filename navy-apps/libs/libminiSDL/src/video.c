@@ -73,10 +73,11 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 	for (int i = 0; i < fill_h; i++) {
 		for (int j = 0; j < fill_w; j++) {
 			int offset = ((fill_y + i) * fill_w + fill_x + j) * dst->format->BytesPerPixel;
-			dst->pixels[offset + 0] = color >> 24;
-			dst->pixels[offset + 1] = color >> 16;
-			dst->pixels[offset + 2] = color >> 8;
-			dst->pixels[offset + 3] = color >> 0;
+			dst->pixels[offset + 0] = (uint8_t)(color >> 16);
+			dst->pixels[offset + 1] = (uint8_t)(color >> 8);
+			dst->pixels[offset + 2] = (uint8_t)(color >> 0);
+			// TODO: how to check alpha channel
+			// dst->pixels[offset + 3] = (uint8_t)(color >> 24);
 		}
 	}
 	printf("%0X\n", color);
