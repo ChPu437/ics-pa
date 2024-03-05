@@ -36,10 +36,13 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 	SDL_LockSurface(src);
 	SDL_LockSurface(dst); 
 	for (int i = 0; i < copy_h; i++) {
-		for (int j = 0; j < copy_w; j++) {
-			dst->pixels[(i + dst_y) * (dst->w) + (j + dst_x)] = src->pixels[(i + copy_y) * (src->w) + (j + copy_x)];
+		// for (int j = 0; j < copy_w; j++) {
+			// dst->pixels[(i + dst_y) * (dst->w) + (j + dst_x)] = src->pixels[(i + copy_y) * (src->w) + (j + copy_x)];
 			// printf("%d %d %d %d\n", j + dst_x, i + dst_y, j + copy_x, i + copy_y);
-		}
+		// }
+		memcpy(dst->pixels + (i + dst_y) * dst->w + dst_x,
+				src->pixels + (i + copy_y) * src->w + copy_x,
+				sizeof(dst->pixels[0]));
 	}
 	SDL_UnlockSurface(src);
 	SDL_UnlockSurface(dst); 
