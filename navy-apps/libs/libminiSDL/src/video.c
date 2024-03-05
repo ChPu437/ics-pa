@@ -33,12 +33,17 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 	if (copy_w > dst->w - dst_x) copy_w = dst->w - dst_x;
 	// printf("%d %d %d %d %d %d %d %d\n", copy_x, copy_y, copy_w, copy_h, dst_x, dst_y, dst->w, dst->h);
 
+	SDL_LockSurface(src);
+	SDL_LockSurface(dst); 
 	for (int i = 0; i < copy_h; i++) {
 		for (int j = 0; j < copy_w; j++) {
 			dst->pixels[(i + dst_y) * (dst->w) + (j + dst_x)] = src->pixels[(i + copy_y) * (src->w) + (j + copy_x)];
 			// printf("%d %d %d %d\n", j + dst_x, i + dst_y, j + copy_x, i + copy_y);
 		}
 	}
+	SDL_UnlockSurface(src);
+	SDL_UnlockSurface(dst); 
+	
 	if (dstrect != NULL) {
 		dstrect->w = copy_w;
 		dstrect->h = copy_h;
