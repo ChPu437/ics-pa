@@ -78,6 +78,9 @@ int main(int argc, char *argv[], char *envp[]) {
   assert(logo_sf);
   set_i_max();
 
+	SDL_UpdateRect(screen, 0, 0, 0, 0);
+	while(1) {};
+
   while (1) {
     display_menu(i_max);
 
