@@ -29,6 +29,8 @@ static int key_assert(char* buf, SDL_Event *event) {
 	if (!strcmp(buf, "kd DOWN")) 	*sym = SDLK_DOWN;
 	if (!strcmp(buf, "kd LEFT")) 	*sym = SDLK_LEFT;
 	if (!strcmp(buf, "kd RIGHT")) *sym = SDLK_RIGHT;
+	if (!strcmp(buf, "kd 0")) 		*sym = SDLK_0;
+	if (!strcmp(buf, "kd 1")) 		*sym = SDLK_1;
 	if (!strcmp(buf, "kd 2")) 		*sym = SDLK_2;
 	if (!strcmp(buf, "kd 3")) 		*sym = SDLK_3;
 	if (!strcmp(buf, "kd 4")) 		*sym = SDLK_4;
