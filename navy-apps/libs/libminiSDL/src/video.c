@@ -42,7 +42,7 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 		// }
 		memcpy(dst->pixels + (i + dst_y) * dst->w + dst_x,
 				src->pixels + (i + copy_y) * src->w + copy_x,
-				sizeof(dst->pixels[0]));
+				sizeof(dst->pixels[0]) * copy_w);
 	}
 	SDL_UnlockSurface(src);
 	SDL_UnlockSurface(dst); 
