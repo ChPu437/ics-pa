@@ -68,10 +68,7 @@ static void clear_display(void) {
 }
 
 int main(int argc, char *argv[], char *envp[]) {
-	for (int i = 0; i < 11; i++) {
-    auto *item = &items[page * 10 + i];
-    printf("[%d] %s\n", i, item->name);
-	}
+	page = 0; // why ?
 
  	SDL_Init(0);
   screen = SDL_SetVideoMode(0, 0, 32, SDL_HWSURFACE);
