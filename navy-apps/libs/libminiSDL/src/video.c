@@ -66,11 +66,13 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 		if (fill_w > dst->w - fill_y) fill_w = dst->w - fill_y;
 	}
 	// clip_rect not implemented in miniSDL
+	SDL_LockSurface(dst);
 	for (int i = 0; i < fill_h; i++) {
 		for (int j = 0; j < fill_w; j++) {
 			dst->pixels[(i + fill_y) * dst->w + (j + fill_x)] = color;
 		}
 	}
+	SDL_UnlockSurface(dst);
 }
 
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
@@ -79,7 +81,9 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 		w = s->w;
 		h = s->h;
 	}
+	SDL_LockSurface(s);
 	NDL_DrawRect(s->pixels, x, y, w, h);
+	SDL_UnlockSurface(s);
 }
 
 // APIs below are already implemented.
