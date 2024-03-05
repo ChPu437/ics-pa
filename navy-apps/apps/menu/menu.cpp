@@ -135,8 +135,11 @@ static void draw_str(BDF_Font *font, int x, int y, char *str, uint32_t fp, uint3
 
 static void draw_text_row(char *s, int r) {
   r += 3;
+  printf("youdiankeqingle\n");
   puts(s);
+  printf("youdiankeqingle\n");
   draw_str(font, 0, r * font->h, s, 0x123456, 0xffffff);
+  printf("youdiankeqingle\n");
 }
 
 static void display_menu(int n) {
@@ -146,13 +149,15 @@ static void display_menu(int n) {
   printf("Available applications:\n");
   char buf[80];
   int i;
-  printf("youdiankeqingle\n");
   for (i = 0; i <= n; i ++) {
-    auto *item = &items[page * 10 + i];
-    sprintf(buf, "  [%d] %s", i, item->name);
-    draw_text_row(buf, i);
-  }
   printf("youdiankeqingle\n");
+    auto *item = &items[page * 10 + i];
+  printf("youdiankeqingle\n");
+    sprintf(buf, "  [%d] %s", i, item->name);
+  printf("youdiankeqingle\n");
+    draw_text_row(buf, i);
+  printf("youdiankeqingle\n");
+  }
 
   i = 11;
 
