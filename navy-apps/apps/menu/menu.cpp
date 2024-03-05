@@ -68,6 +68,11 @@ static void clear_display(void) {
 }
 
 int main(int argc, char *argv[], char *envp[]) {
+	for (int i = 0; i < 11; i++) {
+    auto *item = &items[page * 10 + i];
+    printf("[%d] %s\n", i, item->name);
+	}
+
  	SDL_Init(0);
   screen = SDL_SetVideoMode(0, 0, 32, SDL_HWSURFACE);
 
@@ -150,9 +155,7 @@ static void display_menu(int n) {
   char buf[80];
   int i;
   for (i = 0; i <= n; i ++) {
-  printf("youdiankeqingle\n");
     auto *item = &items[page * 10 + i];
-  printf("youdiankeqingle\n");
     sprintf(buf, "  [%d] %s", i, item->name);
   printf("youdiankeqingle\n");
     draw_text_row(buf, i);
