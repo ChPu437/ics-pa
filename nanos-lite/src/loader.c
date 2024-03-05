@@ -62,8 +62,8 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 		printf("%d %d\n", memsz_pent, filesz_pent);
 		memset((void*)(vaddr_pent + filesz_pent), 0, memsz_pent - filesz_pent);
 		for (int i = 0; i < memsz_pent - filesz_pent; i++) {
-			printf("%d\n", (*((int*)(vaddr_pent + filesz_pent) + i)));
-			assert(*((int*)(vaddr_pent + filesz_pent) + i) == 0);
+			printf("%d\n", (*((char*)(vaddr_pent + filesz_pent) + i)));
+			assert(*((char*)(vaddr_pent + filesz_pent) + i) == 0);
 		} 
 		// printf("%x %x %p\n",  filesz_pent, memsz_pent, vaddr_pent);
 	}
