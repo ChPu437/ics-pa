@@ -29,7 +29,6 @@ Context* __am_irq_handle(Context *c) {
 			case  8: // SYS_lseek
 			case  9: // SYS_brk
 			case 19: // SYS_gettimeofday
-				assert(0);
 				ev.event = EVENT_SYSCALL;
 				break;
 			case -1:
@@ -66,6 +65,7 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
 
 void yield() {
 	// yield保存-1到a7, a7应该代表异常号
+	assert(0);
   asm volatile("li a7, -1; ecall");
 }
 
