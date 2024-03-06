@@ -48,7 +48,7 @@ void next(int rep) {
 
 int main() {
 	printf("%d %p\n", cur, slide);
-//	cur = 0;
+//	cur = 0; // why this?
 //	slide = NULL;
 
   SDL_Init(0);
