@@ -12,7 +12,7 @@ SDL_Surface* IMG_Load_RW(SDL_RWops *src, int freesrc) {
 }
 
 SDL_Surface* IMG_Load(const char *filename) {
-	FILE* img = fopen(filename, 'r');
+	FILE* img = fopen(filename, "r");
 	// move the pointer to end to get file length;
 	fseek(img, 0, SEEK_END);
 	size_t img_size = ftell(img);
