@@ -20,9 +20,8 @@ static int key_assert(char* buf, SDL_Event *event) {
 			event->type = SDL_KEYUP;
 			break;
 		default:
-			printf("Event not implemented\n");
-			NDL_TODO("");
-			break;
+			printf("Event not implemented or no event\n");
+			return 0;
 	}
 	// TODO: regex-ify the compare
 	if (!strcmp(buf, "kd UP")) 		*sym = SDLK_UP;
@@ -43,7 +42,7 @@ static int key_assert(char* buf, SDL_Event *event) {
 	if (!strcmp(buf, "kd J")) 		*sym = SDLK_J;
 	if (!strcmp(buf, "kd K")) 		*sym = SDLK_K;
 
-	return 0;
+	return 1;
 }
 
 int SDL_PushEvent(SDL_Event *ev) {
@@ -52,16 +51,16 @@ int SDL_PushEvent(SDL_Event *ev) {
 }
 
 int SDL_PollEvent(SDL_Event *ev) {
-	NDL_TODO("");
-  return 0;
+	char buf[32];
+	NDL_PollEvent(buf, sizeof(buf));
+	return key_assert(buf, ev);
 }
 
 int SDL_WaitEvent(SDL_Event *event) {
 	char buf[32];
-	while (!NDL_PollEvent(buf, sizeof(buf) + 1));
-	key_assert(buf, event);
+	while (!NDL_PollEvent(buf, sizeof(buf)));
+	return key_assert(buf, event);
 	// printf("SDLK: %d\n", event->key.keysym.sym);
-  return 1;
 }
 
 int SDL_PeepEvents(SDL_Event *ev, int numevents, int action, uint32_t mask) {
