@@ -29,10 +29,10 @@ Context* __am_irq_handle(Context *c) {
 			case  8: // SYS_lseek
 			case  9: // SYS_brk
 			case 19: // SYS_gettimeofday
+				assert(0);
 				ev.event = EVENT_SYSCALL;
 				break;
 			case -1:
-				assert(0);
 				ev.event = EVENT_YIELD; 
 				break;
       default:
