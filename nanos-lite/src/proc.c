@@ -50,10 +50,10 @@ Context* schedule(Context *prev) {
 	if (current == &pcb[MAX_NR_PROC - 1]) {
 		// printf("1\n");
 		current = &pcb[0];
-	} else if ((current + 1) == NULL) {
+	} else if (current == &pcb_boot) {
 		// printf("2\n");
 		current = &pcb[0];
-	} else if (current == &pcb_boot) {
+	} else if ((current + 1) == NULL) {
 		// printf("3\n");
 		current = &pcb[0];
 	} else {
