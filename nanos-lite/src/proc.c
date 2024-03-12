@@ -51,7 +51,7 @@ Context* schedule(Context *prev) {
 		current = &pcb[0];
 	} else {
 		PCB* i = NULL;
-		for (i = current; i < &pcb[4]; i++) {
+		for (i = current + 1; i < &pcb[4]; i++) {
 			if (i != NULL) break;
 		}
 		for (i = &pcb[0]; i < current; i++) {
