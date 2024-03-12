@@ -47,6 +47,7 @@ void init_proc() {
 
 Context* schedule(Context *prev) {
   current->cp = prev;
+  printf("!!!\n");
 	if (current == &pcb[MAX_NR_PROC - 1]) {
 		current = &pcb[0];
 	} else if (current + 1 == NULL) {
