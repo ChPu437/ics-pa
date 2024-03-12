@@ -9,8 +9,6 @@
 #define SYS_BRK 9
 */
 
-extern void* schedule(void*);
-
 void do_syscall(Context *c) {
   uintptr_t a[4];
   a[0] = c->GPR1;

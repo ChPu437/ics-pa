@@ -7,6 +7,7 @@ extern void* schedule(void*);
 
 int32_t sys_yield() {
 	// now use syscall.c schedule() instead.
+	// in file irq.c
 	yield();
 	return 0;
 }
