@@ -47,19 +47,19 @@ void init_proc() {
 
 Context* schedule(Context *prev) {
   current->cp = prev;
-	if (current == &pcb_boot) {
+	if (current == &pcb[MAX_NR_PROC - 1]) {
+		printf("1\n");
+		current = &pcb[0];
+	} else if ((current + 1)->cp == NULL) {
+		printf("2\n");
+		current = &pcb[0];
+	} else if (current == &pcb_boot) {
+		printf("3\n");
 		current = &pcb[0];
 	} else {
-		PCB* i = NULL;
-		for (i = current + 1; i < &pcb[4]; i++) {
-			if (i != NULL) break;
-		}
-		for (i = &pcb[0]; i < current; i++) {
-			if (i != NULL) break;
-		}
-		assert(i != NULL);
-		current = i;
+		printf("4\n");
+		current = current + 1;
 	}
-	return current->cp;
+  return current->cp;
 }
 
