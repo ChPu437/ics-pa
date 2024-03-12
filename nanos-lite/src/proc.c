@@ -7,8 +7,16 @@ extern void naive_uload(PCB *pcb, const char *filename);
 static PCB pcb[MAX_NR_PROC] __attribute__((used)) = {};
 static PCB pcb_boot = {};
 PCB *current = NULL;
+static bool pcb_used[MAX_NR_PROC] = {};
 
 void context_kload(PCB *pcb, void (*entry)(void*), void *arg) {
+	assert(entry);
+	for (int i = 0; i < MAX_NR_PROC; i++) {
+		if (pcb == &pcb[i]) {
+			pcb_used[i] = 1;
+			break;
+		}
+	}
 	pcb->cp = kcontext((Area){(void*)pcb, (void*)(pcb + 1)}, entry, arg);
 } 
  
@@ -47,20 +55,40 @@ void init_proc() {
 
 Context* schedule(Context *prev) {
   current->cp = prev;
-	if (current == &pcb[MAX_NR_PROC - 1]) {
+	/* if (current == &pcb[MAX_NR_PROC - 1]) {
 		printf("1\n");
 		current = &pcb[0];
 	} else if (current == &pcb_boot) {
 		printf("2\n");
 		current = &pcb[0];
-	}
-	if ((current + 1)->cp == NULL) {
+	} else if () {
 		printf("3\n");
 		current = &pcb[0];
 	} else {
 		printf("4\n");
 		current = current + 1;
+	} */
+	if (current == &pcb_boot) {
+		for (int i = 0; i < MAX_NR_PROC; i++) {
+			if (pcb_used[i]) {
+				current = &pcb[i];
+				return current->cp;
+			}
+		}
+	} else {
+		for (int i = current - &pcb[0] + 1; i < MAX_NR_PROC; i++) {
+			if (pcb_used[i]) {
+				current = &pcb[i];
+				return current->cp;
+			}
+		}
+		for (int i = 0; i < current - &pcb[0]; i++) {
+			if (pcb_used[i]) {
+				current = &pcb[i];
+				return current->cp;
+			}
+		}
 	}
-  return current->cp;
+	return NULL;
 }
 
