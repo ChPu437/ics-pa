@@ -49,6 +49,8 @@ Context* schedule(Context *prev) {
   current->cp = prev;
 	if (current == &pcb[MAX_NR_PROC - 1]) {
 		current = &pcb[0];
+	} else if (current + 1 == NULL) {
+		current = &pcb[0];
 	} else {
 		current = current + 1;
 	}
