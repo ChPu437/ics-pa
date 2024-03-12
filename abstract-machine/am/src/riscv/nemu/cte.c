@@ -63,6 +63,7 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
 	/* {void *start, *end}Area */
 	Context* result = (void*)((char*)kstack.end - sizeof(Context));
 	result->mepc = (uintptr_t)entry;
+	result->gpr[12] = (uintptr_t)arg; // a2 ~ a7 args
 	return result;
 }
 

@@ -51,7 +51,7 @@ __am_asm_trap:
   jal __am_irq_handle
 
   # to support context switch
-	mv sp, a0
+	mv sp, a0 # move stack pointer to new context
 
   LOAD t1, OFFSET_STATUS(sp)
   LOAD t2, OFFSET_EPC(sp)
