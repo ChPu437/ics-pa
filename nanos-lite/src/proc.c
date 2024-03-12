@@ -14,6 +14,7 @@ void context_kload(PCB *_pcb, void (*entry)(void*), void *arg) {
 	for (int i = 0; i < MAX_NR_PROC; i++) {
 		if (_pcb == &pcb[i]) {
 			pcb_used[i] = 1;
+			printf("%d\n", i);
 			break;
 		}
 	}
