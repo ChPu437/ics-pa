@@ -17,7 +17,7 @@ void context_kload(PCB *_pcb, void (*entry)(void*), void *arg) {
 			break;
 		}
 	}
-	_pcb->cp = kcontext((Area){(void*)_pcb, (void*)((uintptr_t)_pcb + sizeof(_pcb))}, entry, arg);
+	_pcb->cp = kcontext((Area){(void*)_pcb, (void*)((uintptr_t)_pcb + sizeof(PCB))}, entry, arg);
 } 
  
 void switch_boot_pcb() {
