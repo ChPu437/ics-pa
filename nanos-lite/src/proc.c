@@ -48,16 +48,16 @@ void init_proc() {
 Context* schedule(Context *prev) {
   current->cp = prev;
 	if (current == &pcb[MAX_NR_PROC - 1]) {
-		// printf("1\n");
+		printf("1\n");
 		current = &pcb[0];
 	} else if (current == &pcb_boot) {
-		// printf("2\n");
+		printf("2\n");
 		current = &pcb[0];
 	} else if ((current + 1) == NULL) {
-		// printf("3\n");
+		printf("3\n");
 		current = &pcb[0];
 	} else {
-		// printf("4\n");
+		printf("4\n");
 		current = current + 1;
 	}
   return current->cp;
