@@ -3,8 +3,10 @@ extern size_t fs_read(int, char*, size_t);
 extern size_t fs_write(int, const char*, size_t);
 extern int fs_close(int);
 extern size_t fs_lseek(int, size_t, int);
+extern void* schedule(void*);
 
 int32_t sys_yield() {
+	// now use syscall.c schedule() instead.
 	yield();
 	return 0;
 }

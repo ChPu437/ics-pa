@@ -9,13 +9,16 @@
 #define SYS_BRK 9
 */
 
+extern void* schedule(void*);
+
 void do_syscall(Context *c) {
   uintptr_t a[4];
   a[0] = c->GPR1;
 
   switch (a[0]) {
 		case SYS_exit:            sys_exit(); break;
-		case SYS_yield: c->GPRx = sys_yield(); break;
+		case SYS_yield: c->GPRx = sys_yield(c->GPR2); break;
+		// case SYS_yield: c->GPRx = schedule(c->GPR2); break;
 		case SYS_open:  c->GPRx = sys_open((const char*)c->GPR2, (int)c->GPR3, (int)c->GPR4); break;
 		case SYS_read:  c->GPRx = sys_read((int)c->GPR2, (char*)c->GPR3, (size_t)c->GPR4); break;
 		case SYS_write: c->GPRx = sys_write((int)c->GPR2, (const char*)c->GPR3, (size_t)c->GPR4); break;
