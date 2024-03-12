@@ -57,7 +57,7 @@ Context* schedule(Context *prev) {
 		printf("3\n");
 		current = &pcb[0];
 	} else {
-		printf("4\n");
+		printf("%p\n", current + 1);
 		current = current + 1;
 	}
   return current->cp;
