@@ -55,8 +55,8 @@ __am_asm_trap:
   // csrw mstatus, t1
   // csrw mepc, t2
   LOAD t2, OFFSET_EPC(sp)
-  LOAD t1, OFFSET_STATUS(sp)
   csrw mepc, t2
+  LOAD t1, OFFSET_STATUS(sp)
   csrw mstatus, t1
 
   MAP(REGS, POP)
