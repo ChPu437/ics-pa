@@ -48,7 +48,7 @@ void init_proc() {
 Context* schedule(Context *prev) {
   current->cp = prev;
 	if (current == &pcb_boot) {
-
+		current = &pcb[0];
 	} else {
 		PCB* i = NULL;
 		for (i = current; i < &pcb[4]; i++) {
