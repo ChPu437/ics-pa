@@ -82,12 +82,12 @@ Context* schedule(Context *prev) {
 				return current->cp;
 			}
 		}
-		for (int i = 0; i < current - &pcb[0]; i++) {
-			if (pcb_used[i]) {
-				current = &pcb[i];
-				return current->cp;
-			}
-		}
+// 		for (int i = 0; i < current - &pcb[0]; i++) {
+//			if (pcb_used[i]) {
+//				current = &pcb[i];
+//				return current->cp;
+//			}
+//		}
 	}
 	return NULL;
 }
