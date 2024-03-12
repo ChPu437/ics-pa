@@ -17,7 +17,7 @@ void context_kload(PCB *_pcb, void (*entry)(void*), void *arg) {
 			break;
 		}
 	}
-	_pcb->cp = kcontext((Area){(void*)_pcb, (void*)(_pcb + 1)}, entry, arg);
+	_pcb->cp = kcontext((Area){(void*)pcb, (void*)(pcb + 1)}, entry, arg);
 } 
  
 void switch_boot_pcb() {
@@ -76,12 +76,12 @@ Context* schedule(Context *prev) {
 			}
 		}
 	} else {
-/*		for (int i = current - &pcb[0] + 1; i < MAX_NR_PROC; i++) {
+		for (int i = current - &pcb[0] + 1; i < MAX_NR_PROC; i++) {
 			if (pcb_used[i]) {
 				current = &pcb[i];
 				return current->cp;
 			}
-		} */
+		}
  		for (int i = 0; i < current - &pcb[0]; i++) {
 			if (pcb_used[i]) {
 				current = &pcb[i];
