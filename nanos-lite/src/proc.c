@@ -9,12 +9,11 @@ static PCB pcb_boot = {};
 PCB *current = NULL;
 static bool pcb_used[MAX_NR_PROC] = {};
 
-void context_kload(PCB *pcb, void (*entry)(void*), void *arg) {
+void context_kload(PCB *_pcb, void (*entry)(void*), void *arg) {
 	assert(entry);
 	for (int i = 0; i < MAX_NR_PROC; i++) {
-		if (pcb == &pcb[i]) {
+		if (_pcb == &pcb[i]) {
 			pcb_used[i] = 1;
-			printf("%d\n", i);
 			break;
 		}
 	}
