@@ -51,6 +51,8 @@ Context* schedule(Context *prev) {
 		current = &pcb[0];
 	} else if (current + 1 == NULL) {
 		current = &pcb[0];
+	} else if (current == &pcb_boot) {
+		current = &pcb[0];
 	} else {
 		current = current + 1;
 	}
