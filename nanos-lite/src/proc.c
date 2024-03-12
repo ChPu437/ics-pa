@@ -69,7 +69,6 @@ Context* schedule(Context *prev) {
 		current = current + 1;
 	} */
 	if (current == &pcb_boot) {
-		printf("1\n");
 		for (int i = 0; i < MAX_NR_PROC; i++) {
 			if (pcb_used[i]) {
 				current = &pcb[i];
@@ -77,7 +76,7 @@ Context* schedule(Context *prev) {
 			}
 		}
 	} else {
-		printf("2\n");
+		printf("%d %d\n", current - &pcb[0] + 1, current - &pcb[0]);
 		for (int i = current - &pcb[0] + 1; i < MAX_NR_PROC; i++) {
 			if (pcb_used[i]) {
 				current = &pcb[i];
