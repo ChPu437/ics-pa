@@ -53,11 +53,11 @@ Context* schedule(Context *prev) {
 	} else if (current == &pcb_boot) {
 		printf("2\n");
 		current = &pcb[0];
-	} else if ((current + 1) == NULL) {
+	} else if ((current + 1)->cp == NULL) {
 		printf("3\n");
 		current = &pcb[0];
 	} else {
-		printf("%p\n", current + 1);
+		printf("4\n");
 		current = current + 1;
 	}
   return current->cp;
