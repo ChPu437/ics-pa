@@ -86,7 +86,7 @@ void context_uload(PCB *_pcb, const char *filename) {
 	// _pcb->cp->GPRx = (uintptr_t)heap.end;
 	// _pcb->cp->gpr[2] = (uintptr_t)heap.end;
 	Log("Program = \"%s\" registered with Entry = %p\n", filename, entry);
- ((void(*)())entry) ();
+	// ((void(*)())entry) ();
 	return;
 }
 
