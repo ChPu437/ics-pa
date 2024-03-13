@@ -82,8 +82,8 @@ void naive_uload(PCB *pcb, const char *filename) {
 void context_uload(PCB *_pcb, const char *filename) {
 	assert(filename != NULL);
 	uintptr_t entry = loader(_pcb, filename);
-	Context *context = ucontext(NULL, (Area){(void*)_pcb, (void*)((uintptr_t)_pcb + sizeof(PCB))}, (void*)entry);
-	context->gpr[10] = (uintptr_t)heap.end;
+	// Context *context = ucontext(NULL, (Area){(void*)_pcb, (void*)((uintptr_t)_pcb + sizeof(PCB))}, (void*)entry);
+	// context->gpr[10] = (uintptr_t)heap.end;
 	Log("Program = \"%s\" registered with Entry = %p\n", filename, entry);
 	return;
 }
