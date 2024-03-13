@@ -84,7 +84,7 @@ void context_uload(PCB *_pcb, const char *filename) {
 	uintptr_t entry = loader(NULL, filename);
 	_pcb->cp = ucontext(NULL, (Area){(void*)_pcb, (void*)((uintptr_t)_pcb + sizeof(PCB))}, (void*)entry);
 	// _pcb->cp->GPRx = (uintptr_t)heap.end;
-	// _pcb->cp->gpr[2] = (uintptr_t)heap.end;
+	_pcb->cp->gpr[2] = (uintptr_t)heap.end;
 	Log("Program = \"%s\" registered with Entry = %p\n", filename, entry);
 	// ((void(*)())entry) ();
 	return;
