@@ -3,6 +3,7 @@
 #define MAX_NR_PROC 4
 
 extern void naive_uload(PCB *pcb, const char *filename);
+extern void context_uload(PCB*, const char*);
 
 static PCB pcb[MAX_NR_PROC] __attribute__((used)) = {};
 static PCB pcb_boot = {};
@@ -18,8 +19,9 @@ void context_kload(PCB *_pcb, void (*entry)(void*), void *arg) {
 		}
 	}
 	_pcb->cp = kcontext((Area){(void*)_pcb, (void*)((uintptr_t)_pcb + sizeof(PCB))}, entry, arg);
-} 
- 
+	// 																												to avoid out-of-bound
+}
+
 void switch_boot_pcb() {
   current = &pcb_boot;
 }
@@ -34,12 +36,13 @@ void hello_fun(void *arg) {
 }
 
 void init_proc() {
+  Log("Initializing processes...");
   context_kload(&pcb[0], hello_fun, (void*)1L);
-  context_kload(&pcb[1], hello_fun, (void*)9L);
+  // context_kload(&pcb[1], hello_fun, (void*)9L);
+  context_uload(&pcb[1], "/bin/nslider");
   switch_boot_pcb();
   yield();
 
-  Log("Initializing processes...");
 
   // load program here
   // naive_uload(NULL, "/bin/hello");
@@ -91,4 +94,3 @@ Context* schedule(Context *prev) {
 	}
 	return NULL;
 }
-

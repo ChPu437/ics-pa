@@ -70,5 +70,7 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 }
 
 Context *ucontext(AddrSpace *as, Area kstack, void *entry) {
-  return NULL;
+  Context* result = (void*)((char*)kstack.end - sizeof(Context));
+  result->mepc = (uintptr_t)entry;
+  return result;
 }
