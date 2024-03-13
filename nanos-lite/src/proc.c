@@ -8,7 +8,7 @@ extern void context_uload(PCB*, const char*);
 static PCB pcb[MAX_NR_PROC] __attribute__((used)) = {};
 static PCB pcb_boot = {};
 PCB *current = NULL;
-bool pcb_used[MAX_NR_PROC] = {};
+static bool pcb_used[MAX_NR_PROC] = {};
 
 void context_kload(PCB *_pcb, void (*entry)(void*), void *arg) {
 	assert(entry);
@@ -35,11 +35,22 @@ void hello_fun(void *arg) {
   }
 }
 
+
+void wrapper_uload(PCB* _pcb, const char* filename) {
+	context_uload(_pcb, filename);
+	for (int i = 0; i < MAX_NR_PROC; i++) {
+		if (_pcb == &pcb[i]) {
+			pcb_used[i] = 1;
+			break;
+		}
+	}
+}
+
 void init_proc() {
   Log("Initializing processes...");
   context_kload(&pcb[0], hello_fun, (void*)1L);
   // context_kload(&pcb[1], hello_fun, (void*)9L);
-  context_uload(&pcb[1], "/bin/nslider");
+  wrapper_uload(&pcb[1], "/bin/nslider");
   switch_boot_pcb();
 
 

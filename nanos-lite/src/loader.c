@@ -79,12 +79,12 @@ void naive_uload(PCB *pcb, const char *filename) {
   ((void(*)())entry) ();
 }
  
-extern bool pcb_used[4];
+// extern bool pcb_used[4];
 void context_uload(PCB *_pcb, const char *filename) {
 	assert(filename != NULL);
 	uintptr_t entry = loader(NULL, filename);
 	_pcb->cp = ucontext(NULL, (Area){(void*)_pcb, (void*)((uintptr_t)_pcb + sizeof(PCB))}, (void*)entry);
-	pcb_used[1] = 1;
+	// pcb_used[1] = 1;
 	Log("into ucontext_load");
 	_pcb->cp->GPRx = (uintptr_t)heap.end;
 	Log("into ucontext_load");
