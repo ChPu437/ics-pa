@@ -41,7 +41,6 @@ void init_proc() {
   // context_kload(&pcb[1], hello_fun, (void*)9L);
   context_uload(&pcb[1], "/bin/nslider");
   switch_boot_pcb();
-  yield();
 
 
   // load program here
