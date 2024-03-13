@@ -81,6 +81,7 @@ void naive_uload(PCB *pcb, const char *filename) {
  
 extern bool* pcb_used;
 void context_uload(PCB *_pcb, const char *filename) {
+	Log("into ucontext_load");
 	assert(filename != NULL);
 	uintptr_t entry = loader(NULL, filename);
 	_pcb->cp = ucontext(NULL, (Area){(void*)_pcb, (void*)((uintptr_t)_pcb + sizeof(PCB))}, (void*)entry);
