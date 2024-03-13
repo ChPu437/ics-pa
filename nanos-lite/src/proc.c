@@ -74,6 +74,7 @@ Context* schedule(Context *prev) {
 		for (int i = 0; i < MAX_NR_PROC; i++) {
 			if (pcb_used[i]) {
 				current = &pcb[i];
+				printf("%p\n", current->cp->gpr[2]);
 				return current->cp;
 			}
 		}
@@ -81,12 +82,14 @@ Context* schedule(Context *prev) {
 		for (int i = current - &pcb[0] + 1; i < MAX_NR_PROC; i++) {
 			if (pcb_used[i]) {
 				current = &pcb[i];
+				printf("%p\n", current->cp->gpr[2]);
 				return current->cp;
 			}
 		}
  		for (int i = 0; i < current - &pcb[0]; i++) {
 			if (pcb_used[i]) {
 				current = &pcb[i];
+				printf("%p\n", current->cp->gpr[2]);
 				return current->cp;
 			}
 		}
