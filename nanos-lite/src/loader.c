@@ -83,13 +83,19 @@ extern bool* pcb_used;
 void context_uload(PCB *_pcb, const char *filename) {
 	Log("into ucontext_load");
 	assert(filename != NULL);
+	Log("into ucontext_load");
 	uintptr_t entry = loader(NULL, filename);
+	Log("into ucontext_load");
 	_pcb->cp = ucontext(NULL, (Area){(void*)_pcb, (void*)((uintptr_t)_pcb + sizeof(PCB))}, (void*)entry);
+	Log("into ucontext_load");
 	pcb_used[1] = 1;
+	Log("into ucontext_load");
 	_pcb->cp->GPRx = (uintptr_t)heap.end;
+	Log("into ucontext_load");
 	// _pcb->cp->gpr[2] = (uintptr_t)heap.end;
 	// _pcb->cp->gpr[2] = entry;
 	Log("Program = \"%s\" registered with Entry = %p\n", filename, entry);
+	Log("into ucontext_load");
 	// ((void(*)())entry) ();
 	return;
 }
