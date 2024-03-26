@@ -3,7 +3,7 @@
 #define MAX_NR_PROC 4
 
 extern void naive_uload(PCB *pcb, const char *filename);
-extern void context_uload(PCB*, const char*);
+extern void context_uload(PCB*, const char*, char* const[], char* const[]);
 
 static PCB pcb[MAX_NR_PROC] __attribute__((used)) = {};
 static PCB pcb_boot = {};
@@ -27,17 +27,22 @@ void switch_boot_pcb() {
 }
 
 void hello_fun(void *arg) {
-  int j = 1;
+  int j = 1, count = 0;
   while (1) {
-    Log("Hello World from Nanos-lite with arg '%p' for the %dth time!", (uintptr_t)arg, j);
-    j ++;
+  	count++;
+    if (count == 10000) {
+			j++;
+    	count = 0;
+    	Log("Hello World from Nanos-lite with arg '%p' for the %dth time!", (uintptr_t)arg, j);
+    }
+
     yield();
   }
 }
 
 
-void wrapper_uload(PCB* _pcb, const char* filename) {
-	context_uload(_pcb, filename);
+void wrapper_uload(PCB* _pcb, const char* filename, char* const argv[], char* const envp[]) {
+	context_uload(_pcb, filename, argv, envp);
 	for (int i = 0; i < MAX_NR_PROC; i++) {
 		if (_pcb == &pcb[i]) {
 			pcb_used[i] = 1;
@@ -50,37 +55,18 @@ void init_proc() {
   Log("Initializing processes...");
   context_kload(&pcb[0], hello_fun, (void*)1L);
   // context_kload(&pcb[1], hello_fun, (void*)9L);
-  wrapper_uload(&pcb[1], "/bin/nslider");
+  // wrapper_uload(&pcb[1], "/bin/nslider", NULL, NULL);
+  char* test_arg[] = {"aaa", "bbb", "123"};
+  char* test_env[] = {"PATH=/bin", "CFLAGS=-O2"};
+  wrapper_uload(&pcb[1], "/bin/hello", test_arg, test_env);
+
   switch_boot_pcb();
 
-
-  // load program here
-  // naive_uload(NULL, "/bin/hello");
-  // naive_uload(NULL, "/bin/file-test");
-  // naive_uload(NULL, "/bin/timer-test");
-  // naive_uload(NULL, "/bin/event-test");
-  // naive_uload(NULL, "/bin/bmp-test");
-  // naive_uload(NULL, "/bin/nslider");
-  // naive_uload(NULL, "/bin/menu");
-  // naive_uload(NULL, "/bin/nterm");
   // naive_uload(NULL, "/bin/bird");
 }
 
 Context* schedule(Context *prev) {
   current->cp = prev;
-	/* if (current == &pcb[MAX_NR_PROC - 1]) {
-		printf("1\n");
-		current = &pcb[0];
-	} else if (current == &pcb_boot) {
-		printf("2\n");
-		current = &pcb[0];
-	} else if () {
-		printf("3\n");
-		current = &pcb[0];
-	} else {
-		printf("4\n");
-		current = current + 1;
-	} */
 	if (current == &pcb_boot) {
 		for (int i = 0; i < MAX_NR_PROC; i++) {
 			if (pcb_used[i]) {

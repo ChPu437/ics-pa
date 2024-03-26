@@ -80,19 +80,56 @@ void naive_uload(PCB *pcb, const char *filename) {
 }
  
 // extern bool pcb_used[4];
-void context_uload(PCB *_pcb, const char *filename) {
+void context_uload(PCB *_pcb, const char *filename, char* const argv[], char* const envp[]) {
 	assert(filename != NULL);
 	uintptr_t entry = loader(NULL, filename);
 	_pcb->cp = ucontext(NULL, (Area){(void*)_pcb, (void*)((uintptr_t)_pcb + sizeof(PCB))}, (void*)entry);
-	// pcb_used[1] = 1;
-	Log("into ucontext_load");
-	_pcb->cp->GPRx = (uintptr_t)heap.end;
-	Log("into ucontext_load");
-	// _pcb->cp->gpr[2] = (uintptr_t)heap.end;
-	// _pcb->cp->gpr[2] = entry;
+	// ？：这里用户栈顶应该是可用空间的顶，为了防止数据覆写，实际上预分配的空间应该留空，所以栈顶位置应该恰好是argc的位置？
+
+	uintptr_t ustack_end = (uintptr_t)heap.end;
+
+	int argc = 0;
+	for (; argv[argc] != NULL; argc++);
+	if (argc) argc--;
+	char** arg_data = malloc(sizeof(char*) * argc);
+	if (argc) {
+		for (int i = 0; i < argc; i++) {
+			for (int j = strlen(argv[i]) - 1; j > 0; j--) {
+				*(char*)(ustack_end--) = argv[i][j];
+			}
+			arg_data[i] = (char*)(ustack_end + 1);
+		}
+	}
+
+	int envc = 0;
+	for (; envp[envc] != NULL; envc++);
+	if (envc) envc--;
+	char** env_data = malloc(sizeof(char*) * envc);
+	if (envc) {
+		for (int i = 0; i < sizeof(*envp); i++) {
+			for (int j = strlen(envp[i]) - 1; j > 0; j--) {
+				*(char*)(ustack_end--) = envp[i][j];
+			}
+			env_data[i] = (char*)(ustack_end + 1);
+		}
+	}
+
+	*(char**)ustack_end-- = NULL;
+	for (int i = argc - 1; i >= 0; i--) {
+		*(char**)(ustack_end--) = arg_data[i];
+	}
+	*(char**)ustack_end-- = NULL;
+	for (int i = envc - 1; i >= 0; i--) {
+		*(char**)(ustack_end--) = env_data[i];
+	}
+	
+	if (argc) free(arg_data);
+	if (envc) free(env_data);
+
+	*(int*)ustack_end = argc;
+	_pcb->cp->GPRx = ustack_end;
+
 	Log("Program = \"%s\" registered with Entry = %p\n", filename, entry);
-	Log("into ucontext_load");
-	// ((void(*)())entry) ();
 	return;
 }
 
