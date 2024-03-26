@@ -95,10 +95,7 @@ void context_uload(PCB *_pcb, const char *filename, char* const argv[], char* co
 	if (argc) {
 		for (int i = 0; i < argc; i++) {
 			for (int j = strlen(argv[i]) - 1; j >= 0; j--) {
-				*(char*)ustack_end = argv[i][j];
-				// ustack_end--;
-				// Log("ustack_end = %X", ustack_end);
-				// Log("%d", argv[i][j]); // printf %c in klib mal-implemented
+				*(char*)ustack_end-- = argv[i][j];
 			}
 			Log("12345");
 			arg_data[i] = (char*)(ustack_end + 1);
