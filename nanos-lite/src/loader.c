@@ -91,13 +91,12 @@ void context_uload(PCB *_pcb, const char *filename, char* const argv[], char* co
 
 	int argc = 0;
 	for (; argv[argc] != NULL; argc++);
-	if (argc) argc--;
 	char** arg_data = malloc(sizeof(char*) * argc);
 	if (argc) {
 		for (int i = 0; i < argc; i++) {
 			for (int j = strlen(argv[i]) - 1; j >= 0; j--) {
 				// *(char*)(ustack_end--) = argv[i][j];
-				// Log("%c", argv[i][j]);
+				Log("%c", argv[i][j]);
 			}
 			Log("12345");
 			arg_data[i] = (char*)(ustack_end + 1);
@@ -106,7 +105,6 @@ void context_uload(PCB *_pcb, const char *filename, char* const argv[], char* co
 
 	int envc = 0;
 	for (; envp[envc] != NULL; envc++);
-	if (envc) envc--;
 	char** env_data = malloc(sizeof(char*) * envc);
 	Log("!!!!!");
 	if (envc) {
