@@ -27,7 +27,7 @@ void switch_boot_pcb() {
 }
 
 void hello_fun(void *arg) {
-  int j = 1, count = 0;
+  int j = 1, count = 9999;
   while (1) {
   	count++;
     if (count == 10000) {
