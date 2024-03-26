@@ -97,7 +97,6 @@ void context_uload(PCB *_pcb, const char *filename, char* const argv[], char* co
 			for (int j = strlen(argv[i]) - 1; j >= 0; j--) {
 				*(char*)ustack_end-- = argv[i][j];
 			}
-			Log("12345");
 			arg_data[i] = (char*)(ustack_end + 1);
 		}
 	}
@@ -105,34 +104,27 @@ void context_uload(PCB *_pcb, const char *filename, char* const argv[], char* co
 	int envc = 0;
 	for (; envp[envc] != NULL; envc++);
 	char** env_data = malloc(sizeof(char*) * envc);
-	Log("!!!!!");
 	if (envc) {
 		for (int i = 0; i < sizeof(*envp); i++) {
 			for (int j = strlen(envp[i]) - 1; j > 0; j--) {
-				// *(char*)(ustack_end--) = envp[i][j];
+				*(char*)(ustack_end--) = envp[i][j];
 			}
 			env_data[i] = (char*)(ustack_end + 1);
 		}
 	}
-	Log("!!!!!");
 
-	// *(char**)ustack_end-- = NULL;
-	Log("!!!!!");
+	*(char**)ustack_end-- = NULL;
 	for (int i = argc - 1; i >= 0; i--) {
-		// *(char**)(ustack_end--) = arg_data[i];
+		*(char**)(ustack_end--) = arg_data[i];
 	}
-	Log("!!!!!");
-	// *(char**)ustack_end-- = NULL;
-	Log("!!!!!");
+	*(char**)ustack_end-- = NULL;
 	for (int i = envc - 1; i >= 0; i--) {
-		// *(char**)(ustack_end--) = env_data[i];
+		*(char**)(ustack_end--) = env_data[i];
 	}
-	Log("!!!!!");
 	
 	if (argc) free(arg_data);
 	if (envc) free(env_data);
 
-	Log("!!!!!");
 	*(int*)ustack_end = argc;
 	_pcb->cp->GPRx = (uintptr_t)ustack_end;
 
