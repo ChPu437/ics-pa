@@ -95,9 +95,9 @@ void context_uload(PCB *_pcb, const char *filename, char* const argv[], char* co
 	if (argc) {
 		for (int i = 0; i < argc; i++) {
 			for (int j = strlen(argv[i]) - 1; j >= 0; j--) {
-			Log("54321");
-				*(char*)(ustack_end--) = argv[i][j];
-			Log("%c", argv[i]);
+				*(char*)(ustack_end--) = 'a'; // argv[i][j];
+				Log("54321");
+				Log("%c", argv[i][j]);
 			}
 			Log("12345");
 			arg_data[i] = (char*)(ustack_end + 1);
