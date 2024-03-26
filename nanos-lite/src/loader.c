@@ -127,7 +127,7 @@ void context_uload(PCB *_pcb, const char *filename, char* const argv[], char* co
 	if (envc) free(env_data);
 
 	*(int*)(--ustack_end) = argc; */
-	_pcb->cp->GPRx = (uintptr_t)heap.end; //ustack_end;
+	_pcb->cp->GPRx = (uintptr_t)heap.end - 1; //ustack_end;
 
 	Log("Program = \"%s\" registered with Entry = %p\n", filename, entry);
 	return;
