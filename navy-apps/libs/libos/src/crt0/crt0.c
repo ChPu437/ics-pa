@@ -24,7 +24,7 @@ void call_main(uintptr_t *args) {
 	char** argv = empty;
 	char** envp = empty;
 
-	printf("%d\n", argc);
+	/* printf("%d\n", argc);
 //	assert(0); // test for argc
 
 	if (argc != 0) {
@@ -39,7 +39,7 @@ void call_main(uintptr_t *args) {
 	if ((void*)*args != NULL) {
 		envp = (char**)args;
 	}
-	environ = envp;
+	environ = envp; */
 
   exit(main(argc, argv, envp));
   assert(0); // Should not reach here
