@@ -25,7 +25,7 @@ void call_main(uintptr_t *args) {
 	char** envp = empty;
 
 	printf("%d\n", argc);
-	assert(0); // test for argc
+//	assert(0); // test for argc
 
 	if (argc != 0) {
 		// load arguments
