@@ -56,10 +56,10 @@ void init_proc() {
   Log("Initializing processes...");
   context_kload(&pcb[0], hello_fun, (void*)1L);
   // context_kload(&pcb[1], hello_fun, (void*)9L);
-  // wrapper_uload(&pcb[1], "/bin/nslider", NULL, NULL);
-  char* test_arg[] = {"aaa", "bbb", "123"};
-  char* test_env[] = {"PATH=/bin", "CFLAGS=-O2"};
-  wrapper_uload(&pcb[1], "/bin/hello", test_arg, test_env);
+  wrapper_uload(&pcb[1], "/bin/nslider", NULL, NULL);
+  // char* test_arg[] = {"aaa", "bbb", "123"};
+  // char* test_env[] = {"PATH=/bin", "CFLAGS=-O2"};
+  // wrapper_uload(&pcb[1], "/bin/hello", test_arg, test_env);
 
   switch_boot_pcb();
 
