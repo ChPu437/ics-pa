@@ -27,7 +27,8 @@ void switch_boot_pcb() {
 }
 
 void hello_fun(void *arg) {
-  int j = 1, count = 9999;
+  int j = 1, count = 0;
+  Log("Hello World from Nanos-lite with arg '%p' for the %dth time!", (uintptr_t)arg, j);
   while (1) {
   	count++;
     if (count == 10000) {
@@ -58,7 +59,7 @@ void init_proc() {
   // wrapper_uload(&pcb[1], "/bin/nslider", NULL, NULL);
   char* test_arg[] = {"aaa", "bbb", "123"};
   char* test_env[] = {"PATH=/bin", "CFLAGS=-O2"};
-  wrapper_uload(&pcb[1], "/bin/hello", test_arg, test_env);
+  wrapper_uload(&pcb[1], "/bin/nslider", test_arg, test_env);
 
   switch_boot_pcb();
 

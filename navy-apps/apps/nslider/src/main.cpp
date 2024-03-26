@@ -46,7 +46,16 @@ void next(int rep) {
   render();
 }
 
-int main() {
+int main(int argc, char* argv[], char* envp[]) {
+  printf("Hello-test got argument count: %d, args:\n", argc);
+	for (int i = 0; i < argc; i++) {
+		printf("%s\n", argv[i]);
+	}
+	printf("Hello-test got environment:\n");
+	for (int i = 0; envp[i] != NULL; i++) {
+		printf("%s\n", envp[i]);
+	}
+
 	printf("%d %p\n", cur, slide);
 //	cur = 0; // why this?
 //	slide = NULL;
