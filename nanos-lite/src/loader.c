@@ -87,7 +87,7 @@ void context_uload(PCB *_pcb, const char *filename, char* const argv[], char* co
 	// ？：这里用户栈顶应该是可用空间的顶，为了防止数据覆写，实际上预分配的空间应该留空，所以栈顶位置应该恰好是argc的位置？
 
 	uintptr_t ustack_end = (uintptr_t)heap.end;
-	Log("ustack_end = %X", ustack_end);
+	Log("ustack_end = %u", ustack_end);
 
 	int argc = 0;
 	for (; argv[argc] != NULL; argc++);
