@@ -59,7 +59,7 @@ void init_proc() {
   // wrapper_uload(&pcb[1], "/bin/nslider", NULL, NULL);
   char* test_arg[] = {"aaa", "bbb", "123"};
   char* test_env[] = {"PATH=/bin", "CFLAGS=-O2"};
-  wrapper_uload(&pcb[1], "/bin/nslider", test_arg, test_env);
+  wrapper_uload(&pcb[1], "/bin/hello", test_arg, test_env);
 
   switch_boot_pcb();
 
@@ -73,7 +73,7 @@ Context* schedule(Context *prev) {
 			if (pcb_used[i]) {
 				current = &pcb[i];
 				// printf("%p\n", current->cp->gpr[2]);
-				printf("1\n");
+				printf("1: %d\n", i);
 				return current->cp;
 			}
 		}
@@ -82,7 +82,7 @@ Context* schedule(Context *prev) {
 			if (pcb_used[i]) {
 				current = &pcb[i];
 				// printf("%p\n", current->cp->gpr[2]);
-				printf("2\n");
+				printf("2: %d\n", i);
 				return current->cp;
 			}
 		}
@@ -90,7 +90,7 @@ Context* schedule(Context *prev) {
 			if (pcb_used[i]) {
 				current = &pcb[i];
 				// printf("%p\n", current->cp->gpr[2]);
-				printf("3\n");
+				printf("3 %d\n", i);
 				return current->cp;
 			}
 		}
